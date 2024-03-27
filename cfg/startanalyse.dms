@@ -16,6 +16,16 @@ container startanalyse_2_0
 			parameter<m> omtrek_evenaar := 2.0 * Pi() * WGS84_semi_major_axis;
 		}
 
+		parameter<web_mercator> upper_left_point_nl_wm  := point_xy(243600.00, 7199500.00, web_mercator);
+		parameter<web_mercator> lower_right_point_nl_wm := point_xy(810000.60, 6549800.00, web_mercator);
+		
+		parameter<point_rd> upper_left_point_nl_rd  := point_xy(10000f, 625000f, point_rd); //convert(upper_left_point_nl_wm, point_rd);
+		
+		parameter<point_rd> lower_right_point_nl_rd := convert(lower_right_point_nl_wm, point_rd);
+		
+		parameter<point_rd> upper_left_point_subset_rd  := point_xy(101300f, 437500f, point_rd);
+		parameter<point_rd> lower_right_point_subset_rd := point_xy(126200f, 426100f, point_rd);   
+
 		container wm_map_extents
 		{
 		    parameter<m> halve_omtrek_evenaar := constants/omtrek_evenaar/2.0;
@@ -31,23 +41,81 @@ container startanalyse_2_0
 
 		unit<dpoint> rdc_meter_base : DialogData = "wmts_rd_layer",	SpatialReference = "EPSG:28992";
 		unit<dpoint> web_mercator   : DialogData = "wmts_wm_layer", SpatialReference = "EPSG:3857";
-		unit<dpoint> rdc_meter := range(rdc_meter_base, point_yx(300000.0, 0.0), point_yx(625000.0, 280000.0));
+		//unit<dpoint> rdc_meter := range(rdc_meter_base, point_yx(300000.0, 0.0), point_yx(625000.0, 280000.0));
+		unit<fpoint> point_rd := range(rdc_meter_base, point_yx(300000f, 0f), point_yx(625000f, 280000f));
 
-		#include <wmts_rd_layer.dms>
-		#include <wmts_wm_layer.dms>
-		
+		container m_100 := grid_template(100[units/m], upper_left_point_nl_rd, lower_right_point_nl_rd);
+		container m_10  := grid_template(10[units/m], upper_left_point_nl_rd, lower_right_point_nl_rd);
+		container m_10_test  := grid_template(10[units/m], upper_left_point_subset_rd, lower_right_point_subset_rd);
+
+		Template grid_template
+		{	
+			// case parameter
+			parameter<units/m> grid_size;
+			parameter<point_rd> upper_left;
+			parameter<point_rd> lower_right;
+			// end of case parameter
+			
+			
+			parameter<float32> nr_cols_f32 := (pointcol(lower_right) - pointcol(upper_left)) / float32(grid_size);
+			parameter<int32> nr_cols := int32(nr_cols_f32);
+			parameter<float32> nr_rows_f32 := (pointrow(upper_left) - pointrow(lower_right)) / float32(grid_size);
+			parameter<int32> nr_rows := int32(nr_rows_f32);
+			
+			parameter<point_rd> lower_right_computed := upper_left + point_xy(float32(nr_cols) * float32(grid_size), -float32(nr_rows) * float32(grid_size), point_rd);
+			
+			unit<ipoint> domain
+				:= range(
+					 gridset(
+						point_rd
+					   ,point_xy(float32(grid_size), float32(-grid_size), point_rd) //, 
+					   ,upper_left //upper_left_point_nl_rd //
+					   ,ipoint
+					 )
+					 ,point(0i, 0i)
+					 ,point_xy(nr_cols, nr_rows)
+				  )
+				  {
+					attribute<uint8>  test := const(8b, .);
+				  }
+				
+		}
+
+		container m_100_wm
+		{
+			parameter<float64> grid_size := 100[units/m];
+			parameter<int32> nr_cols := int32((pointcol(lower_right_point_nl) - pointcol(upper_left_point_nl)) / grid_size);
+			parameter<int32> nr_rows := int32((pointrow(upper_left_point_nl) - pointrow(lower_right_point_nl)) / grid_size);
+			
+			unit<ipoint> domain
+				:= range(
+					 gridset(
+						web_mercator
+					   ,point_xy(100[units/m], -100[units/m], web_mercator)
+					   ,wm_tiles_grid/extent/upper_left_tile/UL
+					   ,ipoint
+					 )
+					 ,point(int32(0), int32(0))
+					 ,point_xy(nr_cols, nr_rows)
+				  )
+				  {
+					attribute<uint8>  test := const(8b, .);
+				  }
+				
+		}
+
+
 		container wm_tiles_grid
 		{
 			// parameters
 			parameter<uint32> zoom_level := 13;
-			parameter<web_mercator> upper_left_point  := point_xy(243690.00, 7199495.00, web_mercator);
-			parameter<web_mercator> lower_right_point := point_xy(802570.60, 6549882.00, web_mercator);
+
 
 			container extent
 			{
 				container tile_size_and_number := Templates/number_and_size_of_tiles_from_z(zoom_level);
-				container upper_left_tile      := Templates/tile_xy_from_tile_size_and_wm_point(tile_size_and_number/tile_size, upper_left_point);
-				container lower_right_tile     := Templates/tile_xy_from_tile_size_and_wm_point(tile_size_and_number/tile_size, lower_right_point);
+				container upper_left_tile      := Templates/tile_xy_from_tile_size_and_wm_point(tile_size_and_number/tile_size, upper_left_point_nl);
+				container lower_right_tile     := Templates/tile_xy_from_tile_size_and_wm_point(tile_size_and_number/tile_size, lower_right_point_nl);
 				parameter<int32> number_of_rows := lower_right_tile/y_rounded - upper_left_tile/y_rounded;
 				parameter<int32> number_of_cols := lower_right_tile/x_rounded - upper_left_tile/x_rounded;
 			}
@@ -75,21 +143,23 @@ container startanalyse_2_0
 				attribute<int16> y_tile := pointrow(id(.)) + int16(extent/upper_left_tile/y_rounded); //2624);
 			  }
 			}
+			#include <wmts_rd_layer.dms>
+			#include <wmts_wm_layer.dms>
 		}
 	
 	container SourceData
 	{
 		unit<uint32> buurt2020_with_H2O : StorageName = "%SourceDataDir%/StartAnalyse/V1/cbs_buurt_2020/buurt_2020_v3.shp", StorageType="gdal.vect", StorageReadOnly="True"
 		{
-			attribute<geography/rdc_meter> geometry (poly);
+			attribute<geography/point_rd> geometry (poly);
 		}
 		
-		unit<uint32> buurt2020 := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee')// &&  id(buurt2020_with_H2O)>13885);
+		unit<uint32> buurt2020_nl := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee')// &&  id(buurt2020_with_H2O)>13885);
 		{
 			attribute<geography/web_mercator> geometry_wm (poly) := convert(geometry, geography/web_mercator);
 		}
 		
-		unit<uint32> buurt2020_subset := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee' &&  id(buurt2020_with_H2O)>13885)
+		unit<uint32> buurt2020 := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee' &&  id(buurt2020_with_H2O)>13885)
 		{
 			attribute<geography/web_mercator> geometry_wm (poly) := convert(geometry, geography/web_mercator);
 		}
@@ -106,6 +176,22 @@ container startanalyse_2_0
 	
 	container Templates
 	{	
+		#include <grid2poly_ipoint.dms>
+		
+		Template SimplifyPolygons_ipoint
+		{
+			// begin case parameters
+			unit<uint32>       ShapeDomain;
+			unit<ipoint>       domain_grid;
+			parameter<float64> simplifyFactor;
+			// end case parameters
+
+			attribute<Geography/point_rd> Shape_geometry (ShapeDomain, poly) := ShapeDomain/geometry;
+
+			attribute<ShapeDomain> ShapeDomain_rel (domain_grid) := poly2grid_untiled(Shape_geometry, domain_grid);
+			container SimplifiedPolygons                         := grid2poly_ipoint(domain_grid, ShapeDomain, ShapeDomain_rel, simplifyFactor);
+		}
+		
 		Template number_and_size_of_tiles_from_z
 		{
 			parameter<uint32> z; // zoom level
@@ -189,7 +275,24 @@ container startanalyse_2_0
 	
 	container Analyses
 	{
-		container vergrid_13
+		container simplify
+		{
+			unit<uint2> Direction 
+			{
+				attribute<string> Label : [ 'North', 'East', 'South', 'West'];
+				container V:= for_each_nedv(Label, string(ID(.))+'[..]', void, .);
+				attribute<.> Next    := union_data(., V/West, V/North, V/East, V/South);
+				attribute<.> Reverse := union_data(., V/South, V/West, V/North, V/East);
+			}
+	
+			container zoom_level_11_100m := Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, /geography/m_100/domain, 10[units/m]);
+			container zoom_level_11_10m  := Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, /geography/m_10/domain, 10[units/m]);
+			
+			container zoom_level_11_10m_test  := Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, /geography/m_10_test/domain, 12[units/m]);
+	
+		}
+	
+		container reference_vergrid_13
 		{
 			attribute<SourceData/buurt2020> buurt_2020_rel (geography/wm_tiles_grid/grid_13) := 
 				poly2grid(SourceData/buurt2020/geometry_wm, geography/wm_tiles_grid/grid_13);
