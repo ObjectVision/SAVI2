@@ -1,0 +1,312 @@
+container startanalyse_2_0
+{
+	container units
+	{
+		unit<uint32> Euro;
+		unit<uint32> Year;
+		unit<uint32> Euro_per_Year := Euro / Year;
+		unit<float64> m := baseunit('m', float64);
+	}
+
+	container geography : using = "units"
+	{
+		container constants
+		{
+			parameter<m> WGS84_semi_major_axis := 6378137.000[m];
+			parameter<m> omtrek_evenaar := 2.0 * Pi() * WGS84_semi_major_axis;
+		}
+
+		container wm_map_extents
+		{
+		    parameter<m> halve_omtrek_evenaar := constants/omtrek_evenaar/2.0;
+			
+			parameter<web_mercator> upper_left  := point_yx( halve_omtrek_evenaar, -halve_omtrek_evenaar, web_mercator);
+			parameter<web_mercator> lower_right := point_yx(-halve_omtrek_evenaar,  halve_omtrek_evenaar, web_mercator);
+			
+			parameter<m> x_min := pointcol(upper_left)[m];
+			parameter<m> x_max := pointcol(lower_right)[m];
+			parameter<m> y_min := pointrow(lower_right)[m];
+			parameter<m> y_max := pointrow(upper_left)[m];			
+		}
+
+		unit<dpoint> rdc_meter_base : DialogData = "wmts_rd_layer",	SpatialReference = "EPSG:28992";
+		unit<dpoint> web_mercator   : DialogData = "wmts_wm_layer", SpatialReference = "EPSG:3857";
+		unit<dpoint> rdc_meter := range(rdc_meter_base, point_yx(300000.0, 0.0), point_yx(625000.0, 280000.0));
+
+		#include <wmts_rd_layer.dms>
+		#include <wmts_wm_layer.dms>
+		
+		container wm_tiles_grid
+		{
+			// parameters
+			parameter<uint32> zoom_level := 13;
+			parameter<web_mercator> upper_left_point  := point_xy(243690.00, 7199495.00, web_mercator);
+			parameter<web_mercator> lower_right_point := point_xy(802570.60, 6549882.00, web_mercator);
+
+			container extent
+			{
+				container tile_size_and_number := Templates/number_and_size_of_tiles_from_z(zoom_level);
+				container upper_left_tile      := Templates/tile_xy_from_tile_size_and_wm_point(tile_size_and_number/tile_size, upper_left_point);
+				container lower_right_tile     := Templates/tile_xy_from_tile_size_and_wm_point(tile_size_and_number/tile_size, lower_right_point);
+				parameter<int32> number_of_rows := lower_right_tile/y_rounded - upper_left_tile/y_rounded;
+				parameter<int32> number_of_cols := lower_right_tile/x_rounded - upper_left_tile/x_rounded;
+			}
+			
+			// configure the cardinality for the grid domain
+			parameter<int16> nrofrows := int16(extent/number_of_rows);
+			parameter<int16> nrofcols := int16(extent/number_of_cols);
+
+			// configure the grid domain
+			unit<spoint> grid_13
+			:= range(
+				 gridset(
+					web_mercator
+				   ,point_xy(extent/tile_size_and_number/tile_size, -extent/tile_size_and_number/tile_size)  // 4891.96981030273, -4891.96981030273, web_mercator)
+				   ,extent/upper_left_tile/UL // 243690.0, 7199495.0, web_mercator)
+				   ,spoint
+				 )
+				 ,point(int16(0), int16(0))
+				 ,point(nrofrows, nrofcols)
+			  )
+			  {
+				attribute<uint8>  test := const(8b, .);
+				attribute<.> id := id(.);
+				attribute<int16> x_tile := pointcol(id(.)) + int16(extent/upper_left_tile/x_rounded); //4145);
+				attribute<int16> y_tile := pointrow(id(.)) + int16(extent/upper_left_tile/y_rounded); //2624);
+			  }
+			}
+		}
+	
+	container SourceData
+	{
+		unit<uint32> buurt2020_with_H2O : StorageName = "%projdir%/data/cbs_buurt_2020/buurt_2020_v3.shp", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<geography/rdc_meter> geometry (poly);
+		}
+		
+		unit<uint32> buurt2020 := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee')// &&  id(buurt2020_with_H2O)>13885);
+		{
+			attribute<geography/web_mercator> geometry_wm (poly) := convert(geometry, geography/web_mercator);
+		}
+		
+		unit<uint32> buurt2020_subset := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee' &&  id(buurt2020_with_H2O)>13885)
+		{
+			attribute<geography/web_mercator> geometry_wm (poly) := convert(geometry, geography/web_mercator);
+		}
+
+		container StartAnalyse_1_0
+		{
+			unit<uint32> ViewerIndicatoren_Strategie_3 : StorageName="%projdir%/data/20200901_Viewerindicatoren/01_Hoofdberekening/Results/Strategie_3_ViewerIndicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+			{
+				attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+			}
+		}
+	
+	}
+	
+	container Templates
+	{	
+		Template number_and_size_of_tiles_from_z
+		{
+			parameter<uint32> z; // zoom level
+			
+			
+			parameter<float64> total         := pow(4.0, z[float64]);
+			parameter<float64> total_x_tiles := pow(2.0, z[float64]);
+			parameter<float64> total_y_tiles := total_x_tiles;
+			parameter<units/m> tile_size     := (geography/constants/omtrek_evenaar / total_x_tiles)[units/m];
+		}
+	
+		Template tile_xy_from_tile_size_and_wm_point
+		{
+			parameter<units/m> tile_size; // horizontal and vertical tile size
+			parameter<geography/web_mercator> wm_point;
+			
+			
+			parameter<float64> point_row := pointrow(wm_point);
+			
+			parameter<float64> x := (pointcol(wm_point) - geography/wm_map_extents/x_min) / tile_size;
+			parameter<float64> y := (geography/wm_map_extents/y_max - point_row) / tile_size;
+			
+			parameter<int32> x_rounded := RoundDown(x);
+			parameter<int32> y_rounded := RoundDown(y); 
+			
+			parameter<float64> U := geography/wm_map_extents/y_max - y_rounded[float64]*tile_size[float64];
+			parameter<float64> L := geography/wm_map_extents/x_min + x_rounded[float64]*tile_size[float64];
+			
+			parameter<geography/web_mercator> UL := point_yx(U, L, geography/web_mercator);
+		}
+		
+		Template clip_tile_and_export
+		{
+			// begin case parameters
+			unit<spoint> domain_grid;
+			parameter<string> grid_cel_name;
+			parameter<units/m> grid_size;
+			// end case parameters
+			
+			parameter<domain_grid> domain_grid_rel := rjoin(grid_cel_name, tiles_with_data/name, tiles_with_data/org_rel);
+
+			parameter<geography/web_mercator> top_left := convert(domain_grid_rel, geography/web_mercator);
+			parameter<string> x_tile := string(domain_grid/x_tile[domain_grid_rel]);
+			parameter<string> y_tile := string(domain_grid/y_tile[domain_grid_rel]);
+
+			container Square
+			{
+				unit<uint32> shape: nrofrows = 1
+				{
+					attribute<geography/web_mercator> left_top     := const(top_left,.);
+					attribute<geography/web_mercator> right_top    := top_left + const(point_xy(grid_size, 0[units/m], geography/web_mercator), .);
+					attribute<geography/web_mercator> right_bottom := top_left + const(point_xy(grid_size, -grid_size, geography/web_mercator), .);
+					attribute<geography/web_mercator> left_bottom  := top_left + const(point_xy(0[units/m], -grid_size, geography/web_mercator), .);
+				}
+
+				unit<uint32> pointset : nrofrows = 5
+				{
+					attribute<geography/web_mercator> point    := union_data(., shape/left_top, shape/right_top, shape/right_bottom, shape/left_bottom, shape/left_top);
+					attribute<shape>    sequence := const(0,., shape);
+					attribute<uint32>   order    := id(.);
+				}
+
+				attribute<geography/web_mercator> geometry (poly, shape) := points2sequence(pointset/point, pointset/sequence, pointset/order);
+				
+				unit<uint32> intersect := overlay_polygon(ipolygon(geometry), ipolygon(SourceData/buurt2020/geometry_wm))
+				{
+					attribute<geography/web_mercator> geometry_wm (poly) := convert(geometry, geography/web_mercator);
+				}
+				
+				parameter<string> GDAL_Driver : ['OSM'];
+				unit<uint32> export := intersect
+				, StorageName = "='%LocalDataDir%/startanalyse_2_0/test/' + x_tile + '/' + y_tile + '.pbf'"
+				, StorageType = "gdalwrite.vect"
+				{
+					attribute<geography/web_mercator> geometry (poly) := intersect/geometry_wm;
+					attribute<string>                 bu_code         := SourceData/buurt2020/bu_code[intersect/second_rel];					
+				}
+			}
+		}
+	}
+	
+	container Analyses
+	{
+		container vergrid_13
+		{
+			attribute<SourceData/buurt2020> buurt_2020_rel (geography/wm_tiles_grid/grid_13) := 
+				poly2grid(SourceData/buurt2020/geometry_wm, geography/wm_tiles_grid/grid_13);
+			unit<uint32> tiles_with_data := select_with_org_rel(IsDefined(buurt_2020_rel))
+			{
+				attribute<string> name := 'nr_' + string(id(.));
+			}
+			
+			
+			container grid_export := for_each_ne (
+				  tiles_with_data/name
+				, 'Templates/clip_tile_and_export(geography/wm_tiles_grid/grid_13, ' + quote(tiles_with_data/name) + ', /geography/wm_tiles_grid/extent/tile_size_and_number/tile_size)' 
+				);
+			
+		}
+	}
+	
+	container Exports
+	{
+		unit<uint32> Buurtindicatoren_strategie_3 := SourceData/buurt2020
+		{
+			attribute<geography/web_mercator> geometry (poly) := convert(SourceData/buurt2020/geometry, geography/web_mercator);
+			attribute<string> BU_CODE := SourceData/buurt2020/BU_CODE;
+			//attribute<units/Euro_per_Year> nat_meerk := 	
+			//	rjoin(	BU_CODE, 
+			//			SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE, 
+			//			SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]
+			//		 );
+		}
+		
+		unit<uint32> bstrat3_geojson := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3)),  StorageName="%LocalDataDir%/startanalyse_2_0/bstrat3.geojson", StorageType="gdalwrite.vect";
+		
+		//parameter<string> CONF_str := "{ ""boundaries_lod0"": {	""target_name"": ""geometry"", ""description"": ""Buurtgrenzen"", ""minzoom"":  7, ""maxzoom"": 11, ""fields"": { ""BU_CODE"": ""Number"", } }, }";
+		
+
+		container MBTiles
+		{
+			parameter<string> GDAL_Driver : ['MBTiles'];
+			unit<uint32> optionSet := range(uint32, 0, 2);
+			attribute<string> GDAL_Options (optionSet) : [ 'MINZOOM=7', 'MAXZOOM=13']; //'CONF={ "boundaries_lod0": {	"target_name": "geometry", "description": "Buurtgrenzen", "minzoom":  7, "maxzoom": 11, "fields": { "BU_CODE": "Number", } } }'];
+			container write
+			{
+				//unit<uint32> bstrat3_mvt := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3)),  StorageName="%LocalDataDir%/startanalyse_2_0/bstrat33", StorageType="gdalwrite.vect";
+				
+				
+				unit<uint32> bstrat3 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3))
+				, StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3.mbtiles"
+				, StorageType="gdalwrite.vect";
+				
+			}
+		}
+		
+		container MVT
+		{
+			parameter<string> GDAL_Driver : ['MVT'];
+			container simple
+			{
+				unit<uint32> optionSet := range(uint32, 0, 2);
+				attribute<string> GDAL_Options (optionSet) : [ 'MINZOOM=0', 'MAXZOOM=13']; //'CONF={ "boundaries_lod0": {	"target_name": "geometry", "description": "Buurtgrenzen", "minzoom":  7, "maxzoom": 11, "fields": { "BU_CODE": "Number", } } }'];
+				container write
+				{
+					unit<uint32> bstrat3 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3))
+					, StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_"
+					, StorageType="gdalwrite.vect";
+				}
+			}
+			
+			container single_layer_single_zoom_level
+			{
+				unit<uint32> optionSet := range(uint32, 0, 4);
+				attribute<string> GDAL_Options (optionSet) : ['SIMPLIFICATION=0.0', 'MINZOOM=13', 'MAXZOOM=13', 'CONF=
+					[
+						
+						{
+							"bstrat3": {
+								"target_name": "bstrat3",
+								"description": "CBS buurten met codes",
+								"minzoom": 13,
+								"maxzoom": 13
+							},
+						}
+						
+					]'];
+				unit<uint32> bstrat3 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3))
+				, StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_single_layer_single_zoom"
+				, StorageType="gdalwrite.vect";
+			}
+		}
+	}
+	
+	container reread
+	{
+		unit<uint32> example_pbf : 
+			storagename= "%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_/13/4187/2718.pbf"
+		, 	storagetype= "gdal.vect"
+		,	storagereadonly = "True"
+		{
+			attribute<geography/web_mercator> geometry (poly);
+		}
+		
+		unit<uint32> example_pbf_2 : 
+			storagename= "%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_/13/4248/2674.pbf"
+		, 	storagetype= "gdal.vect"
+		,	storagereadonly = "True"
+		{
+			attribute<geography/web_mercator> geometry (poly);
+		}
+	
+		unit<uint32> example_pbf_3 : 
+		storagename= "%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_single_layer_single_zoom/13/4205/2709.pbf"
+
+		, 	storagetype= "gdal.vect"
+		,	storagereadonly = "True"
+		{
+			attribute<geography/web_mercator> geometry (poly);
+		}
+	}
+	
+	
+}
