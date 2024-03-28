@@ -1,0 +1,8 @@
+{
+"bstrat3": {
+	"target_name": "bstrat3",
+	"description": "CBS buurten met codes",
+	"minzoom": 13,
+	"maxzoom": 13
+},
+}

@@ -1,0 +1,14 @@
+{
+	"bstrat3_12": {
+		"target_name": "bstrat3",
+		"description": "CBS buurten met codes",
+		"minzoom": 12,
+		"maxzoom": 12
+	},
+	"bstrat3_13": {
+	"target_name": "bstrat3",
+	"description": "CBS buurten met codes",
+	"minzoom": 13,
+	"maxzoom": 13
+	}
+}
