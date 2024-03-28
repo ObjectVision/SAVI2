@@ -46,6 +46,7 @@ container startanalyse_2_0
 
 		container m_100 := grid_template(100[units/m], upper_left_point_nl_rd, lower_right_point_nl_rd);
 		container m_10  := grid_template(10[units/m], upper_left_point_nl_rd, lower_right_point_nl_rd);
+		container m_1  := grid_template(1[units/m], upper_left_point_nl_rd, lower_right_point_nl_rd);
 		container m_10_test  := grid_template(10[units/m], upper_left_point_subset_rd, lower_right_point_subset_rd);
 
 		Template grid_template
@@ -68,11 +69,11 @@ container startanalyse_2_0
 				:= range(
 					 gridset(
 						point_rd
-					   ,point_xy(float32(grid_size), float32(-grid_size), point_rd) //, 
+					   ,point_xy(float32(grid_size), float32(-grid_size)) //, 
 					   ,upper_left //upper_left_point_nl_rd //
 					   ,ipoint
 					 )
-					 ,point(0i, 0i)
+					 ,point_xy(0i, 0i)
 					 ,point_xy(nr_cols, nr_rows)
 				  )
 				  {
@@ -362,23 +363,29 @@ container startanalyse_2_0
 			
 			container single_layer_single_zoom_level
 			{
-				unit<uint32> optionSet := range(uint32, 0, 4);
-				attribute<string> GDAL_Options (optionSet) : ['SIMPLIFICATION=0.0', 'MINZOOM=13', 'MAXZOOM=13', 'CONF=
-					[
-						
-						{
-							"bstrat3": {
-								"target_name": "bstrat3",
-								"description": "CBS buurten met codes",
-								"minzoom": 13,
-								"maxzoom": 13
-							},
-						}
-						
-					]'];
-				unit<uint32> bstrat3 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3))
-				, StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_single_layer_single_zoom"
-				, StorageType="gdalwrite.vect";
+				unit<uint32> optionSet := range(uint32, 0, 2);
+				attribute<string> GDAL_Options (optionSet) : ['SIMPLIFICATION=0.0', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_single_layer.json'];
+				container dataset
+				: StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_single_layer_single_zoom"
+				, StorageType="gdalwrite.vect"
+				, StorageReadOnly = "False"
+				{
+					unit<uint32> bstrat3 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3));
+				}
+			}
+			
+			container double_layer_double_zoom_level
+			{
+				unit<uint32> optionSet := range(uint32, 0, 2);
+				attribute<string> GDAL_Options (optionSet) : ['SIMPLIFICATION=0.0', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_double_layer.json'];
+				container dataset
+				: StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_double_layer_double_zoom"
+				, StorageType="gdalwrite.vect"
+				, StorageReadOnly = "False"
+				{
+					unit<uint32> bstrat3_12 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3));
+					unit<uint32> bstrat3_13 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3));
+				}
 			}
 		}
 	}
