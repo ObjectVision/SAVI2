@@ -1,0 +1,91 @@
+container Templates {	
+	#include <grid2poly_ipoint.dms>
+	
+	Template SimplifyPolygons_ipoint {
+		// begin case parameters
+		unit<uint32>       ShapeDomain;
+		unit<ipoint>       domain_grid;
+		parameter<float64> simplifyFactor;
+		// end case parameters
+
+		attribute<Geography/point_rd> Shape_geometry (ShapeDomain, poly) := ShapeDomain/geometry;
+
+		attribute<ShapeDomain> ShapeDomain_rel (domain_grid) := poly2grid_untiled(Shape_geometry, domain_grid);
+		container SimplifiedPolygons                         := grid2poly_ipoint(domain_grid, ShapeDomain, ShapeDomain_rel, simplifyFactor);
+	}
+	
+	Template number_and_size_of_tiles_from_z {
+		// begin case parameters
+		parameter<uint32> z; // zoom level
+		// end case parameters
+		
+		parameter<float64> total         := pow(4.0, z[float64]);
+		parameter<float64> total_x_tiles := pow(2.0, z[float64]);
+		parameter<float64> total_y_tiles := total_x_tiles;
+		parameter<units/m> tile_size     := (geography/constants/omtrek_evenaar / total_x_tiles)[units/m];
+	}
+
+	Template tile_xy_from_tile_size_and_wm_point {
+		// begin case parameters
+		parameter<units/m> tile_size; // horizontal and vertical tile size
+		parameter<geography/web_mercator> wm_point;
+		// end case parameters
+		
+		parameter<float64> point_row := pointrow(wm_point);
+		
+		parameter<float64> x := (pointcol(wm_point) - geography/wm_map_extents/x_min) / tile_size;
+		parameter<float64> y := (geography/wm_map_extents/y_max - point_row) / tile_size;
+		
+		parameter<int32> x_rounded := RoundDown(x);
+		parameter<int32> y_rounded := RoundDown(y); 
+		
+		parameter<float64> U := geography/wm_map_extents/y_max - y_rounded[float64]*tile_size[float64];
+		parameter<float64> L := geography/wm_map_extents/x_min + x_rounded[float64]*tile_size[float64];
+		
+		parameter<geography/web_mercator> UL := point_yx(U, L, geography/web_mercator);
+	}
+	
+	Template clip_tile_and_export {
+		// begin case parameters
+		unit<spoint> domain_grid;
+		parameter<string> grid_cel_name;
+		parameter<units/m> grid_size;
+		// end case parameters
+		
+		parameter<domain_grid> domain_grid_rel := rjoin(grid_cel_name, tiles_with_data/name, tiles_with_data/org_rel);
+
+		parameter<geography/web_mercator> top_left := convert(domain_grid_rel, geography/web_mercator);
+		parameter<string> x_tile := string(domain_grid/x_tile[domain_grid_rel]);
+		parameter<string> y_tile := string(domain_grid/y_tile[domain_grid_rel]);
+
+		container Square {
+			unit<uint32> shape: nrofrows = 1 {
+				attribute<geography/web_mercator> left_top     := const(top_left,.);
+				attribute<geography/web_mercator> right_top    := top_left + const(point_xy(grid_size, 0[units/m], geography/web_mercator), .);
+				attribute<geography/web_mercator> right_bottom := top_left + const(point_xy(grid_size, -grid_size, geography/web_mercator), .);
+				attribute<geography/web_mercator> left_bottom  := top_left + const(point_xy(0[units/m], -grid_size, geography/web_mercator), .);
+			}
+
+			unit<uint32> pointset : nrofrows = 5 {
+				attribute<geography/web_mercator> point    := union_data(., shape/left_top, shape/right_top, shape/right_bottom, shape/left_bottom, shape/left_top);
+				attribute<shape>    sequence := const(0,., shape);
+				attribute<uint32>   order    := id(.);
+			}
+
+			attribute<geography/web_mercator> geometry (poly, shape) := points2sequence(pointset/point, pointset/sequence, pointset/order);
+			
+			unit<uint32> intersect := overlay_polygon(ipolygon(geometry), ipolygon(SourceData/buurt2020/geometry_wm)) {
+				attribute<geography/web_mercator> geometry_wm (poly) := convert(geometry, geography/web_mercator);
+			}
+			
+			parameter<string> GDAL_Driver : ['OSM'];
+			unit<uint32> export := intersect
+			, StorageName = "='%LocalDataDir%/startanalyse_2_0/test/' + x_tile + '/' + y_tile + '.pbf'"
+			, StorageType = "gdalwrite.vect"
+			{
+				attribute<geography/web_mercator> geometry (poly) := intersect/geometry_wm;
+				attribute<string>                 bu_code         := SourceData/buurt2020/bu_code[intersect/second_rel];					
+			}
+		}
+	}
+}

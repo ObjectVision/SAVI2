@@ -1,0 +1,70 @@
+container Exports {
+	unit<uint32> Buurtindicatoren_strategie_3 := SourceData/buurt2020 {
+		attribute<geography/web_mercator> geometry (poly) := convert(SourceData/buurt2020/geometry, geography/web_mercator);
+		attribute<string> BU_CODE := SourceData/buurt2020/BU_CODE;
+		//attribute<units/Euro_per_Year> nat_meerk := 	
+		//	rjoin(	BU_CODE, 
+		//			SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE, 
+		//			SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]
+		//		 );
+	}
+	
+	unit<uint32> bstrat3_geojson := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3)),  StorageName="%LocalDataDir%/startanalyse_2_0/bstrat3.geojson", StorageType="gdalwrite.vect";
+	
+	//parameter<string> CONF_str := "{ ""boundaries_lod0"": {	""target_name"": ""geometry"", ""description"": ""Buurtgrenzen"", ""minzoom"":  7, ""maxzoom"": 11, ""fields"": { ""BU_CODE"": ""Number"", } }, }";
+	
+
+	container MBTiles {
+		parameter<string> GDAL_Driver : ['MBTiles'];
+		unit<uint32> optionSet := range(uint32, 0, 2);
+		attribute<string> GDAL_Options (optionSet) : [ 'MINZOOM=7', 'MAXZOOM=13']; //'CONF={ "boundaries_lod0": {	"target_name": "geometry", "description": "Buurtgrenzen", "minzoom":  7, "maxzoom": 11, "fields": { "BU_CODE": "Number", } } }'];
+		container write
+		{
+			//unit<uint32> bstrat3_mvt := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3)),  StorageName="%LocalDataDir%/startanalyse_2_0/bstrat33", StorageType="gdalwrite.vect";
+			
+			
+			unit<uint32> bstrat3 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3.mbtiles"
+			, StorageType="gdalwrite.vect";
+			
+		}
+	}
+	
+	container MVT {
+		parameter<string> GDAL_Driver : ['MVT'];
+		container simple {
+			unit<uint32> optionSet := range(uint32, 0, 2);
+			attribute<string> GDAL_Options (optionSet) : [ 'MINZOOM=0', 'MAXZOOM=13']; //'CONF={ "boundaries_lod0": {	"target_name": "geometry", "description": "Buurtgrenzen", "minzoom":  7, "maxzoom": 11, "fields": { "BU_CODE": "Number", } } }'];
+			container write {
+				unit<uint32> bstrat3 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3))
+				, StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_"
+				, StorageType="gdalwrite.vect";
+			}
+		}
+		
+		container single_layer_single_zoom_level {
+			unit<uint32> optionSet := range(uint32, 0, 2);
+			attribute<string> GDAL_Options (optionSet) : ['SIMPLIFICATION=0.0', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_single_layer.json'];
+			container dataset
+			: StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_single_layer_single_zoom"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False"
+			{
+				unit<uint32> bstrat3 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3));
+			}
+		}
+		
+		container double_layer_double_zoom_level {
+			unit<uint32> optionSet := range(uint32, 0, 2);
+			attribute<string> GDAL_Options (optionSet) : ['SIMPLIFICATION=0.0', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_double_layer.json'];
+			container dataset
+			: StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_double_layer_double_zoom"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False"
+			{
+				unit<uint32> bstrat3_12 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3));
+				unit<uint32> bstrat3_13 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3));
+			}
+		}
+	}
+}

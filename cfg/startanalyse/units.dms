@@ -1,0 +1,6 @@
+container units {
+	unit<uint32> Euro;
+	unit<uint32> Year;
+	unit<uint32> Euro_per_Year := Euro / Year;
+	unit<float64> m := baseunit('m', float64);
+}
