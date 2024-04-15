@@ -1,6 +1,38 @@
 container Templates {	
 	#include <grid2poly_ipoint.dms>
 	
+	Template grid_template {	
+		// case parameter
+		parameter<units/m> grid_size;
+		parameter<geography/point_rd> upper_left;
+		parameter<geography/point_rd> lower_right;
+		// end of case parameter
+		
+		
+		parameter<float32> nr_cols_f32 := (pointcol(lower_right) - pointcol(upper_left)) / float32(grid_size);
+		parameter<int32> nr_cols := int32(nr_cols_f32);
+		parameter<float32> nr_rows_f32 := (pointrow(upper_left) - pointrow(lower_right)) / float32(grid_size);
+		parameter<int32> nr_rows := int32(nr_rows_f32);
+		
+		parameter<geography/point_rd> lower_right_computed := upper_left + point_xy(float32(nr_cols) * float32(grid_size), -float32(nr_rows) * float32(grid_size), geography/point_rd);
+		
+		unit<ipoint> domain
+			:= range(
+				 gridset(
+					geography/point_rd
+				   ,point_xy(float32(grid_size), float32(-grid_size)) //, 
+				   ,upper_left //upper_left_point_nl_rd //
+				   ,ipoint
+				 )
+				 ,point_xy(0i, 0i)
+				 ,point_xy(nr_cols, nr_rows)
+			  )
+			  {
+				attribute<uint8>  test := const(8b, .);
+			  }
+			
+	}
+	
 	Template SimplifyPolygons_ipoint {
 		// begin case parameters
 		unit<uint32>       ShapeDomain;
@@ -86,6 +118,94 @@ container Templates {
 				attribute<geography/web_mercator> geometry (poly) := intersect/geometry_wm;
 				attribute<string>                 bu_code         := SourceData/buurt2020/bu_code[intersect/second_rel];					
 			}
+		}
+	}
+	
+	Template SimplifyForGridsize {
+		// begin case parameters
+		parameter<units/m> grid_size;
+		// end case parameters
+		
+		//unit<uint32>       ShapeDomain;
+		//unit<ipoint>       domain_grid;
+		//parameter<float64> simplifyFactor;
+		container result := ='Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, /geography/gridsets/m_' + string(grid_size) + '/domain,' + string(factor) + '[units/m])';
+	}
+	
+	Template SimplifyForFactor {
+		// begin case parameters
+		parameter<units/m> factor;
+		// end case parameters
+		
+		container per_gridsize := for_each_ne (
+			  /parameters/simplify/grids/name
+			, 'SimplifyForGridsize(' + string(/parameters/simplify/grids/size) + '[units/m])'
+		);
+	}
+	
+	Template GetSimplifiedResults {
+		// begin case parameters
+		parameter<units/m> grid_size;
+		parameter<units/m> factor;
+		// end case parameters
+	
+		unit<uint2> Direction {
+			attribute<string> Label : [ 'North', 'East', 'South', 'West'];
+			container V:= for_each_nedv(Label, string(ID(.))+'[..]', void, .);
+			attribute<.> Next    := union_data(., V/West, V/North, V/East, V/South);
+			attribute<.> Reverse := union_data(., V/South, V/West, V/North, V/East);
+		}
+	
+		container grid := Templates/grid_template(grid_size, geography/upper_left_point_nl_rd, geography/lower_right_point_nl_rd);
+	
+		//container result := ='Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, /geography/gridsets/m_' + string(grid_size) + '/domain,' + string(factor) + '[units/m])';
+		container simplify := Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, grid/domain, factor);
+	
+		unit<uint32> property : nrofrows = 1 {
+		   parameter<string> name: ['name'];//,'valuesunit'];
+		}
+		unit<uint32> scenario_item := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3_final;
+		unit<uint32> results := SourceData/buurt2020 {
+			//attribute<geography/web_mercator> geometry (poly) := convert(SourceData/buurt2020/geometry, geography/web_mercator);
+			attribute<geography/web_mercator> geometry (poly) := convert(simplify/SimplifiedPolygons/results/geometry, geography/web_mercator);
+			
+			/*container scenario_info {
+				unit<uint32> scenario_name    := ='subitem_propvalues(' + scenario_item + ', "name")';
+				unit<uint32> scenario_vu      := ='subitem_propvalues(' + scenario_item + ', "valuesunit")';
+				
+				unit<uint32> scenario_name_vu := scenario_name {
+					attribute<string> name 		  := scenario_name/name;
+					attribute<string> values_unit (.):= rjoin(string(id(scenario_name)), string(id(scenario_vu)), scenario_vu/ValuesUnit);
+				}
+			}*/
+			
+
+			
+			/*container test := for_each_nedv (
+				  scenario_info/scenario_name_vu/name
+				, 'rjoin(BU_CODE, scenario_item/BU_CODE,' + scenario_item + '/' + scenario_info/scenario_name_vu/name + ')'
+				, SourceData/buurt2020
+				, string //scenario_info/scenario_name_vu/values_unit
+			)
+			{
+				
+			}*/
+			
+			attribute<units/giga_J_per_woning_per_yr> _H01_Vraag_totaal_giga_J_per_Woning_yr_ := 	
+				rjoin(	BU_CODE, 
+						SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3_final/BU_CODE, 
+						SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3_final/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]
+					 );
+			
+			//unit<uint32> scenario_name := subitem_propvalues(/SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3, 'name'); // scenario_unit
+
+			
+			/*
+			attribute<units/Euro_per_Year> nat_meerk := 	
+				rjoin(	BU_CODE, 
+						SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE, 
+						SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]
+					 );*/
 		}
 	}
 }

@@ -1,6 +1,10 @@
 container units {
 	unit<uint32> Euro;
 	unit<uint32> Year;
+	unit<uint32> woning;
 	unit<uint32> Euro_per_Year := Euro / Year;
 	unit<float64> m := baseunit('m', float64);
+	unit<uint32> J := baseunit('J', uint32);
+	unit<uint32> giga_J := 10e9*J;
+	unit<uint32> giga_J_per_woning_per_yr := giga_J / woning / Year;
 }

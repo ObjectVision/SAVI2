@@ -19,15 +19,13 @@ template grid2poly_ipoint
 	unit<int32>  HorizontalLine := range(int32, lowerbound(rows), upperbound(rows)+1[rows]);
 	unit<int32>  VerticalLine   := range(int32, lowerbound(cols), upperbound(cols)+1[cols]);
 
-	unit<uint32> Point := combine(VerticalLine, HorizontalLine)
-	{
+	unit<uint32> Point := combine(VerticalLine, HorizontalLine) {
 		attribute<geography/point_rd> geometry        := domain_grid_rel[geography/point_rd];
 		attribute<domain_grid>        domain_grid_rel := point_xy(first_rel, second_rel, domain_grid); // the RasterCell NorthEast of this Point
 		attribute<bool>               isBoundaryPoint := has_any(BoundarySegment/F1) || has_any(BoundarySegment/F2);
 	}
 
-	unit<uint32> BoundaryPoint := select_with_org_rel(Point/isBoundaryPoint)
-	{
+	unit<uint32> BoundaryPoint := select_with_org_rel(Point/isBoundaryPoint) {
 		attribute<Point>              Point_rel          := org_rel;
 		attribute<geography/point_rd> geometry           := org_rel->geometry;
 		attribute<uint32>             NrBoundarySegments := pcount(BoundarySegment/bp_F1) + pcount(BoundarySegment/bp_F2);
@@ -37,22 +35,19 @@ template grid2poly_ipoint
 		attribute<BoundarySegment> Last_Link := MakeDefined(last (ID(BoundarySegment), BoundarySegment/bp_F2), last (ID(BoundarySegment), BoundarySegment/bp_F1));
 	}
 
-	unit<uint32> HorizontalSegment := combine(cols, HorizontalLine)
-	{
+	unit<uint32> HorizontalSegment := combine(cols, HorizontalLine) {
 		attribute<domain_grid> North             := point_xy(first_rel, second_rel-1[HorizontalLine], domain_grid);
 		attribute<domain_grid> South             := point_xy(first_rel, second_rel   , domain_grid);
 		attribute<bool>        isBoundarySegment := MakeDefined(south->zone_rel, NoZone) != MakeDefined(North->zone_rel, NoZone);
 	}
 
-	unit<uint32> VerticalSegment := combine(VerticalLine, rows)
-	{
+	unit<uint32> VerticalSegment := combine(VerticalLine, rows) {
 		attribute<domain_grid> West              := point_xy(first_rel-1[VerticalLine], second_rel, domain_grid);
 		attribute<domain_grid> East              := point_xy(first_rel   , second_rel, domain_grid);
 		attribute<bool>        isBoundarySegment := MakeDefined(West->zone_rel, max(zone_rel)+1[zone]) != MakeDefined(East->zone_rel, max(zone_rel)+1[zone]);
 	}
 
-	unit<uint32> HorizontalBoundarySegment := select(HorizontalSegment/isBoundarySegment)
-	{
+	unit<uint32> HorizontalBoundarySegment := select(HorizontalSegment/isBoundarySegment) {
 		attribute<cols>           first_rel  := collect_by_cond(., HorizontalSegment/first_rel);
 		attribute<HorizontalLine> second_rel := collect_by_cond(., HorizontalSegment/second_rel);
 
@@ -63,8 +58,7 @@ template grid2poly_ipoint
 		attribute<Point>          F2         := combine_data(Point, (first_rel+1[cols])[VerticalLine], second_rel);
 	}
 
-	unit<uint32> VerticalBoundarySegment := select(verticalSegment/isBoundarySegment)
-	{
+	unit<uint32> VerticalBoundarySegment := select(verticalSegment/isBoundarySegment) {
 		attribute<VerticalLine> first_rel  := collect_by_cond(., VerticalSegment/first_rel);
 		attribute<rows>         second_rel := collect_by_cond(., VerticalSegment/second_rel);
 
@@ -75,12 +69,10 @@ template grid2poly_ipoint
 		attribute<Point>        F2         := combine_data(Point, first_rel, (second_rel+1[rows])[HorizontalLine]);
 	}
 
-	unit<uint32> BoundarySegment := union_unit(HorizontalBoundarySegment, VerticalBoundarySegment)
-	{
+	unit<uint32> BoundarySegment := union_unit(HorizontalBoundarySegment, VerticalBoundarySegment) {
 		attribute<Direction> Direction_rel := union_data(., const(Direction/V/South, HorizontalBoundarySegment), const(Direction/V/East, VerticalBoundarySegment));
 
-		unit<uint32> BS_Point := union_unit(BoundarySegment, BoundarySegment)
-		{
+		unit<uint32> BS_Point := union_unit(BoundarySegment, BoundarySegment) {
 			attribute<geography/point_rd> geometry            := union_data(BS_Point, F1->geometry, F2->geometry);
 			attribute<BoundarySegment>    BoundarySegment_rel := union_data(BS_Point, ID(BoundarySegment), ID(BoundarySegment));
 		}
@@ -103,22 +95,19 @@ template grid2poly_ipoint
 
 		attribute<JFSection>     JFSection_rel := JFSection/PartNr;
 	}
-	unit<uint32> IntermediatePoint := select_with_org_rel(not(BoundaryPoint/isJunction))
-	{
+	unit<uint32> IntermediatePoint := select_with_org_rel(not(BoundaryPoint/isJunction)) {
 		attribute<BoundaryPoint>   BoundaryPoint_rel := org_rel;
 		attribute<BoundarySegment> Ra                := collect_by_cond(IntermediatePoint, BoundaryPoint/FirstLink);
 		attribute<BoundarySegment> Rb                := collect_by_cond(IntermediatePoint, BoundaryPoint/Last_Link);
 		attribute<bool>            IsOke             := IsDefined(Ra) && IsDefined(Rb) && Ra != Rb;
 	}
 
-	unit<uint32> Junction := select_with_org_rel(BoundaryPoint/isJunction)
-	{
+	unit<uint32> Junction := select_with_org_rel(BoundaryPoint/isJunction) {
 		attribute<geography/point_rd> geometry                := collect_by_cond(Junction, BoundaryPoint/geometry);
 		attribute<.>                  per_node(BoundaryPoint) := invert(org_rel);
 	}
 
-	unit<uint32> FromJunctionLink := select_with_org_rel(BoundarySegment/f1IsJunction)
-	{
+	unit<uint32> FromJunctionLink := select_with_org_rel(BoundarySegment/f1IsJunction) {
 		attribute<BoundarySegment> BoundarySegment_rel := org_rel;
 		attribute<BoundaryPoint>   F1                  := collect_by_cond(FromJunctionLink, BoundarySegment/bp_F1);
 		attribute<BoundaryPoint>   F2                  := collect_by_cond(FromJunctionLink, BoundarySegment/bp_F2);
@@ -130,8 +119,7 @@ template grid2poly_ipoint
 		attribute<Zone>            rightZone_rel       := collect_by_cond(FromJunctionLink, BoundarySegment/rightZone_rel);
 	}
 
-	unit<uint32> ToJunctionLink := select_with_org_rel(BoundarySegment/f2IsJunction)
-	{
+	unit<uint32> ToJunctionLink := select_with_org_rel(BoundarySegment/f2IsJunction) {
 		attribute<BoundarySegment> BoundarySegment_rel := org_rel;
 		attribute<BoundaryPoint>   F1                  := collect_by_cond(ToJunctionLink, BoundarySegment/bp_F1);
 		attribute<BoundaryPoint>   F2                  := collect_by_cond(ToJunctionLink, BoundarySegment/bp_F2);
@@ -145,13 +133,11 @@ template grid2poly_ipoint
 
 	unit<uint32> JunctionDirection := combine_unit(Junction, Direction);
 
-	unit<uint32> JunctionLink := union_unit(FromJunctionLink, ToJunctionLink)
-	{
+	unit<uint32> JunctionLink := union_unit(FromJunctionLink, ToJunctionLink) {
 		attribute<geography/point_rd> Junction_geometry   := Junction_rel->Geometry;
 		attribute<BoundarySegment>    BoundarySegment_rel := union_data(., FromJunctionLink/BoundarySegment_rel, ToJunctionLink/BoundarySegment_rel);
 
-		unit<uint32> JL_Point := union_unit(JunctionLink, JunctionLink)
-		{
+		unit<uint32> JL_Point := union_unit(JunctionLink, JunctionLink) {
 			attribute<geography/point_rd> geometry         := union_data(JL_Point, F1->geometry, F2->geometry);
 			attribute<JunctionLink>       JunctionLink_rel := union_data(JL_Point, ID(JunctionLink), ID(JunctionLink));
 		}
@@ -182,8 +168,7 @@ template grid2poly_ipoint
 	}
 
 	// Junction Free Section := clusters van BoundarySegments
-	unit<uint32> JFSection := connected_parts(intermediatePoint/Ra, intermediatePoint/Rb)
-	{
+	unit<uint32> JFSection := connected_parts(intermediatePoint/Ra, intermediatePoint/Rb) {
 		attribute<uint32> nr_BoundarySegments := pcount(PartNr);
 
 		attribute<uint8>  NrEnds       := sum_uint8(2 - BoundarySegment/NrIntermediatePoints, PartNr);
@@ -192,8 +177,7 @@ template grid2poly_ipoint
 		attribute<.> per_IntermediatePoint(IntermediatePoint) := MakeDefined(BoundarySegment/JFSection_rel[IntermediatePoint/Ra], BoundarySegment/JFSection_rel[IntermediatePoint/Rb]);
 	}
 
-	unit<uint32> JFRing  := select_with_org_rel(not(JFSection/isLineString))
-	{
+	unit<uint32> JFRing  := select_with_org_rel(not(JFSection/isLineString)) {
 		attribute<JFSection>       JFSection_rel                     := org_rel;
 		attribute<BoundarySegment> JFSection_firstBS_rel (JFSection) :=  min_index(ID(BoundarySegment), JFSection/PartNr);
 		attribute<BoundarySegment> firstBoundarySegment_rel          := lookup(JFSection_rel, JFSection_firstBS_rel);
@@ -207,8 +191,7 @@ template grid2poly_ipoint
 		attribute<Zone>            left_Zone_rel := firstBoundarySegment_rel->rightZone_rel;
 		attribute<Zone>            rightZone_rel := firstBoundarySegment_rel->left_Zone_rel;
 
-		unit<uint32> ReducedBoundarySegment := select(not(BoundarySegment/JFSection_rel->isLineString) && BoundarySegment_IsNotFirstRingSegment)
-		{
+		unit<uint32> ReducedBoundarySegment := select(not(BoundarySegment/JFSection_rel->isLineString) && BoundarySegment_IsNotFirstRingSegment) {
 			attribute<BoundaryPoint> F1 := collect_by_cond(., BoundarySegment/bp_F1);
 			attribute<BoundaryPoint> F2 := collect_by_cond(., BoundarySegment/bp_F2);
 		}
@@ -220,8 +203,7 @@ template grid2poly_ipoint
 		attribute<uint32> dist_from_first_BP(BoundaryPoint) := impedance_table('bidirectional;startPoint(Node_rel);node:TraceBack'
 				, const(1, ReducedBoundarySegment), ReducedBoundarySegment/F1, ReducedBoundarySegment/F2, firstBoundaryPoint_rel);
 
-		unit<uint32> Point := select(IsDefined(dist_from_first_BP))
-		{
+		unit<uint32> Point := select(IsDefined(dist_from_first_BP)) {
 			attribute<geography/point_rd> geometry := collect_by_cond(Point, BoundaryPoint/Geometry);
 			attribute<JFRing> sequence_rel         := collect_by_cond(Point, per_BoundaryPoint);
 			attribute<uint32> ordinal              := collect_by_cond(Point, dist_from_first_BP);
@@ -232,8 +214,7 @@ template grid2poly_ipoint
 		attribute<float32>            simplified_area       := area(SimplifiedRing, float32);
 	}
 
-	unit<uint32> NonEmptyJFRing := select(abs(JFRing/simplified_area) > 100f)
-	{
+	unit<uint32> NonEmptyJFRing := select(abs(JFRing/simplified_area) > 100f) {
 		attribute<geography/point_rd> geometry       (poly) := collect_by_cond(NonEmptyJFRing, JFRing/geometry);
 		attribute<geography/point_rd> SimplifiedRing (poly) := collect_by_cond(NonEmptyJFRing, JFRing/SimplifiedRing);
 		attribute<Zone>               left_Zone_rel         := collect_by_cond(., JFRing/left_Zone_rel);
@@ -243,8 +224,7 @@ template grid2poly_ipoint
 		attribute<geography/point_rd> SimplifiedReversedRing(poly) := points2polygon(Point/Point, Point/sequence_rel, (pcount(Point/sequence_rel) - 1)[Point/sequence_rel] - Point/ordinal);
 	}
 
-	unit<uint32> JFLineString := select_with_org_rel(JFSection/isLineString) // JunctionFree LineString
-	{
+	unit<uint32> JFLineString := select_with_org_rel(JFSection/isLineString) { // JunctionFree LineString
 		attribute<JunctionLink>  firstJL_rel  := collect_by_cond(., first(ID(JunctionLink), JunctionLink/BoundarySegment_rel->JFSection_rel));
 		attribute<JunctionLink>  last_JL_rel  := collect_by_cond(., last (ID(JunctionLink), JunctionLink/BoundarySegment_rel->JFSection_rel));
 
@@ -256,8 +236,7 @@ template grid2poly_ipoint
 		attribute<BoundarySegment> last_BoundarySegment := last_JL_rel->BoundarySegment_rel;
 		attribute<BoundarySegment> firstBoundarySegment := firstJL_rel->BoundarySegment_rel;
 
-		unit<uint32> ReducedBoundarySegment := select(BoundarySegment/JFSection_rel->isLineString && !IsDefined(invert(last_BoundarySegment)) && !IsDefined(invert(firstBoundarySegment)))
-		{
+		unit<uint32> ReducedBoundarySegment := select(BoundarySegment/JFSection_rel->isLineString && !IsDefined(invert(last_BoundarySegment)) && !IsDefined(invert(firstBoundarySegment))) {
 			attribute<BoundaryPoint> F1 := collect_by_cond(., BoundarySegment/bp_F1);
 			attribute<BoundaryPoint> F2 := collect_by_cond(., BoundarySegment/bp_F2);
 		}
@@ -265,8 +244,7 @@ template grid2poly_ipoint
 		attribute<uint32> dist_from_first_BP(BoundaryPoint) := impedance_table('bidirectional;startPoint(Node_rel);node:TraceBack'
 				, const(1, ReducedBoundarySegment), ReducedBoundarySegment/F1, ReducedBoundarySegment/F2, secondBP_rel);
 
-		unit<uint32> Point := select_with_org_rel(IsDefined(dist_from_first_BP))
-		{
+		unit<uint32> Point := select_with_org_rel(IsDefined(dist_from_first_BP)) {
 			attribute<BoundaryPoint>      BoundaryPoint_rel     := org_rel;
 			attribute<IntermediatePoint>  IntermediatePoint_rel := invert(IntermediatePoint/BoundaryPoint_rel)[BoundaryPoint_rel];
 			attribute<BoundarySegment>    BoundarySegmentA_rel  := IntermediatePoint_rel->Ra;
@@ -276,8 +254,7 @@ template grid2poly_ipoint
 		}
 
 		attribute<uint32> NrPoints := pcount(Point/sequence_rel) > 0 ? max(Point/ordinal, Point/sequence_rel) + 1 : 0;
-		unit<uint32> PointwithConnectors := union_unit(JFLineString, Point, JFLineString)
-		{
+		unit<uint32> PointwithConnectors := union_unit(JFLineString, Point, JFLineString) {
 			attribute<geography/point_rd> geometry     := union_data(., firstJL_rel->Junction_geometry, Point/geometry, last_JL_rel->Junction_geometry);
 			attribute<JFLineString>       sequence_rel := union_data(., id(JFLineString), Point/sequence_rel, id(JFLineString));
 			attribute<uint32>             ordinal      := union_data(., const(0, JFLineString), Point/ordinal+1, NrPoints+1);
@@ -293,15 +270,13 @@ template grid2poly_ipoint
 		attribute<SimplifiedPoints> SimplifiedPointBase       := value(cumulate(NrSimplifiedPoints) - NrSimplifiedPoints, SimplifiedPoints);
 	}
 
-	unit<uint32>  JFLS2 := union_unit(JFLineString, JFLineString)
-	{
+	unit<uint32>  JFLS2 := union_unit(JFLineString, JFLineString) {
 		attribute<JunctionLink> JL_rel             := union_data(., JFLineString/firstJL_rel, JFLineString/last_JL_rel);
 		attribute<uint32>       NrSimplifiedPoints := union_data(., JFLineString/NrSimplifiedPoints, JFLineString/NrSimplifiedPoints);
 		attribute<JunctionLink> Other_rel          := union_data(., JFLineString/last_JL_rel, JFLineString/firstJL_rel);
 		attribute<JFLS2_Point>  JFLS2_Point_Base   := cumulate(NrSimplifiedPoints) - NrSimplifiedPoints;
 	}
-	unit<uint32> JFLS2_Point := range(uint32, 0, sum(JFLS2/NrSimplifiedPoints))
-	{
+	unit<uint32> JFLS2_Point := range(uint32, 0, sum(JFLS2/NrSimplifiedPoints)) {
 		attribute<JFLS2> JFLS2_rel := classify(ID(.), JFLS2/JFLS2_Point_Base);
 		attribute<uint32> ordinal  := ID(.) - JFLS2_rel;
 		attribute<JFLineString/SimplifiedPoints> SimplifiedPoint_rel := union_data(.
@@ -309,8 +284,7 @@ template grid2poly_ipoint
 			, (JFLineString/SimplifiedPointBase+JFLineString/SimplifiedPointOrdinalMax)[JFLineString/SimplifiedPoints/Sequence_rel] - JFLineString/SimplifiedPoints/ordinal);
 		attribute<geography/point_rd> geometry := SimplifiedPoint_rel->Point;
 	}
-	unit<uint32> ZoneRing := connected_parts(ID(JunctionLink), JunctionLink/next_rel)
-	{
+	unit<uint32> ZoneRing := connected_parts(ID(JunctionLink), JunctionLink/next_rel) {
 		attribute<.>            per_JunctionLink (JunctionLink) := PartNr;
 		attribute<JunctionLink> index            (JunctionLink) := index(PartNr);
 		attribute<JunctionLink> order            (JunctionLink) := invert(index);
@@ -331,8 +305,7 @@ template grid2poly_ipoint
 		attribute<float32>            area           := area(geometry, float32);
 	}
 
-	unit<uint32> ZoneRingJunction := range(uint32, 0, sum(ZoneRing/nrJunctions)) 
-	{
+	unit<uint32> ZoneRingJunction := range(uint32, 0, sum(ZoneRing/nrJunctions)) {
 		attribute<ZoneRing> ZoneRing_rel := classify(ID(.), ZoneRing/ZoneRingJunctionBase);
 		attribute<uint32>   ordinal      := id(.) - ZoneRing_rel->ZoneRingJunctionBase;
 
@@ -354,8 +327,7 @@ template grid2poly_ipoint
 		attribute<uint32> ZoneRingPointBase := cumulate(nrPoints) - nrPoints;
 	}
 	// compose a ring from the JunctionLink geometries, either a JFSL2_Point sequence, the BoundaryPoint of F1, or the BoundaryPoint of F2 for doubleton_links
-	unit<uint32> ZoneRingPoint := range(uint32, 0, sum(ZoneRingJunction/nrPoints))
-	{
+	unit<uint32> ZoneRingPoint := range(uint32, 0, sum(ZoneRingJunction/nrPoints)) {
 		attribute<ZoneRingJunction>   ZoneRingJunction_rel := classify(ID(.), ZoneRingJunction/ZoneRingPointBase);
 		attribute<ZoneRing>           ZoneRing_rel         := ZoneRingJunction_rel->ZoneRing_rel;
 		attribute<uint32>             Ring_ordinal         := ID(.) - ZoneRing_rel->ZoneRingPointBase;
@@ -367,16 +339,14 @@ template grid2poly_ipoint
 		attribute<geography/point_rd> geometry             := JFLS2_Point_rel->geometry;
 	}
 	// add a closing point to each ring equal to the first point of that ring.
-	unit<uint32> ClosedZoneRingPoint := range(uint32, 0, sum(ZoneRingJunction/nrPoints)+#ZoneRing)
-	{
+	unit<uint32> ClosedZoneRingPoint := range(uint32, 0, sum(ZoneRingJunction/nrPoints)+#ZoneRing) {
 		 attribute<geography/point_rd> geometry     := union_data(., ZoneRingPoint/geometry, ZoneRing/ZoneRingPointBase->geometry);
 		 attribute<ZoneRing>           ZoneRing_rel := union_data(., ZoneRingPoint/ZoneRing_rel, id(ZoneRing));
 		 attribute<uint32>             Ring_ordinal := union_data(., ZoneRingPoint/Ring_ordinal, sum(ZoneRingJunction/nrPoints, ZoneRingJunction/ZoneRing_rel));
 		 attribute<Zone>               Zone_rel     := ZoneRing_rel->FirstZone_rel;
 	}
 
-	unit<uint32> RingResults := union_unit(ZoneRing, NonEmptyJFRing, NonEmptyJFRing)
-	{
+	unit<uint32> RingResults := union_unit(ZoneRing, NonEmptyJFRing, NonEmptyJFRing) {
 		attribute<geography/point_rd> geometry(poly) := union_data(., ZoneRing/geometry, NonEmptyJFRing/SimplifiedRing, NonEmptyJFRing/SimplifiedReversedRing);
 		attribute<float32>            area           := area(geometry, float32);
 		attribute<Zone>               Zone_rel       := union_data(., ZoneRing/FirstZone_rel, NonEmptyJFRing/RightZone_rel, NonEmptyJFRing/Left_Zone_rel), IntegrityCheck = "ZoneRing/CheckUniqueZonePerRing";
@@ -393,7 +363,7 @@ template grid2poly_ipoint
 		unit<uint32> overlap_check := polygon_connectivity(igeometry)
 		{
 			attribute<ipoint>             ioverlap (poly) := igeometry[F1] * igeometry[F2];
-			attribute<geography/point_rd> overlap  (poly) := polygon(ioverlap);
+			attribute<geography/point_rd> overlap  (poly) := fpolygon(ioverlap);
 			attribute<int32>              area            := area(ioverlap, int32);
 		}
 	}

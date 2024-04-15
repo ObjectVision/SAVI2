@@ -7,13 +7,17 @@ container Analyses {
 			attribute<.> Reverse := union_data(., V/South, V/West, V/North, V/East);
 		}
 
-		container zoom_level_11_100m := Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, /geography/m_100/domain, 10[units/m]);
-		container zoom_level_11_10m  := Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, /geography/m_10/domain, 10[units/m]);
-		container zoom_level_11_10m_test  := Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, /geography/m_10_test/domain, 12[units/m]);
+		container zoom_level_11_100m := Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, /geography/gridsets/m_100/domain, 10[units/m]);
+		container zoom_level_11_10m  := Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, /geography/gridsets/m_10/domain, 10[units/m]);
+		
+		container per_factor := for_each_ne (
+			  /parameters/simplify/factors/name
+			, 'Templates/SimplifyForFactor(' + string(parameters/simplify/factors/id) + '[units/m])'
+		);
 
 	}
 
-	container reference_vergrid_13 {
+	/*container reference_vergrid_13 {
 		attribute<SourceData/buurt2020> buurt_2020_rel (geography/wm_tiles_grid/grid_13) := 
 			poly2grid(SourceData/buurt2020/geometry_wm, geography/wm_tiles_grid/grid_13);
 		unit<uint32> tiles_with_data := select_with_org_rel(IsDefined(buurt_2020_rel)) {
@@ -25,6 +29,5 @@ container Analyses {
 			  tiles_with_data/name
 			, 'Templates/clip_tile_and_export(geography/wm_tiles_grid/grid_13, ' + quote(tiles_with_data/name) + ', /geography/wm_tiles_grid/extent/tile_size_and_number/tile_size)' 
 			);
-		
-	}
+	}*/
 }

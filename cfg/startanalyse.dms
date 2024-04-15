@@ -1,17 +1,14 @@
 container startanalyse_2_0
 {
+	#include <parameters.dms>
 	#include <units.dms>
 	#include <geography.dms>	
 	#include <sourcedata.dms>
 	#include <templates.dms>
 	#include <analyses.dms>
+	#include <exports.dms>
 	
-	
-	
-	
-
-	
-	container reread
+	/*container reread
 	{
 		unit<uint32> example_pbf : 
 			storagename= "%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_/13/4187/2718.pbf"
@@ -37,7 +34,5 @@ container startanalyse_2_0
 		{
 			attribute<geography/web_mercator> geometry (poly);
 		}
-	}
-	
-	
+	}*/
 }

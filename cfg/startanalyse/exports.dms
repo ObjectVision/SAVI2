@@ -2,11 +2,11 @@ container Exports {
 	unit<uint32> Buurtindicatoren_strategie_3 := SourceData/buurt2020 {
 		attribute<geography/web_mercator> geometry (poly) := convert(SourceData/buurt2020/geometry, geography/web_mercator);
 		attribute<string> BU_CODE := SourceData/buurt2020/BU_CODE;
-		//attribute<units/Euro_per_Year> nat_meerk := 	
-		//	rjoin(	BU_CODE, 
-		//			SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE, 
-		//			SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]
-		//		 );
+		attribute<units/Euro_per_Year> nat_meerk := 	
+			rjoin(	BU_CODE, 
+					SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE, 
+					SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]
+				 );
 	}
 	
 	unit<uint32> bstrat3_geojson := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3)),  StorageName="%LocalDataDir%/startanalyse_2_0/bstrat3.geojson", StorageType="gdalwrite.vect";
@@ -66,5 +66,59 @@ container Exports {
 				unit<uint32> bstrat3_13 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3));
 			}
 		}
+		
+		container base_results {
+			unit<uint32> results := SourceData/buurt2020 {
+				// geometry
+				attribute<geography/web_mercator> geometry (poly) := convert(SourceData/buurt2020/geometry, geography/web_mercator);
+				
+				// scenario attributes
+				attribute<units/giga_J_per_woning_per_yr> _H01_Vraag_totaal_giga_J_per_Woning_yr_ := 	
+					rjoin(	BU_CODE, 
+							SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3_final/BU_CODE, 
+							SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3_final/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]
+						 );
+			}
+		}
+		
+		container all_zoom_levels {
+			parameter<units/m> low_f := 100[units/m];
+			parameter<units/m> mid_f := 25[units/m]; // 12
+			
+			parameter<units/m> low_r := 100[units/m];
+			parameter<units/m> mid_r := 10[units/m];
+			
+			container z_5  := Templates/GetSimplifiedResults(low_r, low_f);
+			container z_6  := Templates/GetSimplifiedResults(low_r, low_f);
+			container z_7  := Templates/GetSimplifiedResults(low_r, low_f);
+			container z_8  := Templates/GetSimplifiedResults(mid_r, mid_f);
+			container z_9  := Templates/GetSimplifiedResults(mid_r, mid_f);
+			container z_10 := Templates/GetSimplifiedResults(mid_r, mid_f);
+			
+			/*container z_11 := Templates/GetSimplifiedResults(10b, 10[units/m]);
+			container z_12 := Templates/GetSimplifiedResults(10b, 10[units/m]);
+			container z_13 := Templates/GetSimplifiedResults(10b, 10[units/m]);*/
+			
+			// http://localhost:8080/data/nl_sa1_bstrat3_zoom_05_13/#5/52.79/5.77
+			
+			parameter<string> GDAL_Driver : ['MVT'];
+			unit<uint32> optionSet := range(uint32, 0, 5);
+			attribute<string> GDAL_Options (optionSet) : ['MINZOOM=5', 'MAXZOOM=13', 'SIMPLIFICATION=0.0', 'FORMAT=MBTILES', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_05_13.json'];
+			container dataset
+			: StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_zoom_05_13.mbtiles"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False"
+			{
+				unit<uint32> bstrat3_05 := select_with_attr_by_cond(z_5/results, const(true, z_5/results));
+				unit<uint32> bstrat3_06 := select_with_attr_by_cond(z_6/results, const(true, z_6/results));
+				unit<uint32> bstrat3_07 := select_with_attr_by_cond(z_7/results, const(true, z_7/results));
+				unit<uint32> bstrat3_08 := select_with_attr_by_cond(z_8/results, const(true, z_8/results));
+				unit<uint32> bstrat3_09 := select_with_attr_by_cond(z_9/results, const(true, z_9/results));
+				unit<uint32> bstrat3_10 := select_with_attr_by_cond(z_10/results, const(true, z_10/results));
+				unit<uint32> bstrat3_11 := select_with_attr_by_cond(base_results/results, const(true, base_results/results));
+				unit<uint32> bstrat3_12 := select_with_attr_by_cond(base_results/results, const(true, base_results/results));
+				unit<uint32> bstrat3_13 := select_with_attr_by_cond(base_results/results, const(true, base_results/results));
+			}
+		}	
 	}
 }

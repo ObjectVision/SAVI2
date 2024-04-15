@@ -28,42 +28,14 @@ container geography : using = "units" {
 	//unit<dpoint> rdc_meter := range(rdc_meter_base, point_yx(300000.0, 0.0), point_yx(625000.0, 280000.0));
 	unit<fpoint> point_rd := range(rdc_meter_base, point_yx(300000f, 0f), point_yx(625000f, 280000f));
 
-	container m_100 := grid_template(100[units/m], upper_left_point_nl_rd, lower_right_point_nl_rd);
-	container m_10  := grid_template(10[units/m], upper_left_point_nl_rd, lower_right_point_nl_rd);
-	container m_1  := grid_template(1[units/m], upper_left_point_nl_rd, lower_right_point_nl_rd);
-	container m_10_test  := grid_template(10[units/m], upper_left_point_subset_rd, lower_right_point_subset_rd);
+	container gridsets := for_each_ne (
+		  parameters/simplify/grids/name
+		, 'Templates/grid_template(' + string(parameters/simplify/grids/size) + '[units/m], upper_left_point_nl_rd, lower_right_point_nl_rd)' );
 
-	Template grid_template {	
-		// case parameter
-		parameter<units/m> grid_size;
-		parameter<point_rd> upper_left;
-		parameter<point_rd> lower_right;
-		// end of case parameter
-		
-		
-		parameter<float32> nr_cols_f32 := (pointcol(lower_right) - pointcol(upper_left)) / float32(grid_size);
-		parameter<int32> nr_cols := int32(nr_cols_f32);
-		parameter<float32> nr_rows_f32 := (pointrow(upper_left) - pointrow(lower_right)) / float32(grid_size);
-		parameter<int32> nr_rows := int32(nr_rows_f32);
-		
-		parameter<point_rd> lower_right_computed := upper_left + point_xy(float32(nr_cols) * float32(grid_size), -float32(nr_rows) * float32(grid_size), point_rd);
-		
-		unit<ipoint> domain
-			:= range(
-				 gridset(
-					point_rd
-				   ,point_xy(float32(grid_size), float32(-grid_size)) //, 
-				   ,upper_left //upper_left_point_nl_rd //
-				   ,ipoint
-				 )
-				 ,point_xy(0i, 0i)
-				 ,point_xy(nr_cols, nr_rows)
-			  )
-			  {
-				attribute<uint8>  test := const(8b, .);
-			  }
-			
-	}
+	/*container m_100 	:= Templates/grid_template(100[units/m], upper_left_point_nl_rd, lower_right_point_nl_rd);
+	container m_10  	:= Templates/grid_template(10[units/m], upper_left_point_nl_rd, lower_right_point_nl_rd);
+	container m_1  		:= Templates/grid_template(1[units/m], upper_left_point_nl_rd, lower_right_point_nl_rd);
+	container m_10_test := Templates/grid_template(10[units/m], upper_left_point_subset_rd, lower_right_point_subset_rd);*/
 
 	container m_100_wm {
 		parameter<float64> grid_size := 100[units/m];

@@ -1,0 +1,20 @@
+container parameters {
+	
+	unit<uint8> zoom_levels := range(uint8, 5b, 14b) {
+		attribute<uint8>  id   := id(.);
+		attribute<string> name := "z_" + string(id);
+	}
+	
+	container simplify {
+		unit<uint8> grids : nrofrows=3 {
+			attribute<string>  name : ['m_100', 'm_10', 'm_1'];
+			attribute<units/m> size : [100, 10, 1];
+		}
+		
+		unit<uint32> factors := range(uint32, 0, 15) {
+			attribute<float64> id   := float64(id(.));
+			attribute<string>  name := "f_" + string(id);
+		}
+	}
+	
+}
