@@ -4,12 +4,12 @@ container SourceData {
 		attribute<geography/point_rd> geometry (poly);
 	}
 	
-	unit<uint32> buurt2020_nl := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee')// &&  id(buurt2020_with_H2O)>13885);
+	unit<uint32> buurt2020 := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee')// &&  id(buurt2020_with_H2O)>13885);
 	{
 		attribute<geography/web_mercator> geometry_wm (poly) := convert(geometry, geography/web_mercator);
 	}
 	
-	unit<uint32> buurt2020 := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee' &&  id(buurt2020_with_H2O)>13885)
+	unit<uint32> buurt2020_testset := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee' &&  id(buurt2020_with_H2O)>13885)
 	{
 		attribute<geography/web_mercator> geometry_wm (poly) := convert(geometry, geography/web_mercator);
 	}
@@ -19,12 +19,11 @@ container SourceData {
 		unit<uint32> ViewerIndicatoren_Strategie_3 : StorageName="%SourceDataDir%/StartAnalyse/V1/20200901_Viewerindicatoren/01_Hoofdberekening/Results/Strategie_3_ViewerIndicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_BU_CODE_, '''', '');
-			
 		}
 		
-		unit<uint32> ViewerIndicatoren_Strategie_3_final := ViewerIndicatoren_Strategie_3 {
-			attribute<string> BU_CODE := replace(StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_BU_CODE_, '''', '');
+		/*unit<uint32> ViewerIndicatoren_Strategie_3_final := ViewerIndicatoren_Strategie_3 {
+			attribute<string> BU_CODE := StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE;
 			attribute<units/giga_J_per_woning_per_yr> _H01_Vraag_totaal_giga_J_per_Woning_yr_ := StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr];
-		}
+		}*/
 	}
 }

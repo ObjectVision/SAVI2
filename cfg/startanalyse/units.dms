@@ -1,10 +1,23 @@
 container units {
 	unit<uint32> Euro;
-	unit<uint32> Year;
+	unit<uint32> Jaar;
 	unit<uint32> woning;
-	unit<uint32> Euro_per_Year := Euro / Year;
-	unit<float64> m := baseunit('m', float64);
-	unit<uint32> J := baseunit('J', uint32);
+	unit<uint32> CO2;
+	unit<uint32>  J := baseunit('J', uint32);
+	unit<float64> m  := baseunit('m', float64);
+	
+	unit<float64> m2 := m*m;
+	unit<float64> m3 := m*m*m;
+	unit<float64> ha := 10e4*m2;
 	unit<uint32> giga_J := 10e9*J;
-	unit<uint32> giga_J_per_woning_per_yr := giga_J / woning / Year;
+	unit<float64> giga_J_per_ha := giga_J / ha;
+	unit<uint32> giga_J_per_woning_per_yr := giga_J / woning / Jaar;
+	unit<uint32> ton_CO2 := 10e9*CO2;
+	unit<uint32> ton_CO2_per_yr := ton_CO2 / Jaar;
+	
+	unit<uint32> Euro_per_m3 := Euro / uint32(m3);
+	unit<uint32> Euro_per_woning_per_yr := Euro / Woning / Jaar;
+	unit<uint32> Euro_per_Year := Euro / Jaar;
+	unit<uint32> Euro_per_ton_CO2 := Euro / ton_CO2;
+	unit<uint32> Euro_per_ton_CO2_per_yr := Euro_per_ton_CO2 / jaar;
 }

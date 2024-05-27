@@ -1,12 +1,40 @@
 container Exports {
+	attribute<string> BU_CODE_Scenario (SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3) := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE;
+	
 	unit<uint32> Buurtindicatoren_strategie_3 := SourceData/buurt2020 {
-		attribute<geography/web_mercator> geometry (poly) := convert(SourceData/buurt2020/geometry, geography/web_mercator);
-		attribute<string> BU_CODE := SourceData/buurt2020/BU_CODE;
-		attribute<units/Euro_per_Year> nat_meerk := 	
+		// https://themasites.pbl.nl/leidraad-warmte/2020/#
+		attribute<string> BU_CODE                                                         := SourceData/buurt2020/BU_CODE;
+		attribute<string> V01_Strategievariant                    					      := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_V01_Strategievariant_);
+		attribute<units/giga_J_per_woning_per_yr> H01_Energieverbruik                     := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+		attribute<units/giga_J_per_woning_per_yr> H02_Energieverbruik_ruimteverwarming    := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H02_Vraag_RV_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 			 // GJ/weq/jaar
+		attribute<units/giga_J_per_woning_per_yr> H03_Energieverbruik_warmtapwater        := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H03_Vraag_TW_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+		attribute<units/giga_J_per_woning_per_yr> H04_Energieverbruik_ventilatie          := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H04_Vraag_Vent_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+		attribute<units/giga_J_per_woning_per_yr> H05_Energieverbruik_koude               := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H05_Vraag_K_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+		attribute<units/giga_J_per_woning_per_yr> H06_Energieverbruik_apparaten_en_licht  := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H06_Vraag_App_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+		attribute<units/giga_J_per_ha> H07_Warmteverbruik                                 := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H07_Vraag_tot_ha_100_kilo_J_per_m_2_yr_[units/giga_J_per_ha]); 		 // GJ/ha
+		attribute<units/giga_J_per_woning_per_yr> H08_Energielevering                     := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H08_Input_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+		attribute<units/giga_J_per_woning_per_yr> H09_Energielevering_aardgas             := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H09_Input_aardgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);		 // GJ/weq/jaar
+		attribute<units/giga_J_per_woning_per_yr> H10_Energielevering_duurzaamgas         := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H10_Input_duurzaamgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);	 // GJ/weq/jaar
+		attribute<units/giga_J_per_woning_per_yr> H11_Energielevering_elektriciteit       := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H11_Input_elektriciteit_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);   // GJ/weq/jaar
+		attribute<units/giga_J_per_woning_per_yr> H12_Energielevering_MTwarmtebronnen     := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H12_Input_MTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+		attribute<units/giga_J_per_woning_per_yr> H13_Energielevering_LTwarmtebronnen     := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H13_Input_LTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+		attribute<units/giga_J_per_woning_per_yr> H14_Energielevering_overig              := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H14_Saldo_Omgevingswarmte_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+		attribute<units/ton_CO2_per_yr> H15_CO2_uitstoot                                  := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H15_CO2_uitstoot_mega_g_per_yr_[units/ton_CO2_per_yr]); // ton/jaar
+		attribute<units/Euro_per_Year> H16_Nationale_meerkosten                           := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]); // Euro/jaar
+		attribute<units/Euro_per_ton_CO2_per_yr> H17_Nationale_meerkosten_CO2             := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+		attribute<units/Euro_per_woning_per_yr> H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
+		attribute<units/Euro_per_m3> H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
+		attribute<units/m3> H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
+		attribute<units/Euro_per_ton_CO2> G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+		attribute<units/Euro_per_ton_CO2> G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_G02_Nat_meerkost_CO2_Kost_Reductie_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+		attribute<units/Euro_per_ton_CO2> G03_Nat_meerkost_CO2_En_Prijzen_Laag            := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_G03_Nat_meerkost_CO2_En_Prijzen_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+		attribute<units/Euro_per_ton_CO2> G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_G04_Nat_meerkost_CO2_En_Prijzen_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+		
+		/*attribute<units/Euro_per_Year> nat_meerk := 	
 			rjoin(	BU_CODE, 
-					SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE, 
+					SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE,
 					SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]
-				 );
+				 );*/
 	}
 	
 	unit<uint32> bstrat3_geojson := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3)),  StorageName="%LocalDataDir%/startanalyse_2_0/bstrat3.geojson", StorageType="gdalwrite.vect";
@@ -21,12 +49,9 @@ container Exports {
 		container write
 		{
 			//unit<uint32> bstrat3_mvt := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3)),  StorageName="%LocalDataDir%/startanalyse_2_0/bstrat33", StorageType="gdalwrite.vect";
-			
-			
 			unit<uint32> bstrat3 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3))
 			, StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3.mbtiles"
 			, StorageType="gdalwrite.vect";
-			
 		}
 	}
 	
@@ -68,17 +93,23 @@ container Exports {
 		}
 		
 		container base_results {
-			unit<uint32> results := SourceData/buurt2020 {
+			
+			unit<uint32> results := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3)) {
+				attribute<geography/web_mercator> geometry (poly) := rjoin(BU_CODE, SourceData/buurt2020/BU_CODE, convert(SourceData/buurt2020/geometry, geography/web_mercator));
+			}
+			
+			
+			/*unit<uint32> results := SourceData/buurt2020 {
 				// geometry
 				attribute<geography/web_mercator> geometry (poly) := convert(SourceData/buurt2020/geometry, geography/web_mercator);
 				
 				// scenario attributes
 				attribute<units/giga_J_per_woning_per_yr> _H01_Vraag_totaal_giga_J_per_Woning_yr_ := 	
 					rjoin(	BU_CODE, 
-							SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3_final/BU_CODE, 
-							SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3_final/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]
+							SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE, 
+							SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]
 						 );
-			}
+			}*/
 		}
 		
 		container all_zoom_levels {
@@ -102,20 +133,28 @@ container Exports {
 			// http://localhost:8080/data/nl_sa1_bstrat3_zoom_05_13/#5/52.79/5.77
 			
 			parameter<string> GDAL_Driver : ['MVT'];
-			unit<uint32> optionSet := range(uint32, 0, 5);
+			unit<uint32> optionSet := range(uint32, 0, 5); // FORMAT=DIRECTORY
 			attribute<string> GDAL_Options (optionSet) : ['MINZOOM=5', 'MAXZOOM=13', 'SIMPLIFICATION=0.0', 'FORMAT=MBTILES', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_05_13.json'];
 			container dataset
-			: StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_zoom_05_13.mbtiles"
+			: StorageName="%LocalDataDir%/startanalyse_2_0/NL_nl_sa1_bstrat3_zoom_05_13.mbtiles" // 
 			, StorageType="gdalwrite.vect"
 			, StorageReadOnly = "False"
 			{
-				unit<uint32> bstrat3_05 := select_with_attr_by_cond(z_5/results, const(true, z_5/results));
+				unit<uint32> bstrat3_05 := select_with_attr_by_cond(z_5/results, const(true, z_5/results))  {
+					attribute<units/m2> area_test := area(geometry, units/m2), disablestorage="true";
+				}
 				unit<uint32> bstrat3_06 := select_with_attr_by_cond(z_6/results, const(true, z_6/results));
 				unit<uint32> bstrat3_07 := select_with_attr_by_cond(z_7/results, const(true, z_7/results));
-				unit<uint32> bstrat3_08 := select_with_attr_by_cond(z_8/results, const(true, z_8/results));
+				
+				unit<uint32> bstrat3_08 := select_with_attr_by_cond(z_8/results, const(true, z_8/results)) {
+					attribute<units/m2> area_test := area(geometry, units/m2), disablestorage="true";
+				}
 				unit<uint32> bstrat3_09 := select_with_attr_by_cond(z_9/results, const(true, z_9/results));
 				unit<uint32> bstrat3_10 := select_with_attr_by_cond(z_10/results, const(true, z_10/results));
-				unit<uint32> bstrat3_11 := select_with_attr_by_cond(base_results/results, const(true, base_results/results));
+				
+				unit<uint32> bstrat3_11 := select_with_attr_by_cond(base_results/results, const(true, base_results/results)) {
+					attribute<units/m2> area_test := area(geometry, units/m2), disablestorage="true";
+				}
 				unit<uint32> bstrat3_12 := select_with_attr_by_cond(base_results/results, const(true, base_results/results));
 				unit<uint32> bstrat3_13 := select_with_attr_by_cond(base_results/results, const(true, base_results/results));
 			}

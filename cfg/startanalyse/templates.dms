@@ -164,48 +164,30 @@ container Templates {
 		unit<uint32> property : nrofrows = 1 {
 		   parameter<string> name: ['name'];//,'valuesunit'];
 		}
-		unit<uint32> scenario_item := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3_final;
-		unit<uint32> results := SourceData/buurt2020 {
-			//attribute<geography/web_mercator> geometry (poly) := convert(SourceData/buurt2020/geometry, geography/web_mercator);
-			attribute<geography/web_mercator> geometry (poly) := convert(simplify/SimplifiedPolygons/results/geometry, geography/web_mercator);
-			
-			/*container scenario_info {
-				unit<uint32> scenario_name    := ='subitem_propvalues(' + scenario_item + ', "name")';
-				unit<uint32> scenario_vu      := ='subitem_propvalues(' + scenario_item + ', "valuesunit")';
-				
-				unit<uint32> scenario_name_vu := scenario_name {
-					attribute<string> name 		  := scenario_name/name;
-					attribute<string> values_unit (.):= rjoin(string(id(scenario_name)), string(id(scenario_vu)), scenario_vu/ValuesUnit);
-				}
-			}*/
-			
 
+		
+
+		//attribute<geography/web_mercator> original_geometry_wm (poly) := convert(SourceData/buurt2020/geometry, geography/web_mercator);
+		
+		
+		attribute<uint32> primary_key (results) := id(results);
+		attribute<uint32> foreign_key (simplify/SimplifiedPolygons/results) := id(simplify/SimplifiedPolygons/results);
+		
+		unit<uint32> results := select_with_attr_by_cond(Exports/Buurtindicatoren_strategie_3, const(true, Exports/Buurtindicatoren_strategie_3)) {
+			//attribute<geography/web_mercator> geometry (poly) := convert(SourceData/buurt2020/geometry, geography/web_mercator);
 			
-			/*container test := for_each_nedv (
-				  scenario_info/scenario_name_vu/name
-				, 'rjoin(BU_CODE, scenario_item/BU_CODE,' + scenario_item + '/' + scenario_info/scenario_name_vu/name + ')'
-				, SourceData/buurt2020
-				, string //scenario_info/scenario_name_vu/values_unit
-			)
-			{
-				
-			}*/
+			//attribute<geography/web_mercator> geometry (poly) := convert(simplify/SimplifiedPolygons/results/geometry, geography/web_mercator);
+			attribute<geography/web_mercator> geometry (poly) := rjoin(BU_CODE, Exports/Buurtindicatoren_strategie_3/BU_CODE, convert(simplify/SimplifiedPolygons/results/geometry, geography/web_mercator));
 			
-			attribute<units/giga_J_per_woning_per_yr> _H01_Vraag_totaal_giga_J_per_Woning_yr_ := 	
+			
+			
+			
+			/*attribute<units/giga_J_per_woning_per_yr> _H01_Vraag_totaal_giga_J_per_Woning_yr_ := 	
 				rjoin(	BU_CODE, 
 						SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3_final/BU_CODE, 
 						SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3_final/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]
-					 );
-			
-			//unit<uint32> scenario_name := subitem_propvalues(/SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3, 'name'); // scenario_unit
-
-			
-			/*
-			attribute<units/Euro_per_Year> nat_meerk := 	
-				rjoin(	BU_CODE, 
-						SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE, 
-						SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]
 					 );*/
+
 		}
 	}
 }
