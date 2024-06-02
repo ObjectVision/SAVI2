@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Map} from 'maplibre-gl';
+import {Map, StyleSpecification} from 'maplibre-gl';
 
 @Component({
   selector: 'app-simple-map',
@@ -14,41 +14,35 @@ export class SimpleMapComponent {
   lng: number =  4.895281025449475;
   lat: number = 52.3748673716883;
 
+  style:StyleSpecification = {
+    "version": 8,
+    "sources": {
+      "osm": {
+        "type": "raster",
+        "tiles": ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
+        "tileSize": 256,
+        "attribution": "&copy; OpenStreetMap Contributors",
+        "maxzoom": 19
+      }
+    },
+    "layers": [
+      {
+        "id": "osm",
+        "type": "raster",
+        "source": "osm" // This must match the source key above
+      }
+    ]
+  };
+
   ngOnInit() {
     this.map = new Map({
-      container: 'map', // container id
-      style: 'https://demotiles.maplibre.org/style.json', // style URL
-      center: [this.lng, this.lat], // starting position [lng, lat]
-      zoom: 5 // starting zoom
+      container: 'map',
+      style: this.style,
+      center: [1, 15],
+      zoom: 3
     });
+
+    
+
   }
-
-  /*map : mapboxgl.Map | undefined; // @ts-ignore: Object is possibly 'null'.
-	object_vision_mapbox_access_token = 'pk.eyJ1IjoiZXJpa291ZGVqYW5zIiwiYSI6ImNsc3Jic3J4eDE2amcyaXBzdDNvNWxmMnQifQ.t-iuMEfsoQc9Y2WVTbVTTg';
-  style = 'mapbox://styles/mapbox/streets-v12';
-
-
-  
-    var map = new maplibregl.Map({
-      container: 'map', // container id
-      style: 'https://demotiles.maplibre.org/style.json', // style URL
-      center: [0, 0], // starting position [lng, lat]
-      zoom: 1 // starting zoom
-  });
-
-  nav_control: mapboxgl.NavigationControl | undefined;
-  
-  ngOnInit() {
-    this.map = new mapboxgl.Map({
-       accessToken: this.object_vision_mapbox_access_token,
-       container: 'map',
-       style: this.style,
-       zoom: 3,
-       projection: {name:"mercator"},
-       center: [this.lng, this.lat],
-       attributionControl: false,
-       logoPosition: 'bottom-right'
-     });
-  }
-*/
 }
