@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Map, StyleSpecification} from 'maplibre-gl';
+import {Map, StyleSpecification, Source, ImageSource} from 'maplibre-gl';
 
 @Component({
   selector: 'app-simple-map',
@@ -8,13 +8,16 @@ import {Map, StyleSpecification} from 'maplibre-gl';
   templateUrl: './simple-map.component.html',
   styleUrl: './simple-map.component.css'
 })
+
 export class SimpleMapComponent {
 
   map : Map | undefined;
+  frameCount:number = 5;
+  currentImage:number = 0;
   lng: number =  4.895281025449475;
   lat: number = 52.3748673716883;
 
-  style:StyleSpecification = {
+  style:StyleSpecification = { // https://codepen.io/bothness/pen/ExgwzEG
     "version": 8,
     "sources": {
       "osm": {
@@ -34,13 +37,50 @@ export class SimpleMapComponent {
     ]
   };
 
+  getPath() {
+    return (
+        `https://maplibre.org/maplibre-gl-js/docs/assets/radar${
+            this.currentImage
+        }.gif`
+    );
+  }
+
   ngOnInit() {
     this.map = new Map({
       container: 'map',
       style: this.style,
-      center: [1, 15],
-      zoom: 3
+      maxZoom: 5.99,
+      minZoom: 4,
+      zoom: 5,
+      center: [-75.789, 41.874]
     });
+
+    this.map.on('load', () => {
+      this.map!.addSource('radar', {
+        type: 'image',
+        url: this.getPath(),
+        coordinates: [
+            [-80.425, 46.437],
+            [-71.516, 46.437],
+            [-71.516, 37.936],
+            [-80.425, 37.936]
+        ]
+    });
+    this.map!.addLayer({
+        id: 'radar-layer',
+        'type': 'raster',
+        'source': 'radar',
+        'paint': {
+            'raster-fade-duration': 0
+        }
+    });
+
+    setInterval(() => {
+        this.currentImage = (this.currentImage + 1) % this.frameCount;
+        (<ImageSource>this.map!.getSource('radar')).updateImage({url: this.getPath()});
+    }, 200);
+  });
+
 
     
 
