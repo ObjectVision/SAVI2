@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import {Map, StyleSpecification, Source, ImageSource} from 'maplibre-gl';
+import { interval, Subscription, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-simple-map',
@@ -16,6 +18,18 @@ export class SimpleMapComponent {
   currentImage:number = 0;
   lng: number =  4.895281025449475;
   lat: number = 52.3748673716883;
+  subscription: Subscription | undefined;
+  source = interval(10000);
+  destroy$ = new Subject<void>();
+
+  imageData = new Uint8Array([
+    // Add your image raw data here (e.g., RGBA values)
+    // This is just an example, you need to replace it with actual image data
+    0, 0, 0, 255, 0, 0, 0, 255,
+    0, 0, 0, 255, 0, 0, 0, 255,
+    0, 0, 0, 255, 0, 0, 0, 255,
+    0, 0, 0, 255, 0, 0, 0, 255
+  ]);
 
   style:StyleSpecification = { // https://codepen.io/bothness/pen/ExgwzEG
     "version": 8,
@@ -37,12 +51,39 @@ export class SimpleMapComponent {
     ]
   };
 
-  getPath() {
+  async fetchNewImageUrl(): Promise<string> {
+    return (
+      `https://maplibre.org/maplibre-gl-js/docs/assets/radar${
+          this.currentImage
+      }.gif`
+    );
+  }
+
+  getInitialImageUrl() {
+    //let test = this.fetchNewImageUrl();
     return (
         `https://maplibre.org/maplibre-gl-js/docs/assets/radar${
             this.currentImage
         }.gif`
     );
+  }
+
+  async updateImageSource() {
+    try {
+      this.currentImage = (this.currentImage + 1) % this.frameCount;
+      let newImageUrl:string = await this.fetchNewImageUrl(); // this.getInitialImageUrl();
+      (<ImageSource>this.map!.getSource('radar')).updateImage({url: newImageUrl});
+    } catch (error) {
+      console.error('Failed to update image source:', error);
+    }
+  }
+
+  private startPeriodicTask(): void {
+    interval(200) // Emit value every 10 seconds
+      .pipe(takeUntil(this.destroy$)) // Unsubscribe when destroy$ emits a value
+      .subscribe(() => {
+        this.updateImageSource();
+      });
   }
 
   ngOnInit() {
@@ -58,7 +99,7 @@ export class SimpleMapComponent {
     this.map.on('load', () => {
       this.map!.addSource('radar', {
         type: 'image',
-        url: this.getPath(),
+        url: this.getInitialImageUrl(),
         coordinates: [
             [-80.425, 46.437],
             [-71.516, 46.437],
@@ -75,10 +116,20 @@ export class SimpleMapComponent {
         }
     });
 
-    setInterval(() => {
+    this.startPeriodicTask();
+
+    //this.subscription = this.source.subscribe(val => this.updateImageSource());
+    //setInterval(this.updateImageSource, 200);
+
+    /*setInterval(() => {
+        //const width = 2; // Width of the image
+        //const height = 2; // Height of the ima
+        //const image = new ImageData(new Uint8ClampedArray(this.imageData), width);
+        //this.map!.style.imageManager.updateImage('radar', (<any>image));
+        let test = await fetch('https://api.github.com/users/github');
         this.currentImage = (this.currentImage + 1) % this.frameCount;
         (<ImageSource>this.map!.getSource('radar')).updateImage({url: this.getPath()});
-    }, 200);
+    }, 200);*/
   });
 
 
