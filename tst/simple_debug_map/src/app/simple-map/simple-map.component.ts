@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {Map, StyleSpecification, Source, ImageSource} from 'maplibre-gl';
 import { interval, Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import * as hls from 'hls-parser';
 
 @Component({
   selector: 'app-simple-map',
@@ -68,10 +69,39 @@ export class SimpleMapComponent {
     );
   }
 
+  async parseM3U8FromUrl(url: string) {
+    const response = await fetch(url);
+    const m3u8Text = await response.text();
+    const parsedManifest = hls.parse(m3u8Text);
+    return parsedManifest;
+  }
+
   async updateImageSource() {
     try {
       this.currentImage = (this.currentImage + 1) % this.frameCount;
       let newImageUrl:string = await this.fetchNewImageUrl(); // this.getInitialImageUrl();
+
+      // get camera stream m3u8:
+      let response = await fetch("https://live.netcamviewer.nl/Port-of-Amsterdam-Havenkantoor/480");
+      let text = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, 'text/html');
+      const videoElement = doc.querySelector('video');
+      if (videoElement) {
+        // get chunklist m3u8
+        let videoSrc = videoElement.querySelector('source')?.getAttribute('src');
+        let manifest = await this.parseM3U8FromUrl(videoSrc!);
+        if (videoSrc && manifest) {
+          let chunkListUrl = (<any>manifest).variants[0].uri;
+          
+          // get chunks from chunklist
+          let chunklistManifest = await this.parseM3U8FromUrl("https://5f27cc8163c2e.streamlock.net/480/480.stream/" + chunkListUrl!);
+          
+          let i = 0;
+        }
+        let i = 0;
+      }
+
       (<ImageSource>this.map!.getSource('radar')).updateImage({url: newImageUrl});
     } catch (error) {
       console.error('Failed to update image source:', error);
@@ -117,19 +147,6 @@ export class SimpleMapComponent {
     });
 
     this.startPeriodicTask();
-
-    //this.subscription = this.source.subscribe(val => this.updateImageSource());
-    //setInterval(this.updateImageSource, 200);
-
-    /*setInterval(() => {
-        //const width = 2; // Width of the image
-        //const height = 2; // Height of the ima
-        //const image = new ImageData(new Uint8ClampedArray(this.imageData), width);
-        //this.map!.style.imageManager.updateImage('radar', (<any>image));
-        let test = await fetch('https://api.github.com/users/github');
-        this.currentImage = (this.currentImage + 1) % this.frameCount;
-        (<ImageSource>this.map!.getSource('radar')).updateImage({url: this.getPath()});
-    }, 200);*/
   });
 
 
