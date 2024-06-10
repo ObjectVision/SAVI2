@@ -120,33 +120,36 @@ export class SimpleMapComponent {
     this.map = new Map({
       container: 'map',
       style: this.style,
-      maxZoom: 5.99,
-      minZoom: 4,
-      zoom: 5,
-      center: [-75.789, 41.874]
+      minZoom: 14,
+      zoom: 17,
+      center: [-122.514426, 37.562984],
+      bearing: -96,
     });
 
     this.map.on('load', () => {
-      this.map!.addSource('radar', {
-        type: 'image',
-        url: this.getInitialImageUrl(),
+      this.map!.addSource('video', {
+        type: 'video',
+        urls: [
+            'https://static-assets.mapbox.com/mapbox-gl-js/drone.mp4',
+            'https://static-assets.mapbox.com/mapbox-gl-js/drone.webm'
+        ],
         coordinates: [
-            [-80.425, 46.437],
-            [-71.516, 46.437],
-            [-71.516, 37.936],
-            [-80.425, 37.936]
+            [-122.51596391201019, 37.56238816766053],
+            [-122.51467645168304, 37.56410183312965],
+            [-122.51309394836426, 37.563391708549425],
+            [-122.51423120498657, 37.56161849366671]
         ]
     });
     this.map!.addLayer({
-        id: 'radar-layer',
+        id: 'video-layer',
         'type': 'raster',
-        'source': 'radar',
+        'source': 'video',
         'paint': {
             'raster-fade-duration': 0
         }
     });
 
-    this.startPeriodicTask();
+    //this.startPeriodicTask();
   });
 
 
