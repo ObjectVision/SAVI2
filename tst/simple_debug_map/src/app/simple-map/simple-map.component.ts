@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import {Map, StyleSpecification, Source, ImageSource} from 'maplibre-gl';
 import { interval, Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import * as hls from 'hls-parser';
+import * as hlsParser from 'hls-parser';
+import Hls from 'hls.js';
 
 @Component({
   selector: 'app-simple-map',
@@ -52,35 +53,19 @@ export class SimpleMapComponent {
     ]
   };
 
-  async fetchNewImageUrl(): Promise<string> {
-    return (
-      `https://maplibre.org/maplibre-gl-js/docs/assets/radar${
-          this.currentImage
-      }.gif`
-    );
-  }
 
-  getInitialImageUrl() {
-    //let test = this.fetchNewImageUrl();
-    return (
-        `https://maplibre.org/maplibre-gl-js/docs/assets/radar${
-            this.currentImage
-        }.gif`
-    );
-  }
+
+
 
   async parseM3U8FromUrl(url: string) {
     const response = await fetch(url);
     const m3u8Text = await response.text();
-    const parsedManifest = hls.parse(m3u8Text);
+    const parsedManifest = hlsParser.parse(m3u8Text);
     return parsedManifest;
   }
 
-  async updateImageSource() {
+  async getVideoStreamUrl(): Promise<string> {
     try {
-      this.currentImage = (this.currentImage + 1) % this.frameCount;
-      let newImageUrl:string = await this.fetchNewImageUrl(); // this.getInitialImageUrl();
-
       // get camera stream m3u8:
       let response = await fetch("https://live.netcamviewer.nl/Port-of-Amsterdam-Havenkantoor/480");
       let text = await response.text();
@@ -90,32 +75,31 @@ export class SimpleMapComponent {
       if (videoElement) {
         // get chunklist m3u8
         let videoSrc = videoElement.querySelector('source')?.getAttribute('src');
+        return videoSrc!;
+        
         let manifest = await this.parseM3U8FromUrl(videoSrc!);
         if (videoSrc && manifest) {
           let chunkListUrl = (<any>manifest).variants[0].uri;
           
           // get chunks from chunklist
           let chunklistManifest = await this.parseM3U8FromUrl("https://5f27cc8163c2e.streamlock.net/480/480.stream/" + chunkListUrl!);
-          
-          let i = 0;
+          let videoUrl:string = "https://5f27cc8163c2e.streamlock.net/480/480.stream/" + (<any>chunklistManifest).segments[0].uri;
+          return videoUrl;
         }
-        let i = 0;
       }
 
-      (<ImageSource>this.map!.getSource('radar')).updateImage({url: newImageUrl});
     } catch (error) {
       console.error('Failed to update image source:', error);
     }
+    return "";
   }
 
-  private startPeriodicTask(): void {
-    interval(200) // Emit value every 10 seconds
-      .pipe(takeUntil(this.destroy$)) // Unsubscribe when destroy$ emits a value
-      .subscribe(() => {
-        this.updateImageSource();
-      });
-  }
+  async getVideoUrl(): Promise<string> {
+    let videoUrl:string = await this.getVideoStreamUrl();
+    return videoUrl;
+  } 
 
+ 
   ngOnInit() {
     this.map = new Map({
       container: 'map',
@@ -127,30 +111,44 @@ export class SimpleMapComponent {
     });
 
     this.map.on('load', () => {
-      this.map!.addSource('video', {
-        type: 'video',
-        urls: [
-            'https://static-assets.mapbox.com/mapbox-gl-js/drone.mp4',
-            'https://static-assets.mapbox.com/mapbox-gl-js/drone.webm'
-        ],
-        coordinates: [
-            [-122.51596391201019, 37.56238816766053],
-            [-122.51467645168304, 37.56410183312965],
-            [-122.51309394836426, 37.563391708549425],
-            [-122.51423120498657, 37.56161849366671]
-        ]
-    });
-    this.map!.addLayer({
-        id: 'video-layer',
-        'type': 'raster',
-        'source': 'video',
-        'paint': {
-            'raster-fade-duration': 0
-        }
+      this.getVideoUrl().then((videoUrl) => {
+        const video = document.getElementById('video') as HTMLVideoElement;
+        const hls = new Hls();
+        hls.loadSource(videoUrl);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.muted = true;
+          video.autoplay = true;
+          video.play().then(() => { 
+            this.map!.addSource('video', {
+              type: 'video',
+              urls: [
+                video.src//'https://static-assets.mapbox.com/mapbox-gl-js/drone.mp4'
+              ],
+              coordinates: [
+                  [-122.51596391201019, 37.56238816766053],
+                  [-122.51467645168304, 37.56410183312965],
+                  [-122.51309394836426, 37.563391708549425],
+                  [-122.51423120498657, 37.56161849366671]
+              ]
+            });
+      
+            this.map!.addLayer({
+                id: 'video-layer',
+                'type': 'raster',
+                'source': 'video',
+                'paint': {
+                    'raster-fade-duration': 0
+                }
+            });
+          })          
+        });
+      });    
     });
 
+      
+
     //this.startPeriodicTask();
-  });
 
 
     
