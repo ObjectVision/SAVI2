@@ -109,21 +109,29 @@ export class SimpleMapComponent {
       center: [-122.514426, 37.562984],
       bearing: -96,
     });
-
+    // https://jsfiddle.net/qmu9zt7j/
     this.map.on('load', () => {
       this.getVideoUrl().then((videoUrl) => {
         const video = document.getElementById('video') as HTMLVideoElement;
-        const hls = new Hls();
+        const hls = new Hls({
+          liveBackBufferLength: 17,
+        })
+        
         hls.loadSource(videoUrl);
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           video.muted = true;
           video.autoplay = true;
+          let videoSrc = video.src;
+          let videoHeight = video.videoHeight;
+          let videoWidth = video.videoWidth;
+          let height = video.height;
+          let width = video.width;
           video.play().then(() => { 
             this.map!.addSource('video', {
               type: 'video',
               urls: [
-                video.src//'https://static-assets.mapbox.com/mapbox-gl-js/drone.mp4'
+                videoUrl //video.src//'https://static-assets.mapbox.com/mapbox-gl-js/drone.mp4'
               ],
               coordinates: [
                   [-122.51596391201019, 37.56238816766053],
