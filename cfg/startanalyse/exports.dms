@@ -1,7 +1,20 @@
 container Exports {
+	
+	container all_strats { 
+		container export_strat1 := Templates/ExportStrategieToTilejson(false, 1b);
+		container export_strat2 := Templates/ExportStrategieToTilejson(false, 2b);
+		container export_strat3 := Templates/ExportStrategieToTilejson(false, 3b);
+		container export_strat4 := Templates/ExportStrategieToTilejson(false, 4b);
+		container export_strat5 := Templates/ExportStrategieToTilejson(false, 5b);
+		container export_strat6 := Templates/ExportStrategieToTilejson(true, 6b); // ref19
+		container export_strat7 := Templates/ExportStrategieToTilejson(true, 7b); // ref30
+		container export_strat8 := Templates/ExportStrategieToTilejson(false, 8b); // stratNL
+	}
+	
+	
 	attribute<string> BU_CODE_Scenario (SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3) := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE;
 	
-	unit<uint32> Buurtindicatoren_strategie_3 := SourceData/buurt2020 {
+	/*unit<uint32> Buurtindicatoren_strategie_3 := SourceData/buurt2020 {
 		// https://themasites.pbl.nl/leidraad-warmte/2020/#
 		attribute<string> BU_CODE                                                         := SourceData/buurt2020/BU_CODE;
 		attribute<string> V01_Strategievariant                    					      := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_V01_Strategievariant_);
@@ -29,95 +42,23 @@ container Exports {
 		attribute<units/Euro_per_ton_CO2> G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_G02_Nat_meerkost_CO2_Kost_Reductie_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
 		attribute<units/Euro_per_ton_CO2> G03_Nat_meerkost_CO2_En_Prijzen_Laag            := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_G03_Nat_meerkost_CO2_En_Prijzen_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
 		attribute<units/Euro_per_ton_CO2> G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := rjoin(BU_CODE, BU_CODE_Scenario, SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_G04_Nat_meerkost_CO2_En_Prijzen_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
-		
-		/*attribute<units/Euro_per_Year> nat_meerk := 	
-			rjoin(	BU_CODE, 
-					SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE,
-					SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]
-				 );*/
 	}
 	
-	unit<uint32> bstrat3_geojson := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3)),  StorageName="%LocalDataDir%/startanalyse_2_0/bstrat3.geojson", StorageType="gdalwrite.vect";
-	
-	//parameter<string> CONF_str := "{ ""boundaries_lod0"": {	""target_name"": ""geometry"", ""description"": ""Buurtgrenzen"", ""minzoom"":  7, ""maxzoom"": 11, ""fields"": { ""BU_CODE"": ""Number"", } }, }";
-	
-
-	container MBTiles {
-		parameter<string> GDAL_Driver : ['MBTiles'];
-		unit<uint32> optionSet := range(uint32, 0, 2);
-		attribute<string> GDAL_Options (optionSet) : [ 'MINZOOM=7', 'MAXZOOM=13']; //'CONF={ "boundaries_lod0": {	"target_name": "geometry", "description": "Buurtgrenzen", "minzoom":  7, "maxzoom": 11, "fields": { "BU_CODE": "Number", } } }'];
-		container write
-		{
-			//unit<uint32> bstrat3_mvt := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3)),  StorageName="%LocalDataDir%/startanalyse_2_0/bstrat33", StorageType="gdalwrite.vect";
-			unit<uint32> bstrat3 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3))
-			, StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3.mbtiles"
-			, StorageType="gdalwrite.vect";
-		}
-	}
 	
 	container MVT {
-		parameter<string> GDAL_Driver : ['MVT'];
-		container simple {
-			unit<uint32> optionSet := range(uint32, 0, 2);
-			attribute<string> GDAL_Options (optionSet) : [ 'MINZOOM=0', 'MAXZOOM=13']; //'CONF={ "boundaries_lod0": {	"target_name": "geometry", "description": "Buurtgrenzen", "minzoom":  7, "maxzoom": 11, "fields": { "BU_CODE": "Number", } } }'];
-			container write {
-				unit<uint32> bstrat3 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3))
-				, StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_"
-				, StorageType="gdalwrite.vect";
-			}
-		}
-		
-		container single_layer_single_zoom_level {
-			unit<uint32> optionSet := range(uint32, 0, 2);
-			attribute<string> GDAL_Options (optionSet) : ['SIMPLIFICATION=0.0', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_single_layer.json'];
-			container dataset
-			: StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_single_layer_single_zoom"
-			, StorageType="gdalwrite.vect"
-			, StorageReadOnly = "False"
-			{
-				unit<uint32> bstrat3 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3));
-			}
-		}
-		
-		container double_layer_double_zoom_level {
-			unit<uint32> optionSet := range(uint32, 0, 2);
-			attribute<string> GDAL_Options (optionSet) : ['SIMPLIFICATION=0.0', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_double_layer.json'];
-			container dataset
-			: StorageName="%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_double_layer_double_zoom"
-			, StorageType="gdalwrite.vect"
-			, StorageReadOnly = "False"
-			{
-				unit<uint32> bstrat3_12 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3));
-				unit<uint32> bstrat3_13 := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3));
-			}
-		}
-		
 		container base_results {
-			
 			unit<uint32> results := select_with_attr_by_cond(Buurtindicatoren_strategie_3, const(true, Buurtindicatoren_strategie_3)) {
-				attribute<geography/web_mercator> geometry (poly) := rjoin(BU_CODE, SourceData/buurt2020/BU_CODE, convert(SourceData/buurt2020/geometry, geography/web_mercator));
+				attribute<geography/wm_m> geometry_wm (poly) := rjoin(BU_CODE, SourceData/buurt2020/BU_CODE, convert(SourceData/buurt2020/geometry, geography/wm_m));
+				attribute<geography/rdc_mm> geometry_mm (poly) := rjoin(BU_CODE, SourceData/buurt2020/BU_CODE, SourceData/buurt2020/geometry_mm);
 			}
-			
-			
-			/*unit<uint32> results := SourceData/buurt2020 {
-				// geometry
-				attribute<geography/web_mercator> geometry (poly) := convert(SourceData/buurt2020/geometry, geography/web_mercator);
-				
-				// scenario attributes
-				attribute<units/giga_J_per_woning_per_yr> _H01_Vraag_totaal_giga_J_per_Woning_yr_ := 	
-					rjoin(	BU_CODE, 
-							SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE, 
-							SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]
-						 );
-			}*/
+			container split_polygon_results := Templates/SplitResultsMultiPolygonsIntoPolygons(results);
 		}
 		
 		container all_zoom_levels {
-			parameter<units/m> low_f := 100[units/m];
-			parameter<units/m> mid_f := 25[units/m]; // 12
-			
-			parameter<units/m> low_r := 100[units/m];
-			parameter<units/m> mid_r := 10[units/m];
+			parameter<units/m> low_f := 500000[units/m];
+			parameter<units/m> mid_f := 250[units/m]; // 12
+			parameter<units/mm> low_r := 100000[units/mm];
+			parameter<units/mm> mid_r := 10000[units/mm];
 			
 			container z_5  := Templates/GetSimplifiedResults(low_r, low_f);
 			container z_6  := Templates/GetSimplifiedResults(low_r, low_f);
@@ -126,38 +67,26 @@ container Exports {
 			container z_9  := Templates/GetSimplifiedResults(mid_r, mid_f);
 			container z_10 := Templates/GetSimplifiedResults(mid_r, mid_f);
 			
-			/*container z_11 := Templates/GetSimplifiedResults(10b, 10[units/m]);
-			container z_12 := Templates/GetSimplifiedResults(10b, 10[units/m]);
-			container z_13 := Templates/GetSimplifiedResults(10b, 10[units/m]);*/
-			
-			// http://localhost:8080/data/nl_sa1_bstrat3_zoom_05_13/#5/52.79/5.77
-			
 			parameter<string> GDAL_Driver : ['MVT'];
-			unit<uint32> optionSet := range(uint32, 0, 5); // FORMAT=DIRECTORY
-			attribute<string> GDAL_Options (optionSet) : ['MINZOOM=5', 'MAXZOOM=13', 'SIMPLIFICATION=0.0', 'FORMAT=MBTILES', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_05_13.json'];
+			unit<uint32> optionSet := range(uint32, 0, 10);
+			attribute<string> GDAL_Options (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_05_13.json'];
 			container dataset
-			: StorageName="%LocalDataDir%/startanalyse_2_0/NL_nl_sa1_bstrat3_zoom_05_13.mbtiles" // 
+			: StorageName="%LocalDataDir%/startanalyse_2_0/NL_nl_sa1_bstrat3_zoom_05_13_ori_resi_max_s_f_4"
 			, StorageType="gdalwrite.vect"
 			, StorageReadOnly = "False"
 			{
-				unit<uint32> bstrat3_05 := select_with_attr_by_cond(z_5/results, const(true, z_5/results))  {
-					attribute<units/m2> area_test := area(geometry, units/m2), disablestorage="true";
-				}
-				unit<uint32> bstrat3_06 := select_with_attr_by_cond(z_6/results, const(true, z_6/results));
-				unit<uint32> bstrat3_07 := select_with_attr_by_cond(z_7/results, const(true, z_7/results));
+				unit<uint32> bstrat3_05 := select_with_attr_by_cond(z_5/split_polygon_results/final_results, const(true, z_5/split_polygon_results/final_results));
+				unit<uint32> bstrat3_06 := select_with_attr_by_cond(z_6/split_polygon_results/final_results, const(true, z_6/split_polygon_results/final_results));
+				unit<uint32> bstrat3_07 := select_with_attr_by_cond(z_7/split_polygon_results/final_results, const(true, z_7/split_polygon_results/final_results));
 				
-				unit<uint32> bstrat3_08 := select_with_attr_by_cond(z_8/results, const(true, z_8/results)) {
-					attribute<units/m2> area_test := area(geometry, units/m2), disablestorage="true";
-				}
-				unit<uint32> bstrat3_09 := select_with_attr_by_cond(z_9/results, const(true, z_9/results));
-				unit<uint32> bstrat3_10 := select_with_attr_by_cond(z_10/results, const(true, z_10/results));
-				
-				unit<uint32> bstrat3_11 := select_with_attr_by_cond(base_results/results, const(true, base_results/results)) {
-					attribute<units/m2> area_test := area(geometry, units/m2), disablestorage="true";
-				}
-				unit<uint32> bstrat3_12 := select_with_attr_by_cond(base_results/results, const(true, base_results/results));
-				unit<uint32> bstrat3_13 := select_with_attr_by_cond(base_results/results, const(true, base_results/results));
+				unit<uint32> bstrat3_08 := select_with_attr_by_cond(z_8/split_polygon_results/final_results, const(true, z_8/split_polygon_results/final_results));
+				unit<uint32> bstrat3_09 := select_with_attr_by_cond(z_9/split_polygon_results/final_results, const(true, z_9/split_polygon_results/final_results));
+				unit<uint32> bstrat3_10 := select_with_attr_by_cond(z_10/split_polygon_results/final_results, const(true, z_10/split_polygon_results/final_results));
+
+				unit<uint32> bstrat3_11 := select_with_attr_by_cond(base_results/split_polygon_results/final_results, const(true, base_results/split_polygon_results/final_results));
+				unit<uint32> bstrat3_12 := select_with_attr_by_cond(base_results/split_polygon_results/final_results, const(true, base_results/split_polygon_results/final_results));
+				unit<uint32> bstrat3_13 := select_with_attr_by_cond(base_results/split_polygon_results/final_results, const(true, base_results/split_polygon_results/final_results));
 			}
 		}	
-	}
+	}*/
 }

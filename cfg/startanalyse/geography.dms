@@ -4,18 +4,22 @@ container geography : using = "units" {
 		parameter<m> omtrek_evenaar := 2.0 * Pi() * WGS84_semi_major_axis;
 	}
 
-	parameter<web_mercator> upper_left_point_nl_wm  := point_xy(243600.00, 7199500.00, web_mercator);
-	parameter<web_mercator> lower_right_point_nl_wm := point_xy(810000.60, 6549800.00, web_mercator);
-	parameter<point_rd> upper_left_point_nl_rd  := point_xy(10000f, 625000f, point_rd); //convert(upper_left_point_nl_wm, point_rd);
-	parameter<point_rd> lower_right_point_nl_rd := convert(lower_right_point_nl_wm, point_rd);
-	parameter<point_rd> upper_left_point_subset_rd  := point_xy(101300f, 437500f, point_rd);
-	parameter<point_rd> lower_right_point_subset_rd := point_xy(126200f, 426100f, point_rd);   
+	parameter<wm_m> wm_m_upper_left     := point_xy(243600.00, 7199500.00, wm_m);
+	parameter<wm_m> wm_m_lower_right    := point_xy(810000.60, 6549800.00, wm_m);
+	parameter<rdc_m> rdc_m_upper_left   := point_xy(10000.0, 625000.0, rdc_m);
+	parameter<rdc_m> rdc_m_lower_right  := point_xy(280000.0, 300000.0, rdc_m);
+	parameter<rdc_mm> rdc_mm_upper_left   := convert(rdc_m_upper_left, rdc_mm);
+	parameter<rdc_mm> rdc_mm_lower_right  := convert(rdc_m_lower_right, rdc_mm);
+	
+	
+	//parameter<point_rd> upper_left_point_subset_rd  := point_xy(101300.0, 47500.0, point_rd);
+	//parameter<point_rd> lower_right_point_subset_rd := point_xy(126200.0, 426100.0, point_rd);   
 
 	container wm_map_extents {
 		parameter<m> halve_omtrek_evenaar := constants/omtrek_evenaar/2.0;
 		
-		parameter<web_mercator> upper_left  := point_yx( halve_omtrek_evenaar, -halve_omtrek_evenaar, web_mercator);
-		parameter<web_mercator> lower_right := point_yx(-halve_omtrek_evenaar,  halve_omtrek_evenaar, web_mercator);
+		parameter<wm_m> upper_left  := point_yx( halve_omtrek_evenaar, -halve_omtrek_evenaar, wm_m);
+		parameter<wm_m> lower_right := point_yx(-halve_omtrek_evenaar,  halve_omtrek_evenaar, wm_m);
 		
 		parameter<m> x_min := pointcol(upper_left)[m];
 		parameter<m> x_max := pointcol(lower_right)[m];
@@ -23,10 +27,14 @@ container geography : using = "units" {
 		parameter<m> y_max := pointrow(upper_left)[m];			
 	}
 
-	unit<dpoint> rdc_meter_base : DialogData = "wmts_rd_layer",	SpatialReference = "EPSG:28992";
-	unit<dpoint> web_mercator   : DialogData = "wmts_wm_layer", SpatialReference = "EPSG:3857";
-	//unit<dpoint> rdc_meter := range(rdc_meter_base, point_yx(300000.0, 0.0), point_yx(625000.0, 280000.0));
-	unit<fpoint> point_rd := range(rdc_meter_base, point_yx(300000f, 0f), point_yx(625000f, 280000f));
+	unit<dpoint> rdc_base : DialogData = "wmts_rd_layer",	SpatialReference = "EPSG:28992";
+	unit<dpoint> rdc_m  := range(rdc_base, point_yx(300000.0, 0.0), point_yx(625000.0, 280000.0));
+	unit<ipoint> rdc_mm := gridset(rdc_base,  point_yx(0.001, 0.001), point_yx(0.0, 0.0), ipoint);
+	
+	unit<dpoint> wm_base : DialogData = "wmts_wm_layer", SpatialReference = "EPSG:3857";
+	unit<dpoint> wm_m  := range(rdc_base, point_yx(6555240.0, 335100.0), point_yx(7153283.0, 820628.0));
+	
+	//unit<fpoint> point_rd := range(rdc_meter_base, point_yx(300000f, 0f), point_yx(625000f, 280000f));
 
 	container gridsets := for_each_ne (
 		  parameters/simplify/grids/name

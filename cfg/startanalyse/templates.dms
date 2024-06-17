@@ -3,24 +3,26 @@ container Templates {
 	
 	Template grid_template {	
 		// case parameter
-		parameter<units/m> grid_size;
-		parameter<geography/point_rd> upper_left;
-		parameter<geography/point_rd> lower_right;
+		parameter<units/mm> grid_size;
+		parameter<geography/rdc_mm> upper_left;
+		parameter<geography/rdc_mm> lower_right;
 		// end of case parameter
 		
+		//parameter<float32> nr_cols_f32 := (pointcol(lower_right) - pointcol(upper_left)) / float32(grid_size);
+		//parameter<int32> nr_cols := int32(nr_cols_f32);
+		//parameter<float32> nr_rows_f32 := (pointrow(upper_left) - pointrow(lower_right)) / float32(grid_size);
+		//parameter<int32> nr_rows := int32(nr_rows_f32);
 		
-		parameter<float32> nr_cols_f32 := (pointcol(lower_right) - pointcol(upper_left)) / float32(grid_size);
-		parameter<int32> nr_cols := int32(nr_cols_f32);
-		parameter<float32> nr_rows_f32 := (pointrow(upper_left) - pointrow(lower_right)) / float32(grid_size);
-		parameter<int32> nr_rows := int32(nr_rows_f32);
-		
-		parameter<geography/point_rd> lower_right_computed := upper_left + point_xy(float32(nr_cols) * float32(grid_size), -float32(nr_rows) * float32(grid_size), geography/point_rd);
+		parameter<int32> nr_cols := (pointcol(lower_right) - pointcol(upper_left)) / int32(grid_size);
+		parameter<int32> nr_rows := (pointrow(upper_left) - pointrow(lower_right)) / int32(grid_size);
+
+		parameter<geography/rdc_mm> lower_right_computed := upper_left + point_xy(nr_cols * int32(grid_size), -nr_rows * int32(grid_size), geography/rdc_mm);
 		
 		unit<ipoint> domain
 			:= range(
 				 gridset(
-					geography/point_rd
-				   ,point_xy(float32(grid_size), float32(-grid_size)) //, 
+					geography/rdc_mm
+				   ,point_xy(int32(grid_size), int32(-grid_size)) //, 
 				   ,upper_left //upper_left_point_nl_rd //
 				   ,ipoint
 				 )
@@ -40,7 +42,7 @@ container Templates {
 		parameter<float64> simplifyFactor;
 		// end case parameters
 
-		attribute<Geography/point_rd> Shape_geometry (ShapeDomain, poly) := ShapeDomain/geometry;
+		attribute<Geography/rdc_mm> Shape_geometry(ShapeDomain, poly) := ShapeDomain/geometry_mm;
 
 		attribute<ShapeDomain> ShapeDomain_rel (domain_grid) := poly2grid_untiled(Shape_geometry, domain_grid);
 		container SimplifiedPolygons                         := grid2poly_ipoint(domain_grid, ShapeDomain, ShapeDomain_rel, simplifyFactor);
@@ -143,9 +145,68 @@ container Templates {
 		);
 	}
 	
+	Template SplitResultsMultiPolygonsIntoPolygons {
+		// begin case parameters
+		unit<uint32> domain;
+		// end case parameters
+		
+		container strategievariant_nr {
+			unit<uint32> unique_strategy_variants := unique(final_results/V01_Strategievariant) {
+				attribute<uint32> id := id(.);
+			}
+			
+		}
+		
+		unit<uint32> split_polygons := split_polygon(results/geometry_mm);
+		unit<uint32> final_results := split_polygons {
+			attribute<uint32> id 													     := split_polygons/polygon_rel; 
+			attribute<geography/wm_m> geometry (poly)                                        := convert(split_polygons/geometry, geography/wm_m);
+			
+			attribute<string> V01_Strategievariant                                           := domain/V01_Strategievariant[split_polygons/polygon_rel];
+			attribute<uint32> Strategiecode := rjoin(V01_Strategievariant, strategievariant_nr/unique_strategy_variants/values, strategievariant_nr/unique_strategy_variants/id);
+			attribute<string> BU_CODE                                                        := domain/BU_CODE[split_polygons/polygon_rel];
+			attribute<string> Buurtnaam := domain/Buurtnaam[split_polygons/polygon_rel];
+			attribute<string> Wijkcode := domain/Wijkcode[split_polygons/polygon_rel];
+			attribute<string> Wijknaam := domain/Wijknaam[split_polygons/polygon_rel];
+			attribute<string> Gemeentecode := domain/Gemeentecode[split_polygons/polygon_rel];
+			attribute<string> Gemeentenaam := domain/Gemeentenaam[split_polygons/polygon_rel];
+			attribute<string> Energieregionaam := domain/Energieregionaam[split_polygons/polygon_rel];
+			attribute<string> Provincienaam := domain/Provincienaam[split_polygons/polygon_rel];
+			attribute<string> AantalWoningen := domain/AantalWoningen[split_polygons/polygon_rel];
+			attribute<string> AantalUtiliteiten := domain/AantalUtiliteiten[split_polygons/polygon_rel];
+			attribute<string> WoningEquivalenten := domain/WoningEquivalenten[split_polygons/polygon_rel];
+			
+			attribute<units/Euro_per_ton_CO2_per_yr> H17_Nationale_meerkosten_CO2 			 := domain/H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel];  
+			attribute<units/giga_J_per_woning_per_yr> H01_Energieverbruik                    := domain/H01_Energieverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> H02_Energieverbruik_ruimteverwarming   := domain/H02_Energieverbruik_ruimteverwarming[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> H03_Energieverbruik_warmtapwater       := domain/H03_Energieverbruik_warmtapwater[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> H04_Energieverbruik_ventilatie         := domain/H04_Energieverbruik_ventilatie[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> H05_Energieverbruik_koude              := domain/H05_Energieverbruik_koude    [split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> H06_Energieverbruik_apparaten_en_licht := domain/H06_Energieverbruik_apparaten_en_licht[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_ha> H07_Warmteverbruik                                := domain/H07_Warmteverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> H10_Energielevering_duurzaamgas        := domain/H10_Energielevering_duurzaamgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> H11_Energielevering_elektriciteit      := domain/H11_Energielevering_elektriciteit[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> H12_Energielevering_MTwarmtebronnen    := domain/H12_Energielevering_MTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> H13_Energielevering_LTwarmtebronnen    := domain/H13_Energielevering_LTwarmtebronnen[split_polygons/polygon_rel];
+			
+			attribute<units/giga_J_per_woning_per_yr> H08_Energielevering                    := domain/H08_Energielevering[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> H09_Energielevering_aardgas            := domain/H09_Energielevering_aardgas [split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> H14_Energielevering_overig      		 := domain/H14_Energielevering_overig[split_polygons/polygon_rel];
+			attribute<units/ton_CO2_per_yr> H15_CO2_uitstoot            					 := domain/H15_CO2_uitstoot          [split_polygons/polygon_rel];     
+			attribute<units/Euro_per_Year> H16_Nationale_meerkosten     					 := domain/H16_Nationale_meerkosten   [split_polygons/polygon_rel];            
+			attribute<units/Euro_per_woning_per_yr> H18_Nationale_meerkosten_extra    		 := domain/H18_Nationale_meerkosten_extra   [split_polygons/polygon_rel];    
+			attribute<units/Euro_per_m3> H19_waarde_hernieuwbaar_gas           				 := domain/H19_waarde_hernieuwbaar_gas    [split_polygons/polygon_rel];     
+			attribute<units/m3> H20_beschikbaarheid_hernieuwbaar_gas         				 := domain/H20_beschikbaarheid_hernieuwbaar_gas      [split_polygons/polygon_rel];    
+			attribute<units/Euro_per_ton_CO2> G01_Nat_meerkost_CO2_Kost_Reductie_Hoog        := domain/G01_Nat_meerkost_CO2_Kost_Reductie_Hoog[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> G02_Nat_meerkost_CO2_Kost_Reductie_Laag        := domain/G02_Nat_meerkost_CO2_Kost_Reductie_Laag[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> G03_Nat_meerkost_CO2_En_Prijzen_Laag           := domain/G03_Nat_meerkost_CO2_En_Prijzen_Laag[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> G04_Nat_meerkost_CO2_En_Prijzen_Hoog           := domain/G04_Nat_meerkost_CO2_En_Prijzen_Hoog[split_polygons/polygon_rel];
+		}
+	}
+	
 	Template GetSimplifiedResults {
 		// begin case parameters
-		parameter<units/m> grid_size;
+		parameter<units/mm> grid_size;
 		parameter<units/m> factor;
 		// end case parameters
 	
@@ -156,7 +217,7 @@ container Templates {
 			attribute<.> Reverse := union_data(., V/South, V/West, V/North, V/East);
 		}
 	
-		container grid := Templates/grid_template(grid_size, geography/upper_left_point_nl_rd, geography/lower_right_point_nl_rd);
+		container grid := Templates/grid_template(grid_size, geography/rdc_mm_upper_left, geography/rdc_mm_lower_right);
 	
 		//container result := ='Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, /geography/gridsets/m_' + string(grid_size) + '/domain,' + string(factor) + '[units/m])';
 		container simplify := Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, grid/domain, factor);
@@ -164,30 +225,125 @@ container Templates {
 		unit<uint32> property : nrofrows = 1 {
 		   parameter<string> name: ['name'];//,'valuesunit'];
 		}
-
-		
-
-		//attribute<geography/web_mercator> original_geometry_wm (poly) := convert(SourceData/buurt2020/geometry, geography/web_mercator);
-		
 		
 		attribute<uint32> primary_key (results) := id(results);
 		attribute<uint32> foreign_key (simplify/SimplifiedPolygons/results) := id(simplify/SimplifiedPolygons/results);
 		
-		unit<uint32> results := select_with_attr_by_cond(Exports/Buurtindicatoren_strategie_3, const(true, Exports/Buurtindicatoren_strategie_3)) {
-			//attribute<geography/web_mercator> geometry (poly) := convert(SourceData/buurt2020/geometry, geography/web_mercator);
-			
-			//attribute<geography/web_mercator> geometry (poly) := convert(simplify/SimplifiedPolygons/results/geometry, geography/web_mercator);
-			attribute<geography/web_mercator> geometry (poly) := rjoin(BU_CODE, Exports/Buurtindicatoren_strategie_3/BU_CODE, convert(simplify/SimplifiedPolygons/results/geometry, geography/web_mercator));
-			
-			
-			
-			
-			/*attribute<units/giga_J_per_woning_per_yr> _H01_Vraag_totaal_giga_J_per_Woning_yr_ := 	
-				rjoin(	BU_CODE, 
-						SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3_final/BU_CODE, 
-						SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3_final/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]
-					 );*/
+		unit<uint32> results := select_with_attr_by_cond(Buurtindicatoren_strategie, const(true, Buurtindicatoren_strategie)) {
+			attribute<geography/rdc_mm> geometry_mm (poly) := rjoin(BU_CODE, Buurtindicatoren_strategie/BU_CODE, simplify/SimplifiedPolygons/results/geometry);
+		}
+		
+		container split_polygon_results := SplitResultsMultiPolygonsIntoPolygons(results);
+	}
+	
+	Template ExportStrategieToTilejson {
+		// begin case parameters
+		parameter<bool> is_ref;
+		parameter<uint8> strategie_id;
+		// end case parameters
+ 
+		parameter<string> strategie_domain_str := "SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_" + string(strategie_id);
+		unit<uint32> strategie_domain :== strategie_domain_str;
 
+		attribute<string> BU_CODE_strategie (strategie_domain) := strategie_domain/BU_CODE;
+		unit<uint32> Buurtindicatoren_strategie := SourceData/buurt2020 {
+			// algemene informatie
+			attribute<string> BU_CODE                                                         := SourceData/buurt2020/BU_CODE;
+			attribute<string> Buurtnaam := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I02_buurtnaam_);
+			attribute<string> Wijkcode := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I03_wijkcode_);
+			attribute<string> Wijknaam := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I04_wijknaam_);
+			attribute<string> Gemeentecode := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I05_gemeentecode_);
+			attribute<string> Gemeentenaam := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I06_gemeentenaam_);
+			attribute<string> Energieregionaam := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I07_energieregionaam_);
+			attribute<string> Provincienaam := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I08_provincienaam_);
+			attribute<string> AantalWoningen := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I09_aantal_woningen_Aansluiting_);
+			attribute<string> AantalUtiliteiten := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I10_aantal_utiliteit_Aansluiting_);
+			attribute<string> WoningEquivalenten := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I11_woningequivalenten_Woning_);
+			
+			// strategie informatie
+			attribute<string> V01_Strategievariant                    					      := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_V01_Strategievariant_);
+			attribute<units/giga_J_per_woning_per_yr> H01_Energieverbruik                     := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> H02_Energieverbruik_ruimteverwarming    := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H02_Vraag_RV_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> H03_Energieverbruik_warmtapwater        := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H03_Vraag_TW_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> H04_Energieverbruik_ventilatie          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H04_Vraag_Vent_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> H05_Energieverbruik_koude               := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H05_Vraag_K_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> H06_Energieverbruik_apparaten_en_licht  := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H06_Vraag_App_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_ha> H07_Warmteverbruik                                 := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H07_Vraag_tot_ha_100_kilo_J_per_m_2_yr_[units/giga_J_per_ha]); 		 // GJ/ha
+			attribute<units/giga_J_per_woning_per_yr> H08_Energielevering                     := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H08_Input_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> H09_Energielevering_aardgas             := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H09_Input_aardgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> H10_Energielevering_duurzaamgas         := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H10_Input_duurzaamgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);	 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> H11_Energielevering_elektriciteit       := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H11_Input_elektriciteit_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);   // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> H12_Energielevering_MTwarmtebronnen     := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H12_Input_MTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> H13_Energielevering_LTwarmtebronnen     := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H13_Input_LTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> H14_Energielevering_overig              := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H14_Saldo_Omgevingswarmte_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/ton_CO2_per_yr> H15_CO2_uitstoot                                  := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H15_CO2_uitstoot_mega_g_per_yr_[units/ton_CO2_per_yr]); // ton/jaar
+			attribute<units/Euro_per_Year> H16_Nationale_meerkosten                           := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]); // Euro/jaar
+			attribute<units/Euro_per_ton_CO2_per_yr> H17_Nationale_meerkosten_CO2             := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			attribute<units/Euro_per_woning_per_yr> H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
+			attribute<units/Euro_per_m3> H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
+			attribute<units/m3> H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
+			attribute<units/Euro_per_ton_CO2> G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G02_Nat_meerkost_CO2_Kost_Reductie_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> G03_Nat_meerkost_CO2_En_Prijzen_Laag            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G03_Nat_meerkost_CO2_En_Prijzen_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G04_Nat_meerkost_CO2_En_Prijzen_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+		}
+		
+		container MVT {
+			container base_results {
+				unit<uint32> results := ='select_with_attr_by_cond(Buurtindicatoren_strategie, const(true,Buurtindicatoren_strategie))' {
+					attribute<geography/wm_m> geometry_wm (poly) := rjoin(BU_CODE, SourceData/buurt2020/BU_CODE, convert(SourceData/buurt2020/geometry, geography/wm_m));
+					attribute<geography/rdc_mm> geometry_mm (poly) := rjoin(BU_CODE, SourceData/buurt2020/BU_CODE, SourceData/buurt2020/geometry_mm);
+				}
+				container split_polygon_results := Templates/SplitResultsMultiPolygonsIntoPolygons(results);
+			}
+			
+			container all_zoom_levels {
+				parameter<units/m> low_f := 500000[units/m];
+				parameter<units/m> mid_f := 250[units/m]; // 12
+				parameter<units/mm> low_r := 100000[units/mm];
+				parameter<units/mm> mid_r := 10000[units/mm];
+				
+				container z_5  := Templates/GetSimplifiedResults(low_r, low_f);
+				container z_6  := Templates/GetSimplifiedResults(low_r, low_f);
+				container z_7  := Templates/GetSimplifiedResults(low_r, low_f);
+				container z_8  := Templates/GetSimplifiedResults(mid_r, mid_f);
+				container z_9  := Templates/GetSimplifiedResults(mid_r, mid_f);
+				container z_10 := Templates/GetSimplifiedResults(mid_r, mid_f);
+				
+				parameter<string> GDAL_Driver : ['MVT'];
+				
+				unit<uint32> optionSet := range(uint32, 0, 10);
+				container gdal_options_per_strat {
+					attribute<string> GDAL_Options_1 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_1.json'];
+					attribute<string> GDAL_Options_2 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_2.json'];
+					attribute<string> GDAL_Options_3 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_3.json'];
+					attribute<string> GDAL_Options_4 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_4.json'];
+					attribute<string> GDAL_Options_5 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_5.json'];
+					attribute<string> GDAL_Options_6 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_6.json'];
+					attribute<string> GDAL_Options_7 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_7.json'];
+					attribute<string> GDAL_Options_8 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_8.json'];
+				}
+				
+				attribute<string> GDAL_Options (optionSet) :== "gdal_options_per_strat/GDAL_Options_" + string(strategie_id);
+				
+				container dataset
+				: StorageName='="%LocalDataDir%/startanalyse_2_0/Strategie"+string(strategie_id)'
+				, StorageType="gdalwrite.vect"
+				, StorageReadOnly = "False"
+				{
+					unit<uint32> strat_05 := select_with_attr_by_cond(z_5/split_polygon_results/final_results, const(true, z_5/split_polygon_results/final_results));
+					unit<uint32> strat_06 := select_with_attr_by_cond(z_6/split_polygon_results/final_results, const(true, z_6/split_polygon_results/final_results));
+					unit<uint32> strat_07 := select_with_attr_by_cond(z_7/split_polygon_results/final_results, const(true, z_7/split_polygon_results/final_results));
+					
+					unit<uint32> strat_08 := select_with_attr_by_cond(z_8/split_polygon_results/final_results, const(true, z_8/split_polygon_results/final_results));
+					unit<uint32> strat_09 := select_with_attr_by_cond(z_9/split_polygon_results/final_results, const(true, z_9/split_polygon_results/final_results));
+					unit<uint32> strat_10 := select_with_attr_by_cond(z_10/split_polygon_results/final_results, const(true, z_10/split_polygon_results/final_results));
+
+					unit<uint32> strat_11 := select_with_attr_by_cond(base_results/split_polygon_results/final_results, const(true, base_results/split_polygon_results/final_results));
+					unit<uint32> strat_12 := select_with_attr_by_cond(base_results/split_polygon_results/final_results, const(true, base_results/split_polygon_results/final_results));
+					unit<uint32> strat_13 := select_with_attr_by_cond(base_results/split_polygon_results/final_results, const(true, base_results/split_polygon_results/final_results));
+				}
+			}	
 		}
 	}
 }
