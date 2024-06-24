@@ -32,7 +32,7 @@ container geography : using = "units" {
 	unit<ipoint> rdc_mm := gridset(rdc_base,  point_yx(0.001, 0.001), point_yx(0.0, 0.0), ipoint);
 	
 	unit<dpoint> wm_base : DialogData = "wmts_wm_layer", SpatialReference = "EPSG:3857";
-	unit<dpoint> wm_m  := range(rdc_base, point_yx(6555240.0, 335100.0), point_yx(7153283.0, 820628.0));
+	unit<dpoint> wm_m  := range(wm_base, point_yx(6555240.0, 335100.0), point_yx(7153283.0, 820628.0));
 	
 	//unit<fpoint> point_rd := range(rdc_meter_base, point_yx(300000f, 0f), point_yx(625000f, 280000f));
 

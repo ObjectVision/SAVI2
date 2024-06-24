@@ -69,7 +69,7 @@ container SourceData {
 			attribute<geography/rdc_m> geometry (arc);
 		}
 		
-	    unit<uint32> aardwarmte : StorageName="%SourceDataDir%/StartAnalyse/V1/aanbod/geothermie/technisch_pot_aardwarmte_ThermoGIS21_maart_2019_EBN.shp", StorageType="gdal.vect", StorageReadOnly="True"
+	    unit<uint32> geothermie : StorageName="%SourceDataDir%/StartAnalyse/V1/aanbod/geothermie/technisch_pot_aardwarmte_ThermoGIS21_maart_2019_EBN.shp", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<geography/rdc_m> geometry (poly);
 		}

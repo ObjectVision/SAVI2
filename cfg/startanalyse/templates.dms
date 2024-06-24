@@ -145,7 +145,246 @@ container Templates {
 		);
 	}
 	
-	Template SplitResultsMultiPolygonsIntoPolygons {
+	Template SplitAllResultsMultiPolygonsIntoPolygons {
+		// begin case parameters
+		unit<uint32> domain;
+		// end case parameters
+		
+		container strategievariant_nr {
+			unit<uint32> unique_strategy_variants := unique(final_results/LN_V01_Strategievariant) {
+				attribute<uint32> id := id(.);
+			}
+		}
+		
+		unit<uint32> split_polygons := split_polygon(results/geometry_mm);
+		unit<uint32> final_results := split_polygons {
+			attribute<uint32> id 													     := split_polygons/polygon_rel; 
+			attribute<geography/wm_m> geometry (poly)                                        := convert(split_polygons/geometry, geography/wm_m);
+			attribute<string> BU_CODE                                                        := domain/BU_CODE[split_polygons/polygon_rel];
+			attribute<string> Buurtnaam := domain/Buurtnaam[split_polygons/polygon_rel];
+			attribute<string> Wijkcode := domain/Wijkcode[split_polygons/polygon_rel];
+			attribute<string> Wijknaam := domain/Wijknaam[split_polygons/polygon_rel];
+			attribute<string> Gemeentecode := domain/Gemeentecode[split_polygons/polygon_rel];
+			attribute<string> Gemeentenaam := domain/Gemeentenaam[split_polygons/polygon_rel];
+			attribute<string> Energieregionaam := domain/Energieregionaam[split_polygons/polygon_rel];
+			attribute<string> Provincienaam := domain/Provincienaam[split_polygons/polygon_rel];
+			attribute<uint32> AantalWoningen := uint32(domain/AantalWoningen[split_polygons/polygon_rel]);
+			attribute<uint32> AantalUtiliteiten := uint32(domain/AantalUtiliteiten[split_polygons/polygon_rel]);
+			attribute<uint32> WoningEquivalenten := uint32(domain/WoningEquivalenten[split_polygons/polygon_rel]);
+			attribute<bool> Uitgesloten := domain/Uitgesloten[split_polygons/polygon_rel];
+
+			// S1
+			attribute<string> S1_V01_Strategievariant                    					     := domain/S1_V01_Strategievariant[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S1_H01_Energieverbruik                     := domain/S1_H01_Energieverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S1_H02_Energieverbruik_ruimteverwarming    := domain/S1_H02_Energieverbruik_ruimteverwarming[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S1_H03_Energieverbruik_warmtapwater        := domain/S1_H03_Energieverbruik_warmtapwater[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S1_H04_Energieverbruik_ventilatie          := domain/S1_H04_Energieverbruik_ventilatie[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S1_H05_Energieverbruik_koude               := domain/S1_H05_Energieverbruik_koude[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S1_H06_Energieverbruik_apparaten_en_licht  := domain/S1_H06_Energieverbruik_apparaten_en_licht[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_ha> S1_H07_Warmteverbruik                                 := domain/S1_H07_Warmteverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S1_H08_Energielevering                     := domain/S1_H08_Energielevering[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S1_H09_Energielevering_aardgas             := domain/S1_H09_Energielevering_aardgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S1_H10_Energielevering_duurzaamgas         := domain/S1_H10_Energielevering_duurzaamgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S1_H11_Energielevering_elektriciteit       := domain/S1_H11_Energielevering_elektriciteit[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S1_H12_Energielevering_MTwarmtebronnen     := domain/S1_H12_Energielevering_MTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S1_H13_Energielevering_LTwarmtebronnen     := domain/S1_H13_Energielevering_LTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S1_H14_Energielevering_overig              := domain/S1_H14_Energielevering_overig[split_polygons/polygon_rel];
+			attribute<units/ton_CO2_per_yr> S1_H15_CO2_uitstoot                                  := domain/S1_H15_CO2_uitstoot[split_polygons/polygon_rel];
+			attribute<units/Euro_per_Year> S1_H16_Nationale_meerkosten                           := domain/S1_H16_Nationale_meerkosten[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2_per_yr> S1_H17_Nationale_meerkosten_CO2             := domain/S1_H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel];
+			attribute<units/Euro_per_woning_per_yr> S1_H18_Nationale_meerkosten_extra            := domain/S1_H18_Nationale_meerkosten_extra[split_polygons/polygon_rel];
+			attribute<units/Euro_per_m3> S1_H19_waarde_hernieuwbaar_gas                          := domain/S1_H19_waarde_hernieuwbaar_gas[split_polygons/polygon_rel];
+			attribute<units/m3> S1_H20_beschikbaarheid_hernieuwbaar_gas                          := domain/S1_H20_beschikbaarheid_hernieuwbaar_gas[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S1_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := domain/S1_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S1_G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := domain/S1_G02_Nat_meerkost_CO2_Kost_Reductie_Laag[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S1_G03_Nat_meerkost_CO2_En_Prijzen_Laag            := domain/S1_G03_Nat_meerkost_CO2_En_Prijzen_Laag[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S1_G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := domain/S1_G04_Nat_meerkost_CO2_En_Prijzen_Hoog[split_polygons/polygon_rel];
+			
+			// S2
+			attribute<string> S2_V01_Strategievariant                    					     := domain/S2_V01_Strategievariant[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S2_H01_Energieverbruik                     := domain/S2_H01_Energieverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S2_H02_Energieverbruik_ruimteverwarming    := domain/S2_H02_Energieverbruik_ruimteverwarming[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S2_H03_Energieverbruik_warmtapwater        := domain/S2_H03_Energieverbruik_warmtapwater[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S2_H04_Energieverbruik_ventilatie          := domain/S2_H04_Energieverbruik_ventilatie[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S2_H05_Energieverbruik_koude               := domain/S2_H05_Energieverbruik_koude[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S2_H06_Energieverbruik_apparaten_en_licht  := domain/S2_H06_Energieverbruik_apparaten_en_licht[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_ha> S2_H07_Warmteverbruik                                 := domain/S2_H07_Warmteverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S2_H08_Energielevering                     := domain/S2_H08_Energielevering[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S2_H09_Energielevering_aardgas             := domain/S2_H09_Energielevering_aardgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S2_H10_Energielevering_duurzaamgas         := domain/S2_H10_Energielevering_duurzaamgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S2_H11_Energielevering_elektriciteit       := domain/S2_H11_Energielevering_elektriciteit[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S2_H12_Energielevering_MTwarmtebronnen     := domain/S2_H12_Energielevering_MTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S2_H13_Energielevering_LTwarmtebronnen     := domain/S2_H13_Energielevering_LTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S2_H14_Energielevering_overig              := domain/S2_H14_Energielevering_overig[split_polygons/polygon_rel];
+			attribute<units/ton_CO2_per_yr> S2_H15_CO2_uitstoot                                  := domain/S2_H15_CO2_uitstoot[split_polygons/polygon_rel];
+			attribute<units/Euro_per_Year> S2_H16_Nationale_meerkosten                           := domain/S2_H16_Nationale_meerkosten[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2_per_yr> S2_H17_Nationale_meerkosten_CO2             := domain/S2_H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel];
+			attribute<units/Euro_per_woning_per_yr> S2_H18_Nationale_meerkosten_extra            := domain/S2_H18_Nationale_meerkosten_extra[split_polygons/polygon_rel];
+			attribute<units/Euro_per_m3> S2_H19_waarde_hernieuwbaar_gas                          := domain/S2_H19_waarde_hernieuwbaar_gas[split_polygons/polygon_rel];
+			attribute<units/m3> S2_H20_beschikbaarheid_hernieuwbaar_gas                          := domain/S2_H20_beschikbaarheid_hernieuwbaar_gas[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S2_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := domain/S2_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S2_G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := domain/S2_G02_Nat_meerkost_CO2_Kost_Reductie_Laag[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S2_G03_Nat_meerkost_CO2_En_Prijzen_Laag            := domain/S2_G03_Nat_meerkost_CO2_En_Prijzen_Laag[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S2_G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := domain/S2_G04_Nat_meerkost_CO2_En_Prijzen_Hoog[split_polygons/polygon_rel];
+			
+			// S3
+			attribute<string> S3_V01_Strategievariant                    					  := domain/S3_V01_Strategievariant[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S3_H01_Energieverbruik                     := domain/S3_H01_Energieverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S3_H02_Energieverbruik_ruimteverwarming    := domain/S3_H02_Energieverbruik_ruimteverwarming[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S3_H03_Energieverbruik_warmtapwater        := domain/S3_H03_Energieverbruik_warmtapwater[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S3_H04_Energieverbruik_ventilatie          := domain/S3_H04_Energieverbruik_ventilatie[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S3_H05_Energieverbruik_koude               := domain/S3_H05_Energieverbruik_koude[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S3_H06_Energieverbruik_apparaten_en_licht  := domain/S3_H06_Energieverbruik_apparaten_en_licht[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_ha> S3_H07_Warmteverbruik                                 := domain/S3_H07_Warmteverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S3_H08_Energielevering                     := domain/S3_H08_Energielevering[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S3_H09_Energielevering_aardgas             := domain/S3_H09_Energielevering_aardgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S3_H10_Energielevering_duurzaamgas         := domain/S3_H10_Energielevering_duurzaamgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S3_H11_Energielevering_elektriciteit       := domain/S3_H11_Energielevering_elektriciteit[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S3_H12_Energielevering_MTwarmtebronnen     := domain/S3_H12_Energielevering_MTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S3_H13_Energielevering_LTwarmtebronnen     := domain/S3_H13_Energielevering_LTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S3_H14_Energielevering_overig              := domain/S3_H14_Energielevering_overig[split_polygons/polygon_rel];
+			attribute<units/ton_CO2_per_yr> S3_H15_CO2_uitstoot                                  := domain/S3_H15_CO2_uitstoot[split_polygons/polygon_rel];
+			attribute<units/Euro_per_Year> S3_H16_Nationale_meerkosten                           := domain/S3_H16_Nationale_meerkosten[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2_per_yr> S3_H17_Nationale_meerkosten_CO2             := domain/S3_H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel];
+			attribute<units/Euro_per_woning_per_yr> S3_H18_Nationale_meerkosten_extra            := domain/S3_H18_Nationale_meerkosten_extra[split_polygons/polygon_rel];
+			attribute<units/Euro_per_m3> S3_H19_waarde_hernieuwbaar_gas                          := domain/S3_H19_waarde_hernieuwbaar_gas[split_polygons/polygon_rel];
+			attribute<units/m3> S3_H20_beschikbaarheid_hernieuwbaar_gas                          := domain/S3_H20_beschikbaarheid_hernieuwbaar_gas[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S3_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := domain/S3_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S3_G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := domain/S3_G02_Nat_meerkost_CO2_Kost_Reductie_Laag[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S3_G03_Nat_meerkost_CO2_En_Prijzen_Laag            := domain/S3_G03_Nat_meerkost_CO2_En_Prijzen_Laag[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S3_G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := domain/S3_G04_Nat_meerkost_CO2_En_Prijzen_Hoog[split_polygons/polygon_rel];
+			
+			// S4
+			attribute<string> S4_V01_Strategievariant                    					     := domain/S4_V01_Strategievariant[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S4_H01_Energieverbruik                     := domain/S4_H01_Energieverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S4_H02_Energieverbruik_ruimteverwarming    := domain/S4_H02_Energieverbruik_ruimteverwarming[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S4_H03_Energieverbruik_warmtapwater        := domain/S4_H03_Energieverbruik_warmtapwater[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S4_H04_Energieverbruik_ventilatie          := domain/S4_H04_Energieverbruik_ventilatie[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S4_H05_Energieverbruik_koude               := domain/S4_H05_Energieverbruik_koude[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S4_H06_Energieverbruik_apparaten_en_licht  := domain/S4_H06_Energieverbruik_apparaten_en_licht[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_ha> S4_H07_Warmteverbruik                                 := domain/S4_H07_Warmteverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S4_H08_Energielevering                     := domain/S4_H08_Energielevering[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S4_H09_Energielevering_aardgas             := domain/S4_H09_Energielevering_aardgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S4_H10_Energielevering_duurzaamgas         := domain/S4_H10_Energielevering_duurzaamgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S4_H11_Energielevering_elektriciteit       := domain/S4_H11_Energielevering_elektriciteit[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S4_H12_Energielevering_MTwarmtebronnen     := domain/S4_H12_Energielevering_MTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S4_H13_Energielevering_LTwarmtebronnen     := domain/S4_H13_Energielevering_LTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S4_H14_Energielevering_overig              := domain/S4_H14_Energielevering_overig[split_polygons/polygon_rel];
+			attribute<units/ton_CO2_per_yr> S4_H15_CO2_uitstoot                                  := domain/S4_H15_CO2_uitstoot[split_polygons/polygon_rel];
+			attribute<units/Euro_per_Year> S4_H16_Nationale_meerkosten                           := domain/S4_H16_Nationale_meerkosten[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2_per_yr> S4_H17_Nationale_meerkosten_CO2             := domain/S4_H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel];
+			attribute<units/Euro_per_woning_per_yr> S4_H18_Nationale_meerkosten_extra            := domain/S4_H18_Nationale_meerkosten_extra[split_polygons/polygon_rel];
+			attribute<units/Euro_per_m3> S4_H19_waarde_hernieuwbaar_gas                          := domain/S4_H19_waarde_hernieuwbaar_gas[split_polygons/polygon_rel];
+			attribute<units/m3> S4_H20_beschikbaarheid_hernieuwbaar_gas                          := domain/S4_H20_beschikbaarheid_hernieuwbaar_gas[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S4_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := domain/S4_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S4_G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := domain/S4_G02_Nat_meerkost_CO2_Kost_Reductie_Laag[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S4_G03_Nat_meerkost_CO2_En_Prijzen_Laag            := domain/S4_G03_Nat_meerkost_CO2_En_Prijzen_Laag[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S4_G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := domain/S4_G04_Nat_meerkost_CO2_En_Prijzen_Hoog[split_polygons/polygon_rel];
+			
+			// S5
+			attribute<string> S5_V01_Strategievariant                    					     := domain/S5_V01_Strategievariant[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S5_H01_Energieverbruik                     := domain/S5_H01_Energieverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S5_H02_Energieverbruik_ruimteverwarming    := domain/S5_H02_Energieverbruik_ruimteverwarming[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S5_H03_Energieverbruik_warmtapwater        := domain/S5_H03_Energieverbruik_warmtapwater[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S5_H04_Energieverbruik_ventilatie          := domain/S5_H04_Energieverbruik_ventilatie[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S5_H05_Energieverbruik_koude               := domain/S5_H05_Energieverbruik_koude[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S5_H06_Energieverbruik_apparaten_en_licht  := domain/S5_H06_Energieverbruik_apparaten_en_licht[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_ha> S5_H07_Warmteverbruik                                 := domain/S5_H07_Warmteverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S5_H08_Energielevering                     := domain/S5_H08_Energielevering[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S5_H09_Energielevering_aardgas             := domain/S5_H09_Energielevering_aardgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S5_H10_Energielevering_duurzaamgas         := domain/S5_H10_Energielevering_duurzaamgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S5_H11_Energielevering_elektriciteit       := domain/S5_H11_Energielevering_elektriciteit[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S5_H12_Energielevering_MTwarmtebronnen     := domain/S5_H12_Energielevering_MTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S5_H13_Energielevering_LTwarmtebronnen     := domain/S5_H13_Energielevering_LTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> S5_H14_Energielevering_overig              := domain/S5_H14_Energielevering_overig[split_polygons/polygon_rel];
+			attribute<units/ton_CO2_per_yr> S5_H15_CO2_uitstoot                                  := domain/S5_H15_CO2_uitstoot[split_polygons/polygon_rel];
+			attribute<units/Euro_per_Year> S5_H16_Nationale_meerkosten                           := domain/S5_H16_Nationale_meerkosten[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2_per_yr> S5_H17_Nationale_meerkosten_CO2             := domain/S5_H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel];
+			attribute<units/Euro_per_woning_per_yr> S5_H18_Nationale_meerkosten_extra            := domain/S5_H18_Nationale_meerkosten_extra[split_polygons/polygon_rel];
+			attribute<units/Euro_per_m3> S5_H19_waarde_hernieuwbaar_gas                          := domain/S5_H19_waarde_hernieuwbaar_gas[split_polygons/polygon_rel];
+			attribute<units/m3> S5_H20_beschikbaarheid_hernieuwbaar_gas                          := domain/S5_H20_beschikbaarheid_hernieuwbaar_gas[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S5_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := domain/S5_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S5_G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := domain/S5_G02_Nat_meerkost_CO2_Kost_Reductie_Laag[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S5_G03_Nat_meerkost_CO2_En_Prijzen_Laag            := domain/S5_G03_Nat_meerkost_CO2_En_Prijzen_Laag[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> S5_G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := domain/S5_G04_Nat_meerkost_CO2_En_Prijzen_Hoog[split_polygons/polygon_rel];
+			
+			// R19
+			attribute<string> R19_V01_Strategievariant                    					  := domain/R19_V01_Strategievariant[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R19_H01_Energieverbruik                     := domain/R19_H01_Energieverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R19_H02_Energieverbruik_ruimteverwarming    := domain/R19_H02_Energieverbruik_ruimteverwarming[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R19_H03_Energieverbruik_warmtapwater        := domain/R19_H03_Energieverbruik_warmtapwater[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R19_H04_Energieverbruik_ventilatie          := domain/R19_H04_Energieverbruik_ventilatie[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R19_H05_Energieverbruik_koude               := domain/R19_H05_Energieverbruik_koude[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R19_H06_Energieverbruik_apparaten_en_licht  := domain/R19_H06_Energieverbruik_apparaten_en_licht[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_ha> R19_H07_Warmteverbruik                                 := domain/R19_H07_Warmteverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R19_H08_Energielevering                     := domain/R19_H08_Energielevering[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R19_H09_Energielevering_aardgas             := domain/R19_H09_Energielevering_aardgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R19_H10_Energielevering_duurzaamgas         := domain/R19_H10_Energielevering_duurzaamgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R19_H11_Energielevering_elektriciteit       := domain/R19_H11_Energielevering_elektriciteit[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R19_H12_Energielevering_MTwarmtebronnen     := domain/R19_H12_Energielevering_MTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R19_H13_Energielevering_LTwarmtebronnen     := domain/R19_H13_Energielevering_LTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R19_H14_Energielevering_overig              := domain/R19_H14_Energielevering_overig[split_polygons/polygon_rel];
+			attribute<units/ton_CO2_per_yr> R19_H15_CO2_uitstoot                                  := domain/R19_H15_CO2_uitstoot[split_polygons/polygon_rel];
+			attribute<units/Euro_per_Year> R19_H16_Nationale_meerkosten                           := domain/R19_H16_Nationale_meerkosten[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2_per_yr> R19_H17_Nationale_meerkosten_CO2             := domain/R19_H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel];
+			attribute<units/Euro_per_woning_per_yr> R19_H18_Nationale_meerkosten_extra            := domain/R19_H18_Nationale_meerkosten_extra[split_polygons/polygon_rel];
+			attribute<units/Euro_per_m3> R19_H19_waarde_hernieuwbaar_gas                          := domain/R19_H19_waarde_hernieuwbaar_gas[split_polygons/polygon_rel];
+			attribute<units/m3> R19_H20_beschikbaarheid_hernieuwbaar_gas                          := domain/R19_H20_beschikbaarheid_hernieuwbaar_gas[split_polygons/polygon_rel];
+
+			// R30
+			attribute<string> R30_V01_Strategievariant                    					  := domain/R30_V01_Strategievariant[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R30_H01_Energieverbruik                     := domain/R30_H01_Energieverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R30_H02_Energieverbruik_ruimteverwarming    := domain/R30_H02_Energieverbruik_ruimteverwarming[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R30_H03_Energieverbruik_warmtapwater        := domain/R30_H03_Energieverbruik_warmtapwater[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R30_H04_Energieverbruik_ventilatie          := domain/R30_H04_Energieverbruik_ventilatie[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R30_H05_Energieverbruik_koude               := domain/R30_H05_Energieverbruik_koude[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R30_H06_Energieverbruik_apparaten_en_licht  := domain/R30_H06_Energieverbruik_apparaten_en_licht[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_ha> R30_H07_Warmteverbruik                                 := domain/R30_H07_Warmteverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R30_H08_Energielevering                     := domain/R30_H08_Energielevering[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R30_H09_Energielevering_aardgas             := domain/R30_H09_Energielevering_aardgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R30_H10_Energielevering_duurzaamgas         := domain/R30_H10_Energielevering_duurzaamgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R30_H11_Energielevering_elektriciteit       := domain/R30_H11_Energielevering_elektriciteit[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R30_H12_Energielevering_MTwarmtebronnen     := domain/R30_H12_Energielevering_MTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R30_H13_Energielevering_LTwarmtebronnen     := domain/R30_H13_Energielevering_LTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> R30_H14_Energielevering_overig              := domain/R30_H14_Energielevering_overig[split_polygons/polygon_rel];
+			attribute<units/ton_CO2_per_yr> R30_H15_CO2_uitstoot                                  := domain/R30_H15_CO2_uitstoot[split_polygons/polygon_rel];
+			attribute<units/Euro_per_Year> R30_H16_Nationale_meerkosten                           := domain/R30_H16_Nationale_meerkosten[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2_per_yr> R30_H17_Nationale_meerkosten_CO2             := domain/R30_H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel];
+			attribute<units/Euro_per_woning_per_yr> R30_H18_Nationale_meerkosten_extra            := domain/R30_H18_Nationale_meerkosten_extra[split_polygons/polygon_rel];
+			attribute<units/Euro_per_m3> R30_H19_waarde_hernieuwbaar_gas                          := domain/R30_H19_waarde_hernieuwbaar_gas[split_polygons/polygon_rel];
+			attribute<units/m3> R30_H20_beschikbaarheid_hernieuwbaar_gas                          := domain/R30_H20_beschikbaarheid_hernieuwbaar_gas[split_polygons/polygon_rel];
+
+			// LN
+			attribute<string> LN_V01_Strategievariant                    					  := domain/LN_V01_Strategievariant[split_polygons/polygon_rel];
+			attribute<uint32> LN_Strategiecode := rjoin(LN_V01_Strategievariant, strategievariant_nr/unique_strategy_variants/values, strategievariant_nr/unique_strategy_variants/id);
+			attribute<units/giga_J_per_woning_per_yr> LN_H01_Energieverbruik                     := domain/LN_H01_Energieverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> LN_H02_Energieverbruik_ruimteverwarming    := domain/LN_H02_Energieverbruik_ruimteverwarming[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> LN_H03_Energieverbruik_warmtapwater        := domain/LN_H03_Energieverbruik_warmtapwater[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> LN_H04_Energieverbruik_ventilatie          := domain/LN_H04_Energieverbruik_ventilatie[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> LN_H05_Energieverbruik_koude               := domain/LN_H05_Energieverbruik_koude[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> LN_H06_Energieverbruik_apparaten_en_licht  := domain/LN_H06_Energieverbruik_apparaten_en_licht[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_ha> LN_H07_Warmteverbruik                                 := domain/LN_H07_Warmteverbruik[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> LN_H08_Energielevering                     := domain/LN_H08_Energielevering[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> LN_H09_Energielevering_aardgas             := domain/LN_H09_Energielevering_aardgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> LN_H10_Energielevering_duurzaamgas         := domain/LN_H10_Energielevering_duurzaamgas[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> LN_H11_Energielevering_elektriciteit       := domain/LN_H11_Energielevering_elektriciteit[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> LN_H12_Energielevering_MTwarmtebronnen     := domain/LN_H12_Energielevering_MTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> LN_H13_Energielevering_LTwarmtebronnen     := domain/LN_H13_Energielevering_LTwarmtebronnen[split_polygons/polygon_rel];
+			attribute<units/giga_J_per_woning_per_yr> LN_H14_Energielevering_overig              := domain/LN_H14_Energielevering_overig[split_polygons/polygon_rel];
+			attribute<units/ton_CO2_per_yr> LN_H15_CO2_uitstoot                                  := domain/LN_H15_CO2_uitstoot[split_polygons/polygon_rel];
+			attribute<units/Euro_per_Year> LN_H16_Nationale_meerkosten                           := domain/LN_H16_Nationale_meerkosten[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2_per_yr> LN_H17_Nationale_meerkosten_CO2             := domain/LN_H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel];
+			attribute<units/Euro_per_woning_per_yr> LN_H18_Nationale_meerkosten_extra            := domain/LN_H18_Nationale_meerkosten_extra[split_polygons/polygon_rel];
+			attribute<units/Euro_per_m3> LN_H19_waarde_hernieuwbaar_gas                          := domain/LN_H19_waarde_hernieuwbaar_gas[split_polygons/polygon_rel];
+			attribute<units/m3> LN_H20_beschikbaarheid_hernieuwbaar_gas                          := domain/LN_H20_beschikbaarheid_hernieuwbaar_gas[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> LN_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := domain/LN_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> LN_G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := domain/LN_G02_Nat_meerkost_CO2_Kost_Reductie_Laag[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> LN_G03_Nat_meerkost_CO2_En_Prijzen_Laag            := domain/LN_G03_Nat_meerkost_CO2_En_Prijzen_Laag[split_polygons/polygon_rel];
+			attribute<units/Euro_per_ton_CO2> LN_G04_Nat_meerkost_CO2_En_Prijzen_Hoog  			 := domain/LN_G04_Nat_meerkost_CO2_En_Prijzen_Hoog[split_polygons/polygon_rel];
+		}
+	}
+	
+	Template SplitSingleStrategyResultsMultiPolygonsIntoPolygons {
 		// begin case parameters
 		unit<uint32> domain;
 		// end case parameters
@@ -229,11 +468,321 @@ container Templates {
 		attribute<uint32> primary_key (results) := id(results);
 		attribute<uint32> foreign_key (simplify/SimplifiedPolygons/results) := id(simplify/SimplifiedPolygons/results);
 		
-		unit<uint32> results := select_with_attr_by_cond(Buurtindicatoren_strategie, const(true, Buurtindicatoren_strategie)) {
-			attribute<geography/rdc_mm> geometry_mm (poly) := rjoin(BU_CODE, Buurtindicatoren_strategie/BU_CODE, simplify/SimplifiedPolygons/results/geometry);
+		unit<uint32> results := select_with_attr_by_cond(Buurtindicatoren, const(true, Buurtindicatoren)) {
+			attribute<geography/rdc_mm> geometry_mm (poly) := rjoin(BU_CODE, Buurtindicatoren/BU_CODE, simplify/SimplifiedPolygons/results/geometry);
 		}
 		
-		container split_polygon_results := SplitResultsMultiPolygonsIntoPolygons(results);
+		container split_polygon_results := SplitAllResultsMultiPolygonsIntoPolygons(results);
+	}
+	
+	Template ExportStrategiesToTilejson {
+		
+		
+		container domains {
+			unit<uint32> domain_S1 := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_1;
+			unit<uint32> domain_S2 := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_2;
+			unit<uint32> domain_S3 := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3;
+			unit<uint32> domain_S4 := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_4;
+			unit<uint32> domain_S5 := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_5;
+			unit<uint32> domain_R19 := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_6;
+			unit<uint32> domain_R30 := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_7;
+			unit<uint32> domain_LN := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_8;
+		}
+		
+		container BU_CODES { 
+			attribute<string> BU_CODE_S1 (SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_1) := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_1/BU_CODE;
+			attribute<string> BU_CODE_S2 (SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_2) := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_2/BU_CODE;
+			attribute<string> BU_CODE_S3 (SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3) := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_3/BU_CODE;
+			attribute<string> BU_CODE_S4 (SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_4) := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_4/BU_CODE;
+			attribute<string> BU_CODE_S5 (SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_5) := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_5/BU_CODE;
+			attribute<string> BU_CODE_R19 (SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_6) := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_6/BU_CODE;
+			attribute<string> BU_CODE_R30 (SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_7) := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_7/BU_CODE;
+			attribute<string> BU_CODE_LN (SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_8) := SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_8/BU_CODE;
+		}		
+		
+		
+		
+		unit<uint32> Buurtindicatoren := SourceData/buurt2020 {
+			// algemene informatie
+			attribute<string> BU_CODE                                                         := SourceData/buurt2020/BU_CODE;
+			attribute<string> Buurtnaam := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I02_buurtnaam_);
+			attribute<string> Wijkcode := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I03_wijkcode_);
+			attribute<string> Wijknaam := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I04_wijknaam_);
+			attribute<string> Gemeentecode := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I05_gemeentecode_);
+			attribute<string> Gemeentenaam := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I06_gemeentenaam_);
+			attribute<string> Energieregionaam := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I07_energieregionaam_);
+			attribute<string> Provincienaam := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I08_provincienaam_);
+			attribute<string> AantalWoningen := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I09_aantal_woningen_Aansluiting_);
+			attribute<string> AantalUtiliteiten := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I10_aantal_utiliteit_Aansluiting_);
+			attribute<string> WoningEquivalenten := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I11_woningequivalenten_Woning_);
+			attribute<bool> Uitgesloten := isdefined(Buurtnaam);
+			
+			// S1
+			attribute<string> S1_V01_Strategievariant                    					  := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_V01_Strategievariant_);
+			attribute<units/giga_J_per_woning_per_yr> S1_H01_Energieverbruik                     := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S1_H02_Energieverbruik_ruimteverwarming    := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H02_Vraag_RV_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S1_H03_Energieverbruik_warmtapwater        := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H03_Vraag_TW_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S1_H04_Energieverbruik_ventilatie          := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H04_Vraag_Vent_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S1_H05_Energieverbruik_koude               := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H05_Vraag_K_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S1_H06_Energieverbruik_apparaten_en_licht  := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H06_Vraag_App_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_ha> S1_H07_Warmteverbruik                                 := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H07_Vraag_tot_ha_100_kilo_J_per_m_2_yr_[units/giga_J_per_ha]); 		 // GJ/ha
+			attribute<units/giga_J_per_woning_per_yr> S1_H08_Energielevering                     := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H08_Input_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S1_H09_Energielevering_aardgas             := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H09_Input_aardgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S1_H10_Energielevering_duurzaamgas         := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H10_Input_duurzaamgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);	 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S1_H11_Energielevering_elektriciteit       := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H11_Input_elektriciteit_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);   // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S1_H12_Energielevering_MTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H12_Input_MTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S1_H13_Energielevering_LTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H13_Input_LTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S1_H14_Energielevering_overig              := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H14_Saldo_Omgevingswarmte_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/ton_CO2_per_yr> S1_H15_CO2_uitstoot                                  := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H15_CO2_uitstoot_mega_g_per_yr_[units/ton_CO2_per_yr]); // ton/jaar
+			attribute<units/Euro_per_Year> S1_H16_Nationale_meerkosten                           := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]); // Euro/jaar
+			attribute<units/Euro_per_ton_CO2_per_yr> S1_H17_Nationale_meerkosten_CO2             := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			attribute<units/Euro_per_woning_per_yr> S1_H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
+			attribute<units/Euro_per_m3> S1_H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
+			attribute<units/m3> S1_H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
+			attribute<units/Euro_per_ton_CO2> S1_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S1_G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_G02_Nat_meerkost_CO2_Kost_Reductie_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S1_G03_Nat_meerkost_CO2_En_Prijzen_Laag            := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_G03_Nat_meerkost_CO2_En_Prijzen_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S1_G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := rjoin(BU_CODE, BU_CODES/BU_CODE_S1, domains/domain_S1/_G04_Nat_meerkost_CO2_En_Prijzen_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+			
+			// S2
+			attribute<string> S2_V01_Strategievariant                    					  := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_V01_Strategievariant_);
+			attribute<units/giga_J_per_woning_per_yr> S2_H01_Energieverbruik                     := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S2_H02_Energieverbruik_ruimteverwarming    := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H02_Vraag_RV_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S2_H03_Energieverbruik_warmtapwater        := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H03_Vraag_TW_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S2_H04_Energieverbruik_ventilatie          := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H04_Vraag_Vent_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S2_H05_Energieverbruik_koude               := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H05_Vraag_K_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S2_H06_Energieverbruik_apparaten_en_licht  := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H06_Vraag_App_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_ha> S2_H07_Warmteverbruik                                 := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H07_Vraag_tot_ha_100_kilo_J_per_m_2_yr_[units/giga_J_per_ha]); 		 // GJ/ha
+			attribute<units/giga_J_per_woning_per_yr> S2_H08_Energielevering                     := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H08_Input_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S2_H09_Energielevering_aardgas             := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H09_Input_aardgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S2_H10_Energielevering_duurzaamgas         := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H10_Input_duurzaamgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);	 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S2_H11_Energielevering_elektriciteit       := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H11_Input_elektriciteit_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);   // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S2_H12_Energielevering_MTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H12_Input_MTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S2_H13_Energielevering_LTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H13_Input_LTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S2_H14_Energielevering_overig              := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H14_Saldo_Omgevingswarmte_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/ton_CO2_per_yr> S2_H15_CO2_uitstoot                                  := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H15_CO2_uitstoot_mega_g_per_yr_[units/ton_CO2_per_yr]); // ton/jaar
+			attribute<units/Euro_per_Year> S2_H16_Nationale_meerkosten                           := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]); // Euro/jaar
+			attribute<units/Euro_per_ton_CO2_per_yr> S2_H17_Nationale_meerkosten_CO2             := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			attribute<units/Euro_per_woning_per_yr> S2_H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
+			attribute<units/Euro_per_m3> S2_H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
+			attribute<units/m3> S2_H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
+			attribute<units/Euro_per_ton_CO2> S2_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S2_G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_G02_Nat_meerkost_CO2_Kost_Reductie_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S2_G03_Nat_meerkost_CO2_En_Prijzen_Laag            := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_G03_Nat_meerkost_CO2_En_Prijzen_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S2_G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := rjoin(BU_CODE, BU_CODES/BU_CODE_S2, domains/domain_S2/_G04_Nat_meerkost_CO2_En_Prijzen_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+			
+			// S3
+			attribute<string> S3_V01_Strategievariant                    					  := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_V01_Strategievariant_);
+			attribute<units/giga_J_per_woning_per_yr> S3_H01_Energieverbruik                     := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S3_H02_Energieverbruik_ruimteverwarming    := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H02_Vraag_RV_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S3_H03_Energieverbruik_warmtapwater        := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H03_Vraag_TW_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S3_H04_Energieverbruik_ventilatie          := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H04_Vraag_Vent_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S3_H05_Energieverbruik_koude               := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H05_Vraag_K_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S3_H06_Energieverbruik_apparaten_en_licht  := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H06_Vraag_App_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_ha> S3_H07_Warmteverbruik                                 := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H07_Vraag_tot_ha_100_kilo_J_per_m_2_yr_[units/giga_J_per_ha]); 		 // GJ/ha
+			attribute<units/giga_J_per_woning_per_yr> S3_H08_Energielevering                     := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H08_Input_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S3_H09_Energielevering_aardgas             := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H09_Input_aardgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S3_H10_Energielevering_duurzaamgas         := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H10_Input_duurzaamgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);	 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S3_H11_Energielevering_elektriciteit       := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H11_Input_elektriciteit_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);   // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S3_H12_Energielevering_MTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H12_Input_MTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S3_H13_Energielevering_LTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H13_Input_LTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S3_H14_Energielevering_overig              := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H14_Saldo_Omgevingswarmte_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/ton_CO2_per_yr> S3_H15_CO2_uitstoot                                  := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H15_CO2_uitstoot_mega_g_per_yr_[units/ton_CO2_per_yr]); // ton/jaar
+			attribute<units/Euro_per_Year> S3_H16_Nationale_meerkosten                           := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]); // Euro/jaar
+			attribute<units/Euro_per_ton_CO2_per_yr> S3_H17_Nationale_meerkosten_CO2             := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			attribute<units/Euro_per_woning_per_yr> S3_H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
+			attribute<units/Euro_per_m3> S3_H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
+			attribute<units/m3> S3_H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
+			attribute<units/Euro_per_ton_CO2> S3_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S3_G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_G02_Nat_meerkost_CO2_Kost_Reductie_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S3_G03_Nat_meerkost_CO2_En_Prijzen_Laag            := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_G03_Nat_meerkost_CO2_En_Prijzen_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S3_G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := rjoin(BU_CODE, BU_CODES/BU_CODE_S3, domains/domain_S3/_G04_Nat_meerkost_CO2_En_Prijzen_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+			
+			// S4
+			attribute<string> S4_V01_Strategievariant                    					  := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_V01_Strategievariant_);
+			attribute<units/giga_J_per_woning_per_yr> S4_H01_Energieverbruik                     := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S4_H02_Energieverbruik_ruimteverwarming    := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H02_Vraag_RV_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S4_H03_Energieverbruik_warmtapwater        := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H03_Vraag_TW_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S4_H04_Energieverbruik_ventilatie          := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H04_Vraag_Vent_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S4_H05_Energieverbruik_koude               := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H05_Vraag_K_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S4_H06_Energieverbruik_apparaten_en_licht  := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H06_Vraag_App_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_ha> S4_H07_Warmteverbruik                                 := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H07_Vraag_tot_ha_100_kilo_J_per_m_2_yr_[units/giga_J_per_ha]); 		 // GJ/ha
+			attribute<units/giga_J_per_woning_per_yr> S4_H08_Energielevering                     := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H08_Input_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S4_H09_Energielevering_aardgas             := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H09_Input_aardgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S4_H10_Energielevering_duurzaamgas         := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H10_Input_duurzaamgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);	 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S4_H11_Energielevering_elektriciteit       := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H11_Input_elektriciteit_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);   // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S4_H12_Energielevering_MTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H12_Input_MTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S4_H13_Energielevering_LTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H13_Input_LTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S4_H14_Energielevering_overig              := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H14_Saldo_Omgevingswarmte_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/ton_CO2_per_yr> S4_H15_CO2_uitstoot                                  := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H15_CO2_uitstoot_mega_g_per_yr_[units/ton_CO2_per_yr]); // ton/jaar
+			attribute<units/Euro_per_Year> S4_H16_Nationale_meerkosten                           := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]); // Euro/jaar
+			attribute<units/Euro_per_ton_CO2_per_yr> S4_H17_Nationale_meerkosten_CO2             := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			attribute<units/Euro_per_woning_per_yr> S4_H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
+			attribute<units/Euro_per_m3> S4_H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
+			attribute<units/m3> S4_H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
+			attribute<units/Euro_per_ton_CO2> S4_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S4_G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_G02_Nat_meerkost_CO2_Kost_Reductie_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S4_G03_Nat_meerkost_CO2_En_Prijzen_Laag            := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_G03_Nat_meerkost_CO2_En_Prijzen_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S4_G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := rjoin(BU_CODE, BU_CODES/BU_CODE_S4, domains/domain_S4/_G04_Nat_meerkost_CO2_En_Prijzen_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+			
+			// S5
+			attribute<string> S5_V01_Strategievariant                    					  := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_V01_Strategievariant_);
+			attribute<units/giga_J_per_woning_per_yr> S5_H01_Energieverbruik                     := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S5_H02_Energieverbruik_ruimteverwarming    := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H02_Vraag_RV_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S5_H03_Energieverbruik_warmtapwater        := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H03_Vraag_TW_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S5_H04_Energieverbruik_ventilatie          := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H04_Vraag_Vent_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S5_H05_Energieverbruik_koude               := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H05_Vraag_K_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S5_H06_Energieverbruik_apparaten_en_licht  := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H06_Vraag_App_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_ha> S5_H07_Warmteverbruik                                 := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H07_Vraag_tot_ha_100_kilo_J_per_m_2_yr_[units/giga_J_per_ha]); 		 // GJ/ha
+			attribute<units/giga_J_per_woning_per_yr> S5_H08_Energielevering                     := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H08_Input_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S5_H09_Energielevering_aardgas             := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H09_Input_aardgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S5_H10_Energielevering_duurzaamgas         := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H10_Input_duurzaamgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);	 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S5_H11_Energielevering_elektriciteit       := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H11_Input_elektriciteit_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);   // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S5_H12_Energielevering_MTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H12_Input_MTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S5_H13_Energielevering_LTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H13_Input_LTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> S5_H14_Energielevering_overig              := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H14_Saldo_Omgevingswarmte_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/ton_CO2_per_yr> S5_H15_CO2_uitstoot                                  := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H15_CO2_uitstoot_mega_g_per_yr_[units/ton_CO2_per_yr]); // ton/jaar
+			attribute<units/Euro_per_Year> S5_H16_Nationale_meerkosten                           := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]); // Euro/jaar
+			attribute<units/Euro_per_ton_CO2_per_yr> S5_H17_Nationale_meerkosten_CO2             := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			attribute<units/Euro_per_woning_per_yr> S5_H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
+			attribute<units/Euro_per_m3> S5_H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
+			attribute<units/m3> S5_H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
+			attribute<units/Euro_per_ton_CO2> S5_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S5_G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_G02_Nat_meerkost_CO2_Kost_Reductie_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S5_G03_Nat_meerkost_CO2_En_Prijzen_Laag            := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_G03_Nat_meerkost_CO2_En_Prijzen_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> S5_G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := rjoin(BU_CODE, BU_CODES/BU_CODE_S5, domains/domain_S5/_G04_Nat_meerkost_CO2_En_Prijzen_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+			
+			// R19
+			attribute<string> R19_V01_Strategievariant                    					  := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_V01_Strategievariant_);
+			attribute<units/giga_J_per_woning_per_yr> R19_H01_Energieverbruik                     := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R19_H02_Energieverbruik_ruimteverwarming    := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H02_Vraag_RV_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R19_H03_Energieverbruik_warmtapwater        := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H03_Vraag_TW_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R19_H04_Energieverbruik_ventilatie          := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H04_Vraag_Vent_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R19_H05_Energieverbruik_koude               := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H05_Vraag_K_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R19_H06_Energieverbruik_apparaten_en_licht  := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H06_Vraag_App_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_ha> R19_H07_Warmteverbruik                                 := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H07_Vraag_tot_ha_100_kilo_J_per_m_2_yr_[units/giga_J_per_ha]); 		 // GJ/ha
+			attribute<units/giga_J_per_woning_per_yr> R19_H08_Energielevering                     := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H08_Input_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R19_H09_Energielevering_aardgas             := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H09_Input_aardgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R19_H10_Energielevering_duurzaamgas         := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H10_Input_duurzaamgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);	 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R19_H11_Energielevering_elektriciteit       := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H11_Input_elektriciteit_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);   // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R19_H12_Energielevering_MTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H12_Input_MTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R19_H13_Energielevering_LTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H13_Input_LTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R19_H14_Energielevering_overig              := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H14_Saldo_Omgevingswarmte_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/ton_CO2_per_yr> R19_H15_CO2_uitstoot                                  := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H15_CO2_uitstoot_mega_g_per_yr_[units/ton_CO2_per_yr]); // ton/jaar
+			attribute<units/Euro_per_Year> R19_H16_Nationale_meerkosten                           := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]); // Euro/jaar
+			attribute<units/Euro_per_ton_CO2_per_yr> R19_H17_Nationale_meerkosten_CO2             := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			attribute<units/Euro_per_woning_per_yr> R19_H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
+			attribute<units/Euro_per_m3> R19_H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
+			attribute<units/m3> R19_H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_R19, domains/domain_R19/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
+
+			// R30
+			attribute<string> R30_V01_Strategievariant                    					  := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_V01_Strategievariant_);
+			attribute<units/giga_J_per_woning_per_yr> R30_H01_Energieverbruik                     := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R30_H02_Energieverbruik_ruimteverwarming    := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H02_Vraag_RV_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R30_H03_Energieverbruik_warmtapwater        := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H03_Vraag_TW_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R30_H04_Energieverbruik_ventilatie          := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H04_Vraag_Vent_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R30_H05_Energieverbruik_koude               := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H05_Vraag_K_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R30_H06_Energieverbruik_apparaten_en_licht  := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H06_Vraag_App_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_ha> R30_H07_Warmteverbruik                                 := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H07_Vraag_tot_ha_100_kilo_J_per_m_2_yr_[units/giga_J_per_ha]); 		 // GJ/ha
+			attribute<units/giga_J_per_woning_per_yr> R30_H08_Energielevering                     := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H08_Input_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R30_H09_Energielevering_aardgas             := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H09_Input_aardgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R30_H10_Energielevering_duurzaamgas         := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H10_Input_duurzaamgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);	 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R30_H11_Energielevering_elektriciteit       := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H11_Input_elektriciteit_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);   // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R30_H12_Energielevering_MTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H12_Input_MTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R30_H13_Energielevering_LTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H13_Input_LTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> R30_H14_Energielevering_overig              := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H14_Saldo_Omgevingswarmte_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/ton_CO2_per_yr> R30_H15_CO2_uitstoot                                  := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H15_CO2_uitstoot_mega_g_per_yr_[units/ton_CO2_per_yr]); // ton/jaar
+			attribute<units/Euro_per_Year> R30_H16_Nationale_meerkosten                           := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]); // Euro/jaar
+			attribute<units/Euro_per_ton_CO2_per_yr> R30_H17_Nationale_meerkosten_CO2             := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			attribute<units/Euro_per_woning_per_yr> R30_H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
+			attribute<units/Euro_per_m3> R30_H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
+			attribute<units/m3> R30_H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_R30, domains/domain_R30/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
+
+			// LN
+			attribute<string> LN_V01_Strategievariant                    					  := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_V01_Strategievariant_);
+			attribute<units/giga_J_per_woning_per_yr> LN_H01_Energieverbruik                     := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H01_Vraag_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> LN_H02_Energieverbruik_ruimteverwarming    := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H02_Vraag_RV_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> LN_H03_Energieverbruik_warmtapwater        := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H03_Vraag_TW_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> LN_H04_Energieverbruik_ventilatie          := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H04_Vraag_Vent_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> LN_H05_Energieverbruik_koude               := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H05_Vraag_K_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);				 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> LN_H06_Energieverbruik_apparaten_en_licht  := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H06_Vraag_App_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);			 // GJ/weq/jaar
+			attribute<units/giga_J_per_ha> LN_H07_Warmteverbruik                                 := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H07_Vraag_tot_ha_100_kilo_J_per_m_2_yr_[units/giga_J_per_ha]); 		 // GJ/ha
+			attribute<units/giga_J_per_woning_per_yr> LN_H08_Energielevering                     := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H08_Input_totaal_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); 		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> LN_H09_Energielevering_aardgas             := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H09_Input_aardgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);		 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> LN_H10_Energielevering_duurzaamgas         := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H10_Input_duurzaamgas_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);	 // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> LN_H11_Energielevering_elektriciteit       := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H11_Input_elektriciteit_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]);   // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> LN_H12_Energielevering_MTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H12_Input_MTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> LN_H13_Energielevering_LTwarmtebronnen     := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H13_Input_LTwarmtebronnen_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/giga_J_per_woning_per_yr> LN_H14_Energielevering_overig              := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H14_Saldo_Omgevingswarmte_giga_J_per_Woning_yr_[units/giga_J_per_woning_per_yr]); // GJ/weq/jaar
+			attribute<units/ton_CO2_per_yr> LN_H15_CO2_uitstoot                                  := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H15_CO2_uitstoot_mega_g_per_yr_[units/ton_CO2_per_yr]); // ton/jaar
+			attribute<units/Euro_per_Year> LN_H16_Nationale_meerkosten                           := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]); // Euro/jaar
+			attribute<units/Euro_per_ton_CO2_per_yr> LN_H17_Nationale_meerkosten_CO2             := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			attribute<units/Euro_per_woning_per_yr> LN_H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
+			attribute<units/Euro_per_m3> LN_H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
+			attribute<units/m3> LN_H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
+			attribute<units/Euro_per_ton_CO2> LN_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> LN_G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_G02_Nat_meerkost_CO2_Kost_Reductie_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> LN_G03_Nat_meerkost_CO2_En_Prijzen_Laag            := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_G03_Nat_meerkost_CO2_En_Prijzen_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> LN_G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := rjoin(BU_CODE, BU_CODES/BU_CODE_LN, domains/domain_LN/_G04_Nat_meerkost_CO2_En_Prijzen_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+		}
+		
+		container MVT {
+			container base_results {
+				unit<uint32> results := select_with_attr_by_cond(Buurtindicatoren, const(true,Buurtindicatoren)) {
+					attribute<geography/wm_m> geometry_wm (poly) := rjoin(BU_CODE, SourceData/buurt2020/BU_CODE, convert(SourceData/buurt2020/geometry, geography/wm_m));
+					attribute<geography/rdc_mm> geometry_mm (poly) := rjoin(BU_CODE, SourceData/buurt2020/BU_CODE, SourceData/buurt2020/geometry_mm);
+				}
+				container split_polygon_results := Templates/SplitAllResultsMultiPolygonsIntoPolygons(results);
+			}
+			
+			container all_zoom_levels {
+				parameter<units/m> low_f := 500000[units/m];
+				parameter<units/m> mid_f := 250[units/m]; // 12
+				parameter<units/mm> low_r := 100000[units/mm];
+				parameter<units/mm> mid_r := 10000[units/mm];
+				
+				container z_5  := Templates/GetSimplifiedResults(low_r, low_f);
+				container z_6  := Templates/GetSimplifiedResults(low_r, low_f);
+				container z_7  := Templates/GetSimplifiedResults(low_r, low_f);
+				container z_8  := Templates/GetSimplifiedResults(mid_r, mid_f);
+				container z_9  := Templates/GetSimplifiedResults(mid_r, mid_f);
+				container z_10 := Templates/GetSimplifiedResults(mid_r, mid_f);
+				
+				parameter<string> GDAL_Driver : ['MVT'];
+				
+				unit<uint32> optionSet := range(uint32, 0, 10);
+				container gdal_options_per_strat {
+					attribute<string> GDAL_Options_1 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_1.json'];
+					attribute<string> GDAL_Options_2 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_2.json'];
+					attribute<string> GDAL_Options_3 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_3.json'];
+					attribute<string> GDAL_Options_4 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_4.json'];
+					attribute<string> GDAL_Options_5 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_5.json'];
+					attribute<string> GDAL_Options_6 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_6.json'];
+					attribute<string> GDAL_Options_7 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_7.json'];
+					attribute<string> GDAL_Options_8 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_8.json'];
+				}
+				
+				attribute<string> GDAL_Options (optionSet) := gdal_options_per_strat/GDAL_Options_8;
+				
+				container dataset
+				: StorageName="%LocalDataDir%/startanalyse_2_0/Strategie_ALL"
+				, StorageType="gdalwrite.vect"
+				, StorageReadOnly = "False"
+				{
+					unit<uint32> strat_05 := select_with_attr_by_cond(z_5/split_polygon_results/final_results, const(true, z_5/split_polygon_results/final_results));
+					unit<uint32> strat_06 := select_with_attr_by_cond(z_6/split_polygon_results/final_results, const(true, z_6/split_polygon_results/final_results));
+					unit<uint32> strat_07 := select_with_attr_by_cond(z_7/split_polygon_results/final_results, const(true, z_7/split_polygon_results/final_results));
+					
+					unit<uint32> strat_08 := select_with_attr_by_cond(z_8/split_polygon_results/final_results, const(true, z_8/split_polygon_results/final_results));
+					unit<uint32> strat_09 := select_with_attr_by_cond(z_9/split_polygon_results/final_results, const(true, z_9/split_polygon_results/final_results));
+					unit<uint32> strat_10 := select_with_attr_by_cond(z_10/split_polygon_results/final_results, const(true, z_10/split_polygon_results/final_results));
+
+					unit<uint32> strat_11 := select_with_attr_by_cond(base_results/split_polygon_results/final_results, const(true, base_results/split_polygon_results/final_results));
+					unit<uint32> strat_12 := select_with_attr_by_cond(base_results/split_polygon_results/final_results, const(true, base_results/split_polygon_results/final_results));
+					unit<uint32> strat_13 := select_with_attr_by_cond(base_results/split_polygon_results/final_results, const(true, base_results/split_polygon_results/final_results));
+				}
+			}
+		}
 	}
 	
 	Template ExportStrategieToTilejson {
