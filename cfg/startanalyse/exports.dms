@@ -15,6 +15,8 @@ container Exports {
 	}
 
 	container aanbod {
+		container export_gas := Templates/ExportGasTilejson();
+		
 		unit<uint32> gas := SourceData/aanbod/gas
 		, storageName="%LocalDataDir%/startanalyse_2_0/aanbod/gas.geojson"
 		, storageType="gdalwrite.vect"
