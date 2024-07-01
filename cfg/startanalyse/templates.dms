@@ -42,7 +42,7 @@ container Templates {
 		parameter<float64> simplifyFactor;
 		// end case parameters
 
-		attribute<Geography/rdc_mm> Shape_geometry(ShapeDomain, poly) := ShapeDomain/geometry_mm;
+		attribute<Geography/rdc_m_ipoint> Shape_geometry(ShapeDomain, poly) := ShapeDomain/geometry_rdc_m_ipoint;
 
 		attribute<ShapeDomain> ShapeDomain_rel (domain_grid) := poly2grid_untiled(Shape_geometry, domain_grid);
 		container SimplifiedPolygons                         := grid2poly_ipoint(domain_grid, ShapeDomain, ShapeDomain_rel, simplifyFactor);
@@ -148,6 +148,7 @@ container Templates {
 	Template SplitAllResultsMultiPolygonsIntoPolygons {
 		// begin case parameters
 		unit<uint32> domain;
+		parameter<string> geometry_item_name; 
 		// end case parameters
 		
 		container strategievariant_nr {
@@ -156,7 +157,7 @@ container Templates {
 			}
 		}
 		
-		unit<uint32> split_polygons := split_polygon(results/geometry_mm);
+		unit<uint32> split_polygons :== "split_polygon(results/" + geometry_item_name + ")"; //geometry_mm)";
 		unit<uint32> final_results := split_polygons {
 			attribute<uint32> id 													     := split_polygons/polygon_rel; 
 			attribute<geography/wm_m> geometry (poly)                                        := convert(split_polygons/geometry, geography/wm_m);
@@ -469,10 +470,10 @@ container Templates {
 		attribute<uint32> foreign_key (simplify/SimplifiedPolygons/results) := id(simplify/SimplifiedPolygons/results);
 		
 		unit<uint32> results := select_with_attr_by_cond(Buurtindicatoren, const(true, Buurtindicatoren)) {
-			attribute<geography/rdc_mm> geometry_mm (poly) := rjoin(BU_CODE, Buurtindicatoren/BU_CODE, simplify/SimplifiedPolygons/results/geometry);
+			attribute<geography/rdc_m_ipoint> geometry_rdc_ipoint (poly) := rjoin(BU_CODE, Buurtindicatoren/BU_CODE, simplify/SimplifiedPolygons/results/geometry);
 		}
 		
-		container split_polygon_results := SplitAllResultsMultiPolygonsIntoPolygons(results);
+		container split_polygon_results := SplitAllResultsMultiPolygonsIntoPolygons(results, "geometry_rdc_ipoint");
 	}
 	
 	Template ExportStrategiesToTilejson {
@@ -732,37 +733,35 @@ container Templates {
 					attribute<geography/wm_m> geometry_wm (poly) := rjoin(BU_CODE, SourceData/buurt2020/BU_CODE, convert(SourceData/buurt2020/geometry, geography/wm_m));
 					attribute<geography/rdc_mm> geometry_mm (poly) := rjoin(BU_CODE, SourceData/buurt2020/BU_CODE, SourceData/buurt2020/geometry_mm);
 				}
-				container split_polygon_results := Templates/SplitAllResultsMultiPolygonsIntoPolygons(results);
+				container split_polygon_results := Templates/SplitAllResultsMultiPolygonsIntoPolygons(results, "geometry_mm");
 			}
 			
 			container all_zoom_levels {
-				parameter<units/m> low_f := 500000[units/m];
-				parameter<units/m> mid_f := 250[units/m]; // 12
-				parameter<units/mm> low_r := 100000[units/mm];
-				parameter<units/mm> mid_r := 10000[units/mm];
+				container simplify_params {
+					parameter<units/m> min_f := 5000[units/m];
+					parameter<units/m> low_f := 500[units/m];
+					parameter<units/m> mid_f := 250[units/m];
+					parameter<units/m> high_f :=  50[units/m];
+					
+					parameter<units/mm> min_r := 1000000[units/mm];
+					parameter<units/mm> low_r := 100000[units/mm];
+					parameter<units/mm> mid_r := 10000[units/mm];
+					parameter<units/mm> high_r :=   8000[units/mm];
+				}
 				
-				container z_5  := Templates/GetSimplifiedResults(low_r, low_f);
-				container z_6  := Templates/GetSimplifiedResults(low_r, low_f);
-				container z_7  := Templates/GetSimplifiedResults(low_r, low_f);
-				container z_8  := Templates/GetSimplifiedResults(mid_r, mid_f);
-				container z_9  := Templates/GetSimplifiedResults(mid_r, mid_f);
-				container z_10 := Templates/GetSimplifiedResults(mid_r, mid_f);
+				container z_5  := Templates/GetSimplifiedResults(simplify_params/min_r, simplify_params/min_f);
+				container z_6  := Templates/GetSimplifiedResults(simplify_params/min_r, simplify_params/min_f);
+				container z_7  := Templates/GetSimplifiedResults(simplify_params/min_r, simplify_params/min_f);
+				container z_8  := Templates/GetSimplifiedResults(simplify_params/low_r, simplify_params/low_f);
+				container z_9  := Templates/GetSimplifiedResults(simplify_params/low_r, simplify_params/low_f);
+				container z_10 := Templates/GetSimplifiedResults(simplify_params/mid_r, simplify_params/mid_f);
+				container z_11 := Templates/GetSimplifiedResults(simplify_params/mid_r, simplify_params/mid_f);
+				container z_12 := Templates/GetSimplifiedResults(simplify_params/high_r, simplify_params/high_f);
 				
 				parameter<string> GDAL_Driver : ['MVT'];
 				
-				unit<uint32> optionSet := range(uint32, 0, 10);
-				container gdal_options_per_strat {
-					attribute<string> GDAL_Options_1 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_1.json'];
-					attribute<string> GDAL_Options_2 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_2.json'];
-					attribute<string> GDAL_Options_3 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_3.json'];
-					attribute<string> GDAL_Options_4 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_4.json'];
-					attribute<string> GDAL_Options_5 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_5.json'];
-					attribute<string> GDAL_Options_6 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_6.json'];
-					attribute<string> GDAL_Options_7 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_7.json'];
-					attribute<string> GDAL_Options_8 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_8.json'];
-				}
-				
-				attribute<string> GDAL_Options (optionSet) := gdal_options_per_strat/GDAL_Options_8;
+				unit<uint32> optionSet := range(uint32, 0, 9);				
+				attribute<string> GDAL_Options (optionSet) : ['MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_ALL.json'];
 				
 				container dataset
 				: StorageName="%LocalDataDir%/startanalyse_2_0/Strategie_ALL"
@@ -777,8 +776,8 @@ container Templates {
 					unit<uint32> strat_09 := select_with_attr_by_cond(z_9/split_polygon_results/final_results, const(true, z_9/split_polygon_results/final_results));
 					unit<uint32> strat_10 := select_with_attr_by_cond(z_10/split_polygon_results/final_results, const(true, z_10/split_polygon_results/final_results));
 
-					unit<uint32> strat_11 := select_with_attr_by_cond(base_results/split_polygon_results/final_results, const(true, base_results/split_polygon_results/final_results));
-					unit<uint32> strat_12 := select_with_attr_by_cond(base_results/split_polygon_results/final_results, const(true, base_results/split_polygon_results/final_results));
+					unit<uint32> strat_11 := select_with_attr_by_cond(z_11/split_polygon_results/final_results, const(true, z_11/split_polygon_results/final_results));
+					unit<uint32> strat_12 := select_with_attr_by_cond(z_12/split_polygon_results/final_results, const(true, z_12/split_polygon_results/final_results));
 					unit<uint32> strat_13 := select_with_attr_by_cond(base_results/split_polygon_results/final_results, const(true, base_results/split_polygon_results/final_results));
 				}
 			}
@@ -895,4 +894,88 @@ container Templates {
 			}	
 		}
 	}
+	
+	Template ExportGasTilejson {
+		container MVT {
+			unit<uint32> results := SourceData/aanbod/gas {
+				attribute<geography/wm_m> geometry_wm (arc) := convert(geometry, geography/wm_m);
+				attribute<geography/rdc_mm> geometry_mm (arc) := convert(geometry, geography/rdc_mm);
+				attribute<geography/wm_m> geometry_wm_z5 (arc) :=  convert(bg_simplify_linestring(geometry_mm, 150000.0), geography/wm_m);
+				attribute<geography/wm_m> geometry_wm_z8 (arc) :=  convert(bg_simplify_linestring(geometry_mm,  25000.0), geography/wm_m);
+			}
+						
+			container all_zoom_levels {				
+				unit<uint32> z_5  := SourceData/aanbod/gas {
+					attribute<geography/wm_m> Geometry (arc) := MVT/results/geometry_wm_z5;
+					attribute<string> Categorie := SourceData/aanbod/gas/Categorie;
+				}
+				
+				unit<uint32> z_6  := SourceData/aanbod/gas {
+					attribute<geography/wm_m> Geometry (arc):= MVT/results/geometry_wm_z5;
+					attribute<string> Categorie := SourceData/aanbod/gas/Categorie;
+				}
+				
+				unit<uint32> z_7  := SourceData/aanbod/gas {
+					attribute<geography/wm_m> Geometry (arc):= MVT/results/geometry_wm_z5;
+					attribute<string> Categorie := SourceData/aanbod/gas/Categorie;
+				}
+				
+				unit<uint32> z_8  := SourceData/aanbod/gas {
+					attribute<geography/wm_m> Geometry (arc):= MVT/results/geometry_wm_z8;
+					attribute<string> Categorie := SourceData/aanbod/gas/Categorie;
+				}
+				
+				unit<uint32> z_9  := SourceData/aanbod/gas {
+					attribute<geography/wm_m> Geometry (arc):= MVT/results/geometry_wm_z8;
+					attribute<string> Categorie := SourceData/aanbod/gas/Categorie;
+				}
+				
+				unit<uint32> z_10 := SourceData/aanbod/gas {
+					attribute<geography/wm_m> Geometry (arc):= MVT/results/geometry_wm_z8;
+					attribute<string> Categorie := SourceData/aanbod/gas/Categorie;
+				}
+				
+				unit<uint32> z_11 := SourceData/aanbod/gas {
+					attribute<geography/wm_m> Geometry (arc):= MVT/results/geometry_wm;
+					attribute<string> Categorie := SourceData/aanbod/gas/Categorie;
+				}
+				
+				unit<uint32> z_12 := SourceData/aanbod/gas {
+					attribute<geography/wm_m> Geometry (arc):= MVT/results/geometry_wm;
+					attribute<string> Categorie := SourceData/aanbod/gas/Categorie;
+				}
+				
+				unit<uint32> z_13 := SourceData/aanbod/gas {
+					attribute<geography/wm_m> Geometry (arc):= MVT/results/geometry_wm;
+					attribute<string> Categorie := SourceData/aanbod/gas/Categorie;
+				}
+				
+				
+				parameter<string> GDAL_Driver : ['MVT'];
+				
+				unit<uint32> optionSet := range(uint32, 0, 9);				
+				attribute<string> GDAL_Options (optionSet) : ['MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_gas.json'];
+				
+				container dataset
+				: StorageName="%LocalDataDir%/startanalyse_2_0/Gas"
+				, StorageType="gdalwrite.vect"
+				, StorageReadOnly = "False"
+				{
+					unit<uint32> strat_05 := select_with_attr_by_cond(z_5, const(true, z_5));
+					unit<uint32> strat_06 := select_with_attr_by_cond(z_6, const(true, z_6));
+					unit<uint32> strat_07 := select_with_attr_by_cond(z_7, const(true, z_7));
+					
+					unit<uint32> strat_08 := select_with_attr_by_cond(z_8, const(true, z_8));
+					unit<uint32> strat_09 := select_with_attr_by_cond(z_9, const(true, z_9));
+					unit<uint32> strat_10 := select_with_attr_by_cond(z_10, const(true, z_10));
+
+					unit<uint32> strat_11 := select_with_attr_by_cond(z_11, const(true, z_11));
+					unit<uint32> strat_12 := select_with_attr_by_cond(z_12, const(true, z_12));
+					unit<uint32> strat_13 := select_with_attr_by_cond(z_13, const(true, z_13));
+				}
+			}
+		}
+	}
+	
 }
+
