@@ -1,0 +1,56 @@
+{
+	"bstrat3_05": {
+		"target_name": "bstrat3",
+		"description": "CBS buurten met codes",
+		"minzoom": 5,
+		"maxzoom": 5
+	},
+	"bstrat3_06": {
+		"target_name": "bstrat3",
+		"description": "CBS buurten met codes",
+		"minzoom": 6,
+		"maxzoom": 6
+	},
+	"bstrat3_07": {
+		"target_name": "bstrat3",
+		"description": "CBS buurten met codes",
+		"minzoom": 7,
+		"maxzoom": 7
+	},
+	"bstrat3_08": {
+		"target_name": "bstrat3",
+		"description": "CBS buurten met codes",
+		"minzoom": 8,
+		"maxzoom": 8
+	},
+	"bstrat3_09": {
+		"target_name": "bstrat3",
+		"description": "CBS buurten met codes",
+		"minzoom": 9,
+		"maxzoom": 9
+	},
+	"bstrat3_10": {
+		"target_name": "bstrat3",
+		"description": "CBS buurten met codes",
+		"minzoom": 10,
+		"maxzoom": 10
+	},
+	"bstrat3_11": {
+		"target_name": "bstrat3",
+		"description": "CBS buurten met codes",
+		"minzoom": 11,
+		"maxzoom": 11
+	},
+	"bstrat3_12": {
+		"target_name": "bstrat3",
+		"description": "CBS buurten met codes",
+		"minzoom": 12,
+		"maxzoom": 12
+	},
+	"bstrat3_13": {
+		"target_name": "bstrat3",
+		"description": "CBS buurten met codes",
+		"minzoom": 13,
+		"maxzoom": 13
+	}
+}

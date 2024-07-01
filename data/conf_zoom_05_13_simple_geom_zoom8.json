@@ -1,0 +1,8 @@
+{
+	"bstrat3_08": {
+		"target_name": "buurt",
+		"description": "CBS buurten met codes",
+		"minzoom": 8,
+		"maxzoom": 8
+	}
+}
