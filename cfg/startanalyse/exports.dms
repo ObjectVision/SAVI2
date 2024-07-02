@@ -1,9 +1,9 @@
 container Exports {
 	
 	
-	container merged_strats := Templates/ExportStrategiesToTilejson();
+	container buurt_indicators := Templates/ExportStrategiesToTilejson();
 	
-	container all_strats { 
+	/*container all_strats { 
 		container export_strat1 := Templates/ExportStrategieToTilejson(false, 1b);
 		container export_strat2 := Templates/ExportStrategieToTilejson(false, 2b);
 		container export_strat3 := Templates/ExportStrategieToTilejson(false, 3b);
@@ -12,19 +12,19 @@ container Exports {
 		container export_strat6 := Templates/ExportStrategieToTilejson(true, 6b);  // ref19
 		container export_strat7 := Templates/ExportStrategieToTilejson(true, 7b);  // ref30
 		container export_strat8 := Templates/ExportStrategieToTilejson(false, 8b); // stratNL
-	}
+	}*/
 
 	container aanbod {
-		container export_gas := Templates/ExportGasTilejson();
+		container gas := Templates/ExportGasTilejson();
 		
-		unit<uint32> gas := SourceData/aanbod/gas
+		/*unit<uint32> gas := SourceData/aanbod/gas
 		, storageName="%LocalDataDir%/startanalyse_2_0/aanbod/gas.geojson"
 		, storageType="gdalwrite.vect"
 		, StorageReadOnly = "False"
 		{
 			attribute<geography/wm_m> geometry (arc) := convert(SourceData/aanbod/gas/geometry, geography/wm_m);
 			attribute<string> Categorie := SourceData/aanbod/gas/Categorie;
-		}
+		}*/
 		
 		unit<uint32> geothermie := SourceData/aanbod/geothermie
 		, storageName="%LocalDataDir%/startanalyse_2_0/aanbod/geothermie.geojson"

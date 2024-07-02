@@ -20,14 +20,14 @@ template grid2poly_ipoint
 	unit<int32>  VerticalLine   := range(int32, lowerbound(cols), upperbound(cols)+1[cols]);
 
 	unit<uint32> Point := combine(VerticalLine, HorizontalLine) {
-		attribute<geography/rdc_mm> geometry        := domain_grid_rel[geography/rdc_mm];
+		attribute<geography/rdc_m_ipoint> geometry        := domain_grid_rel[geography/rdc_m_ipoint];
 		attribute<domain_grid>        domain_grid_rel := point_xy(first_rel, second_rel, domain_grid); // the RasterCell NorthEast of this Point
 		attribute<bool>               isBoundaryPoint := has_any(BoundarySegment/F1) || has_any(BoundarySegment/F2);
 	}
 
 	unit<uint32> BoundaryPoint := select_with_org_rel(Point/isBoundaryPoint) {
 		attribute<Point>              Point_rel          := org_rel;
-		attribute<geography/rdc_mm> geometry           := org_rel->geometry;
+		attribute<geography/rdc_m_ipoint> geometry           := org_rel->geometry;
 		attribute<uint32>             NrBoundarySegments := pcount(BoundarySegment/bp_F1) + pcount(BoundarySegment/bp_F2);
 		attribute<bool>               isJunction         := NrBoundarySegments != 2; // Junction := raster-hoekpunt waarop meer dan 2 segmenten uit komen (1 kan niet voor komen)
 
@@ -73,10 +73,10 @@ template grid2poly_ipoint
 		attribute<Direction> Direction_rel := union_data(., const(Direction/V/South, HorizontalBoundarySegment), const(Direction/V/East, VerticalBoundarySegment));
 
 		unit<uint32> BS_Point := union_unit(BoundarySegment, BoundarySegment) {
-			attribute<geography/rdc_mm> geometry            := union_data(BS_Point, F1->geometry, F2->geometry);
+			attribute<geography/rdc_m_ipoint> geometry            := union_data(BS_Point, F1->geometry, F2->geometry);
 			attribute<BoundarySegment>    BoundarySegment_rel := union_data(BS_Point, ID(BoundarySegment), ID(BoundarySegment));
 		}
-		attribute<geography/rdc_mm> geometry(arc) := points2sequence(BS_Point/geometry, BS_Point/BoundarySegment_rel);
+		attribute<geography/rdc_m_ipoint> geometry(arc) := points2sequence(BS_Point/geometry, BS_Point/BoundarySegment_rel);
 
 		attribute<uint32> NrIntermediatePoints := pcount(IntermediatePoint/Ra) + pcount(IntermediatePoint/Rb);
 
@@ -103,7 +103,7 @@ template grid2poly_ipoint
 	}
 
 	unit<uint32> Junction := select_with_org_rel(BoundaryPoint/isJunction) {
-		attribute<geography/rdc_mm> geometry := collect_by_cond(Junction, BoundaryPoint/geometry);
+		attribute<geography/rdc_m_ipoint> geometry := collect_by_cond(Junction, BoundaryPoint/geometry);
 		attribute<.> per_node(BoundaryPoint) := invert(org_rel);
 	}
 
@@ -134,15 +134,15 @@ template grid2poly_ipoint
 	unit<uint32> JunctionDirection := combine_unit(Junction, Direction);
 
 	unit<uint32> JunctionLink := union_unit(FromJunctionLink, ToJunctionLink) {
-		attribute<geography/rdc_mm> Junction_geometry   := Junction_rel->Geometry;
+		attribute<geography/rdc_m_ipoint> Junction_geometry   := Junction_rel->Geometry;
 		attribute<BoundarySegment>    BoundarySegment_rel := union_data(., FromJunctionLink/BoundarySegment_rel, ToJunctionLink/BoundarySegment_rel);
 
 		unit<uint32> JL_Point := union_unit(JunctionLink, JunctionLink) {
-			attribute<geography/rdc_mm> geometry         := union_data(JL_Point, F1->geometry, F2->geometry);
+			attribute<geography/rdc_m_ipoint> geometry         := union_data(JL_Point, F1->geometry, F2->geometry);
 			attribute<JunctionLink>     JunctionLink_rel := union_data(JL_Point, ID(JunctionLink), ID(JunctionLink));
 		}
 
-		attribute<geography/rdc_mm> geometry(arc)   := points2sequence(JL_Point/geometry, JL_Point/JunctionLink_rel);
+		attribute<geography/rdc_m_ipoint> geometry(arc)   := points2sequence(JL_Point/geometry, JL_Point/JunctionLink_rel);
 
 		attribute<BoundaryPoint>      F1              := union_data(., FromJunctionLink/F1, ToJunctionLink/F2);
 		attribute<BoundaryPoint>      F2              := union_data(., FromJunctionLink/F2, ToJunctionLink/F1);
@@ -204,24 +204,24 @@ template grid2poly_ipoint
 				, const(1, ReducedBoundarySegment), ReducedBoundarySegment/F1, ReducedBoundarySegment/F2, firstBoundaryPoint_rel);
 
 		unit<uint32> Point := select(IsDefined(dist_from_first_BP)) {
-			attribute<geography/rdc_mm> geometry := collect_by_cond(Point, BoundaryPoint/Geometry);
+			attribute<geography/rdc_m_ipoint> geometry := collect_by_cond(Point, BoundaryPoint/Geometry);
 			attribute<JFRing> sequence_rel         := collect_by_cond(Point, per_BoundaryPoint);
 			attribute<uint32> ordinal              := collect_by_cond(Point, dist_from_first_BP);
 		}
-		attribute<geography/rdc_mm> geometry       (poly) := points2polygon(Point/geometry, Point/sequence_rel, Point/ordinal);
+		attribute<geography/rdc_m_ipoint> geometry       (poly) := points2polygon(Point/geometry, Point/sequence_rel, Point/ordinal);
 		attribute<units/mm>            area                  := area(geometry, units/mm);
-		attribute<geography/rdc_mm> SimplifiedRing (poly) := bg_simplify_polygon(geometry, simplifyFactor);
+		attribute<geography/rdc_m_ipoint> SimplifiedRing (poly) := bg_simplify_polygon(geometry, simplifyFactor);
 		attribute<units/mm>          simplified_area       := area(SimplifiedRing, units/mm);
 	}
 
 	unit<uint32> NonEmptyJFRing := select(abs(JFRing/simplified_area) > 100i) {
-		attribute<geography/rdc_mm> geometry       (poly) := collect_by_cond(NonEmptyJFRing, JFRing/geometry);
-		attribute<geography/rdc_mm> SimplifiedRing (poly) := collect_by_cond(NonEmptyJFRing, JFRing/SimplifiedRing);
+		attribute<geography/rdc_m_ipoint> geometry       (poly) := collect_by_cond(NonEmptyJFRing, JFRing/geometry);
+		attribute<geography/rdc_m_ipoint> SimplifiedRing (poly) := collect_by_cond(NonEmptyJFRing, JFRing/SimplifiedRing);
 		attribute<Zone>               left_Zone_rel         := collect_by_cond(., JFRing/left_Zone_rel);
 		attribute<Zone>               rightZone_rel         := collect_by_cond(., JFRing/rightZone_rel);
 
 		unit<uint32> Point := sequence2points(SimplifiedRing);
-		attribute<geography/rdc_mm> SimplifiedReversedRing(poly) := points2polygon(Point/Point, Point/sequence_rel, (pcount(Point/sequence_rel) - 1)[Point/sequence_rel] - Point/ordinal);
+		attribute<geography/rdc_m_ipoint> SimplifiedReversedRing(poly) := points2polygon(Point/Point, Point/sequence_rel, (pcount(Point/sequence_rel) - 1)[Point/sequence_rel] - Point/ordinal);
 	}
 
 	unit<uint32> JFLineString := select_with_org_rel(JFSection/isLineString) { // JunctionFree LineString
@@ -248,21 +248,21 @@ template grid2poly_ipoint
 			attribute<BoundaryPoint>      BoundaryPoint_rel     := org_rel;
 			attribute<IntermediatePoint>  IntermediatePoint_rel := invert(IntermediatePoint/BoundaryPoint_rel)[BoundaryPoint_rel];
 			attribute<BoundarySegment>    BoundarySegmentA_rel  := IntermediatePoint_rel->Ra;
-			attribute<geography/rdc_mm> geometry              := collect_by_cond(Point, BoundaryPoint/Geometry);
+			attribute<geography/rdc_m_ipoint> geometry              := collect_by_cond(Point, BoundaryPoint/Geometry);
 			attribute<JFLineString>       sequence_rel          := invert(JFLineString/org_rel)[BoundarySegmentA_rel->JFSection_rel];
 			attribute<uint32>             ordinal               := collect_by_cond(Point, dist_from_first_BP);
 		}
 
 		attribute<uint32> NrPoints := pcount(Point/sequence_rel) > 0 ? max(Point/ordinal, Point/sequence_rel) + 1 : 0;
 		unit<uint32> PointwithConnectors := union_unit(JFLineString, Point, JFLineString) {
-			attribute<geography/rdc_mm> geometry     := union_data(., firstJL_rel->Junction_geometry, Point/geometry, last_JL_rel->Junction_geometry);
+			attribute<geography/rdc_m_ipoint> geometry     := union_data(., firstJL_rel->Junction_geometry, Point/geometry, last_JL_rel->Junction_geometry);
 			attribute<JFLineString>       sequence_rel := union_data(., id(JFLineString), Point/sequence_rel, id(JFLineString));
 			attribute<uint32>             ordinal      := union_data(., const(0, JFLineString), Point/ordinal+1, NrPoints+1);
 		}
 
-		attribute<geography/rdc_mm> LineString               (arc) := points2sequence(Point/geometry, Point/sequence_rel, Point/ordinal);
-		attribute<geography/rdc_mm> LineStringWithConnectors (arc) := points2sequence(PointwithConnectors/geometry, PointwithConnectors/sequence_rel, PointwithConnectors/ordinal);
-		attribute<geography/rdc_mm> SimplifiedLineString     (arc) := bg_simplify_linestring(LineStringWithConnectors, simplifyFactor);
+		attribute<geography/rdc_m_ipoint> LineString               (arc) := points2sequence(Point/geometry, Point/sequence_rel, Point/ordinal);
+		attribute<geography/rdc_m_ipoint> LineStringWithConnectors (arc) := points2sequence(PointwithConnectors/geometry, PointwithConnectors/sequence_rel, PointwithConnectors/ordinal);
+		attribute<geography/rdc_m_ipoint> SimplifiedLineString     (arc) := bg_simplify_linestring(LineStringWithConnectors, simplifyFactor);
 
 		unit<uint32>                SimplifiedPoints          := sequence2points(SimplifiedLineString);
 		attribute<uint32>           SimplifiedPointOrdinalMax := max(SimplifiedPoints/ordinal, SimplifiedPoints/Sequence_rel);
@@ -282,7 +282,7 @@ template grid2poly_ipoint
 		attribute<JFLineString/SimplifiedPoints> SimplifiedPoint_rel := union_data(.
 			, JFLineString/SimplifiedPointBase[JFLineString/SimplifiedPoints/Sequence_rel] + JFLineString/SimplifiedPoints/ordinal
 			, (JFLineString/SimplifiedPointBase+JFLineString/SimplifiedPointOrdinalMax)[JFLineString/SimplifiedPoints/Sequence_rel] - JFLineString/SimplifiedPoints/ordinal);
-		attribute<geography/rdc_mm> geometry := SimplifiedPoint_rel->Point;
+		attribute<geography/rdc_m_ipoint> geometry := SimplifiedPoint_rel->Point;
 	}
 	unit<uint32> ZoneRing := connected_parts(ID(JunctionLink), JunctionLink/next_rel) {
 		attribute<.>            per_JunctionLink (JunctionLink) := PartNr;
@@ -301,7 +301,7 @@ template grid2poly_ipoint
 
 		attribute<ZoneRingPoint> ZoneRingPointBase := ZoneRingJunctionBase->ZoneRingPointBase;
 
-		attribute<geography/rdc_mm> geometry(poly) := points2polygon(ClosedZoneRingPoint/geometry, ClosedZoneRingPoint/ZoneRing_rel, ClosedZoneRingPoint/Ring_ordinal);
+		attribute<geography/rdc_m_ipoint> geometry(poly) := points2polygon(ClosedZoneRingPoint/geometry, ClosedZoneRingPoint/ZoneRing_rel, ClosedZoneRingPoint/Ring_ordinal);
 		attribute<units/mm>            area           := area(geometry, units/mm);
 	}
 
@@ -336,18 +336,18 @@ template grid2poly_ipoint
 		attribute<JunctionLink>       JunctionLink_rel     := ZoneRingJunction_rel->JunctionLink_rel;
 		attribute<JFLS2>              JFLS2_rel            := JunctionLink_rel->outJFLS2;
 		attribute<JFLS2_Point>        JFLS2_Point_rel      := JFLS2_rel->JFLS2_Point_Base + RingJunction_ordinal;
-		attribute<geography/rdc_mm> geometry             := JFLS2_Point_rel->geometry;
+		attribute<geography/rdc_m_ipoint> geometry             := JFLS2_Point_rel->geometry;
 	}
 	// add a closing point to each ring equal to the first point of that ring.
 	unit<uint32> ClosedZoneRingPoint := range(uint32, 0, sum(ZoneRingJunction/nrPoints)+#ZoneRing) {
-		 attribute<geography/rdc_mm> geometry     := union_data(., ZoneRingPoint/geometry, ZoneRing/ZoneRingPointBase->geometry);
+		 attribute<geography/rdc_m_ipoint> geometry     := union_data(., ZoneRingPoint/geometry, ZoneRing/ZoneRingPointBase->geometry);
 		 attribute<ZoneRing>           ZoneRing_rel := union_data(., ZoneRingPoint/ZoneRing_rel, id(ZoneRing));
 		 attribute<uint32>             Ring_ordinal := union_data(., ZoneRingPoint/Ring_ordinal, sum(ZoneRingJunction/nrPoints, ZoneRingJunction/ZoneRing_rel));
 		 attribute<Zone>               Zone_rel     := ZoneRing_rel->FirstZone_rel;
 	}
 
 	unit<uint32> RingResults := union_unit(ZoneRing, NonEmptyJFRing, NonEmptyJFRing) {
-		attribute<geography/rdc_mm> geometry(poly) := union_data(., ZoneRing/geometry, NonEmptyJFRing/SimplifiedRing, NonEmptyJFRing/SimplifiedReversedRing);
+		attribute<geography/rdc_m_ipoint> geometry(poly) := union_data(., ZoneRing/geometry, NonEmptyJFRing/SimplifiedRing, NonEmptyJFRing/SimplifiedReversedRing);
 		attribute<units/mm>            area           := area(geometry, units/mm);
 		attribute<Zone>               Zone_rel       := union_data(., ZoneRing/FirstZone_rel, NonEmptyJFRing/RightZone_rel, NonEmptyJFRing/Left_Zone_rel), IntegrityCheck = "ZoneRing/CheckUniqueZonePerRing";
 	}
@@ -357,7 +357,7 @@ template grid2poly_ipoint
 		// Polygonen van dezelfde regio samenvoegen tot multi-polygons, in een afzonderlijke template
 		// TODO: met afzonderlijke punten doen o.b.v. de te checked aanname dat ze niet overlappen.
 		attribute<ipoint> igeometry(poly) := partitioned_union_polygon(ipolygon(RingResults/geometry), RingResults/Zone_rel);
-		attribute<geography/rdc_mm> geometry(poly) := igeometry;
+		attribute<geography/rdc_m_ipoint> geometry(poly) := igeometry;
 
 		// check dat result geen overlappende polygonen bevat
 		unit<uint32> overlap_check := polygon_connectivity(igeometry)

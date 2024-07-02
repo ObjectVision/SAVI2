@@ -6,33 +6,6 @@ container startanalyse_2_0
 	#include <sourcedata.dms>
 	#include <templates.dms>
 	#include <analyses.dms>
+	#include <simplification.dms>
 	#include <exports.dms>
-	
-	/*container reread
-	{
-		unit<uint32> example_pbf : 
-			storagename= "%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_/13/4187/2718.pbf"
-		, 	storagetype= "gdal.vect"
-		,	storagereadonly = "True"
-		{
-			attribute<geography/web_mercator> geometry (poly);
-		}
-		
-		unit<uint32> example_pbf_2 : 
-			storagename= "%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_/13/4248/2674.pbf"
-		, 	storagetype= "gdal.vect"
-		,	storagereadonly = "True"
-		{
-			attribute<geography/web_mercator> geometry (poly);
-		}
-	
-		unit<uint32> example_pbf_3 : 
-		storagename= "%LocalDataDir%/startanalyse_2_0/nl_sa1_bstrat3_single_layer_single_zoom/13/4205/2709.pbf"
-
-		, 	storagetype= "gdal.vect"
-		,	storagereadonly = "True"
-		{
-			attribute<geography/web_mercator> geometry (poly);
-		}
-	}*/
 }

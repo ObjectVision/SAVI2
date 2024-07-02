@@ -1,0 +1,135 @@
+container simplification {
+	container params {
+		parameter<units/m> min_f := 5000[units/m];
+		parameter<units/m> low_f := 500[units/m];
+		parameter<units/m> mid_f := 250[units/m];
+		parameter<units/m> high_f :=  50[units/m];
+		
+		parameter<units/mm> min_r := 1000000[units/mm];
+		parameter<units/mm> low_r := 100000[units/mm];
+		parameter<units/mm> mid_r := 10000[units/mm];
+		parameter<units/mm> high_r :=   8000[units/mm];
+	}
+	
+	container z_9 := Templates/SimplifyAndExportGeometry(100000[units/mm], 500[units/m]) {
+		container export {
+			unit<uint32> z_9 := simplification/z_9/simplify/SimplifiedPolygons/Results
+			, StorageName = "%LocalDataProjDir%/simplified/z_9.shp"
+			, StorageType = "gdalwrite.vect"
+			, StorageReadOnly = "False"
+			{
+			    attribute<geography/wm_m> geometry(poly) := convert(simplification/z_9/simplify/SimplifiedPolygons/Results/geometry, geography/wm_m);
+				attribute<string> BU_CODE := SourceData/buurt2020/BU_CODE;
+			}
+		}
+
+		container read {
+			unit<uint32> z_9 
+			: StorageName = "%LocalDataProjDir%/simplified/z_9.shp"
+			, StorageType = "gdal.vect"
+			, StorageReadOnly = "True"
+			, SyncMode = "alltables"
+			{
+			   attribute<geography/wm_m> geometry(poly);
+			}
+		}
+	}
+	
+	container z_10 := Templates/SimplifyAndExportGeometry(100000[units/mm], 400[units/m]) {
+		container export {
+			unit<uint32> z_10 := simplification/z_10/simplify/SimplifiedPolygons/Results
+			, StorageName = "%LocalDataProjDir%/simplified/z_10.shp"
+			, StorageType = "gdalwrite.vect"
+			, StorageReadOnly = "False"
+			{
+			   attribute<geography/wm_m> geometry(poly) := convert(simplification/z_10/simplify/SimplifiedPolygons/Results/geometry, geography/wm_m);
+			   attribute<string> BU_CODE := SourceData/buurt2020/BU_CODE;
+			}
+		}
+
+		container read {
+			unit<uint32> z_10 
+			: StorageName = "%LocalDataProjDir%/simplified/z_10.shp"
+			, StorageType = "gdal.vect"
+			, StorageReadOnly = "True"
+			, SyncMode = "alltables"
+			{
+			   attribute<geography/wm_m> geometry(poly);
+			}
+		}
+	}
+	
+	container z_11 := Templates/SimplifyAndExportGeometry(10000[units/mm], 250[units/m]) {
+		container export {
+			unit<uint32> z_11 := simplification/z_11/simplify/SimplifiedPolygons/Results
+			, StorageName = "%LocalDataProjDir%/simplified/z_11.shp"
+			, StorageType = "gdalwrite.vect"
+			, StorageReadOnly = "False"
+			{
+			    attribute<geography/wm_m> geometry(poly) := convert(simplification/z_11/simplify/SimplifiedPolygons/Results/geometry, geography/wm_m);
+			    attribute<string> BU_CODE := SourceData/buurt2020/BU_CODE;
+			}
+		}
+
+		container read {
+			unit<uint32> z_11 
+			: StorageName = "%LocalDataProjDir%/simplified/z_11.shp"
+			, StorageType = "gdal.vect"
+			, StorageReadOnly = "True"
+			, SyncMode = "alltables"
+			{
+			   attribute<geography/wm_m> geometry(poly);
+			}
+		}
+	}
+	
+	container z_12 := Templates/SimplifyAndExportGeometry(10000[units/mm], 150[units/m]) {
+		container export {
+			unit<uint32> z_12 := simplification/z_12/simplify/SimplifiedPolygons/Results
+			, StorageName = "%LocalDataProjDir%/simplified/z_12.shp"
+			, StorageType = "gdalwrite.vect"
+			, StorageReadOnly = "False"
+			{
+			   attribute<geography/wm_m> geometry(poly) := convert(simplification/z_12/simplify/SimplifiedPolygons/Results/geometry, geography/wm_m);
+				attribute<string> BU_CODE := SourceData/buurt2020/BU_CODE;
+			}
+		}
+
+	container read {
+			unit<uint32> z_12 
+			: StorageName = "%LocalDataProjDir%/simplified/z_12.shp"
+			, StorageType = "gdal.vect"
+			, StorageReadOnly = "True"
+			, SyncMode = "alltables"
+			{
+			   attribute<geography/wm_m> geometry(poly);
+			}
+		}
+	}
+	
+	container z_13 := Templates/SimplifyAndExportGeometry(10000[units/mm], 100[units/m]) {
+		container export {
+			unit<uint32> z_13 := simplification/z_13/simplify/SimplifiedPolygons/Results
+			, StorageName = "%LocalDataProjDir%/simplified/z_13.shp"
+			, StorageType = "gdalwrite.vect"
+			, StorageReadOnly = "False"
+			{
+			   attribute<geography/wm_m> geometry(poly) := convert(SourceData/buurt2020/geometry_rdc_m_ipoint, geography/wm_m);
+			   attribute<string> BU_CODE := SourceData/buurt2020/BU_CODE;
+			}
+		}
+
+		container read {
+			unit<uint32> z_13 
+			: StorageName = "%LocalDataProjDir%/simplified/z_13.shp"
+			, StorageType = "gdal.vect"
+			, StorageReadOnly = "True"
+			, SyncMode = "alltables"
+			{
+			   attribute<geography/wm_m> geometry(poly);
+			}
+		}
+	}
+	
+	parameter<string> export_all := "True", ExplicitSuppliers="z_9/export;z_10/export;z_11/export;z_12/export;z_13/export";
+}

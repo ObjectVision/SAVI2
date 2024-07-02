@@ -1,4 +1,19 @@
 container SourceData {
+	container CBS2020Gebiedsindelingen 
+	:  StorageName  = "%SourceDataDir%/CBS/2020/cbsgebiedsindelingen2020.gpkg"
+	,  StorageType     = "gdal.vect"
+	,  StorageReadOnly = "True"
+	,  SyncMode        = "None"
+	,  DialogData      = "geography/rdc_m" 
+	{
+		unit<uint32> buurt_gegeneraliseerd 
+		{
+			attribute<geography/rdc_m_ipoint> geometry (poly);
+			attribute<string> statcode;
+			attribute<string> BU_CODE := statcode;
+		}
+	}
+	
 	unit<uint32> buurt2020_with_H2O : StorageName = "%SourceDataDir%/StartAnalyse/V1/cbs_buurt_2020/buurt_2020_v3.shp", StorageType="gdal.vect", StorageReadOnly="True"
 	{
 		attribute<geography/rdc_m> geometry (poly);
@@ -8,12 +23,15 @@ container SourceData {
 	unit<uint32> buurt2020 := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee')// &&  id(buurt2020_with_H2O)>13885);
 	{
 		attribute<geography/wm_m> geometry_wm (poly) := convert(geometry, geography/wm_m);
+		
+		//attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := convert(geometry, geography/rdc_m_ipoint);
+		attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := rjoin(BU_CODE, CBS2020Gebiedsindelingen/buurt_gegeneraliseerd/BU_CODE, CBS2020Gebiedsindelingen/buurt_gegeneraliseerd/geometry);
 	}
 	
-	unit<uint32> buurt2020_testset := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee' &&  id(buurt2020_with_H2O)>13885)
+	/*unit<uint32> buurt2020_testset := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee' &&  id(buurt2020_with_H2O)>13885)
 	{
 		attribute<geography/wm_m> geometry_wm (poly) := convert(geometry, geography/wm_m);
-	}
+	}*/
 
 	container StartAnalyse_1_0
 	{
