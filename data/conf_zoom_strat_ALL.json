@@ -1,16 +1,4 @@
 {
-	"strat_05": {
-		"target_name": "stratALL",
-		"description": "CBS buurten met codes",
-		"minzoom": 5,
-		"maxzoom": 5
-	},
-	"strat_06": {
-		"target_name": "stratALL",
-		"description": "CBS buurten met codes",
-		"minzoom": 6,
-		"maxzoom": 6
-	},
 	"strat_07": {
 		"target_name": "stratALL",
 		"description": "CBS buurten met codes",

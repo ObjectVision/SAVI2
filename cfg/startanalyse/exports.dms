@@ -3,7 +3,7 @@ container Exports {
 	
 	container buurt_indicators := Templates/ExportStrategiesToTilejson();
 	
-	/*container all_strats { 
+	container all_strats { 
 		container export_strat1 := Templates/ExportStrategieToTilejson(false, 1b);
 		container export_strat2 := Templates/ExportStrategieToTilejson(false, 2b);
 		container export_strat3 := Templates/ExportStrategieToTilejson(false, 3b);
@@ -12,7 +12,7 @@ container Exports {
 		container export_strat6 := Templates/ExportStrategieToTilejson(true, 6b);  // ref19
 		container export_strat7 := Templates/ExportStrategieToTilejson(true, 7b);  // ref30
 		container export_strat8 := Templates/ExportStrategieToTilejson(false, 8b); // stratNL
-	}*/
+	}
 
 	container aanbod {
 		container gas := Templates/ExportGasTilejson();

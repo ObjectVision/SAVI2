@@ -1,16 +1,53 @@
 container simplification {
-	container params {
-		parameter<units/m> min_f := 5000[units/m];
-		parameter<units/m> low_f := 500[units/m];
-		parameter<units/m> mid_f := 250[units/m];
-		parameter<units/m> high_f :=  50[units/m];
-		
-		parameter<units/mm> min_r := 1000000[units/mm];
-		parameter<units/mm> low_r := 100000[units/mm];
-		parameter<units/mm> mid_r := 10000[units/mm];
-		parameter<units/mm> high_r :=   8000[units/mm];
+
+	container z_7 := Templates/SimplifyAndExportGeometry(100000[units/mm], 500[units/m]) {
+		container export {
+			unit<uint32> z_7 := simplification/z_7/simplify/SimplifiedPolygons/Results
+			, StorageName = "%LocalDataProjDir%/simplified/z_7.shp"
+			, StorageType = "gdalwrite.vect"
+			, StorageReadOnly = "False"
+			{
+			    attribute<geography/wm_m> geometry(poly) := convert(simplification/z_7/simplify/SimplifiedPolygons/Results/geometry, geography/wm_m);
+				attribute<string> BU_CODE := SourceData/buurt2020/BU_CODE;
+			}
+		}
+
+		container read {
+			unit<uint32> z_7 
+			: StorageName = "%LocalDataProjDir%/simplified/z_7.shp"
+			, StorageType = "gdal.vect"
+			, StorageReadOnly = "True"
+			, SyncMode = "alltables"
+			{
+			   attribute<geography/wm_m> geometry(poly);
+			}
+		}
 	}
-	
+
+	container z_8 := Templates/SimplifyAndExportGeometry(100000[units/mm], 500[units/m]) {
+		container export {
+			unit<uint32> z_8 := simplification/z_8/simplify/SimplifiedPolygons/Results
+			, StorageName = "%LocalDataProjDir%/simplified/z_8.shp"
+			, StorageType = "gdalwrite.vect"
+			, StorageReadOnly = "False"
+			{
+			    attribute<geography/wm_m> geometry(poly) := convert(simplification/z_8/simplify/SimplifiedPolygons/Results/geometry, geography/wm_m);
+				attribute<string> BU_CODE := SourceData/buurt2020/BU_CODE;
+			}
+		}
+
+		container read {
+			unit<uint32> z_8 
+			: StorageName = "%LocalDataProjDir%/simplified/z_8.shp"
+			, StorageType = "gdal.vect"
+			, StorageReadOnly = "True"
+			, SyncMode = "alltables"
+			{
+			   attribute<geography/wm_m> geometry(poly);
+			}
+		}
+	}
+
 	container z_9 := Templates/SimplifyAndExportGeometry(100000[units/mm], 500[units/m]) {
 		container export {
 			unit<uint32> z_9 := simplification/z_9/simplify/SimplifiedPolygons/Results
@@ -131,5 +168,5 @@ container simplification {
 		}
 	}
 	
-	parameter<string> export_all := "True", ExplicitSuppliers="z_9/export;z_10/export;z_11/export;z_12/export;z_13/export";
+	parameter<string> export_all := "True", ExplicitSuppliers="z_7/export;z_8/export;z_9/export;z_10/export;z_11/export;z_12/export;z_13/export";
 }
