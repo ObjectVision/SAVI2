@@ -1,6 +1,5 @@
 container Exports {
-	
-	
+
 	container buurt_indicators := Templates/ExportStrategiesToTilejson();
 	
 	container all_strats { 
@@ -12,6 +11,20 @@ container Exports {
 		container export_strat6 := Templates/ExportStrategieToTilejson(true, 6b);  // ref19
 		container export_strat7 := Templates/ExportStrategieToTilejson(true, 7b);  // ref30
 		container export_strat8 := Templates/ExportStrategieToTilejson(false, 8b); // stratNL
+		
+		parameter<string> export_all := "Done", ExplicitSuppliers="Exports/all_strats/export_strat1/MVT/all_zoom_levels/dataset;Exports/all_strats/export_strat2/MVT/all_zoom_levels/dataset;Exports/all_strats/export_strat3/MVT/all_zoom_levels/dataset;Exports/all_strats/export_strat4/MVT/all_zoom_levels/dataset;Exports/all_strats/export_strat5/MVT/all_zoom_levels/dataset;Exports/all_strats/export_strat6/MVT/all_zoom_levels/dataset;Exports/all_strats/export_strat7/MVT/all_zoom_levels/dataset;Exports/all_strats/export_strat8/MVT/all_zoom_levels/dataset";
+	}
+	
+	unit<uint32> optionSet := range(uint32, 0, 9);
+	attribute<string> GDAL_Options (optionSet) : ['MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/pand.json'];
+	parameter<string> GDAL_Driver : ['MVT'];
+	container pand
+	: StorageName="%LocalDataDir%/startanalyse_2_0/pand"
+	, StorageType="gdalwrite.vect"
+	, StorageReadOnly = "False"
+	{
+		unit<uint32> pand_12 := select_with_attr_by_cond(SourceData/pand/pand_fss_read, const(true, SourceData/pand/pand_fss_read));
+		unit<uint32> pand_13 := select_with_attr_by_cond(SourceData/pand/pand_fss_read, const(true, SourceData/pand/pand_fss_read));
 	}
 
 	container aanbod {

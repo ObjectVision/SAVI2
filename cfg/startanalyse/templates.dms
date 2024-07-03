@@ -163,8 +163,19 @@ container Templates {
 			unit<uint32> per_strat := split_polygons {
 				attribute<geography/wm_m> geometry (poly)                                        := convert(split_polygons/geometry, geography/wm_m);
 				attribute<uint32> id 													          := split_polygons/polygon_rel;
-				attribute<string> V01_Strategievariant                    					      := domain/V01_Strategievariant[split_polygons/polygon_rel];
-				attribute<uint32> Strategiecode                                                   := rjoin(V01_Strategievariant, strategievariant_nr/unique_strategy_variants/values, strategievariant_nr/unique_strategy_variants/id);
+				attribute<string> V01_Strategievariant                    					      := unquote(domain/V01_Strategievariant[split_polygons/polygon_rel]);
+				attribute<uint32> Strategiecode                                                   := MakeDefined(rjoin(V01_Strategievariant, SourceData/variants/name, SourceData/variants/id), 9999), integritycheck="IsDefined(this) || !IsDefined(V01_Strategievariant) || trim(V01_Strategievariant)==''";
+				attribute<string> BU_CODE                                                        := domain/BU_CODE[split_polygons/polygon_rel];
+				attribute<string> Buurtnaam := domain/Buurtnaam[split_polygons/polygon_rel];
+				attribute<string> Wijkcode := domain/Wijkcode[split_polygons/polygon_rel];
+				attribute<string> Wijknaam := domain/Wijknaam[split_polygons/polygon_rel];
+				attribute<string> Gemeentecode := domain/Gemeentecode[split_polygons/polygon_rel];
+				attribute<string> Gemeentenaam := domain/Gemeentenaam[split_polygons/polygon_rel];
+				attribute<string> Energieregionaam := domain/Energieregionaam[split_polygons/polygon_rel];
+				attribute<string> Provincienaam := domain/Provincienaam[split_polygons/polygon_rel];
+				attribute<uint32> AantalWoningen := uint32(domain/AantalWoningen[split_polygons/polygon_rel]);
+				attribute<uint32> AantalUtiliteiten := uint32(domain/AantalUtiliteiten[split_polygons/polygon_rel]);
+				attribute<uint32> WoningEquivalenten := uint32(domain/WoningEquivalenten[split_polygons/polygon_rel]);
 				attribute<units/giga_J_per_woning_per_yr> H01_Energieverbruik                     := domain/H01_Energieverbruik[split_polygons/polygon_rel];
 				attribute<units/giga_J_per_woning_per_yr> H02_Energieverbruik_ruimteverwarming    := domain/H02_Energieverbruik_ruimteverwarming[split_polygons/polygon_rel];
 				attribute<units/giga_J_per_woning_per_yr> H03_Energieverbruik_warmtapwater        := domain/H03_Energieverbruik_warmtapwater[split_polygons/polygon_rel];

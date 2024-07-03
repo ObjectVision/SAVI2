@@ -6,6 +6,6 @@ container startanalyse_2_0
 	#include <sourcedata.dms>
 	#include <templates.dms>
 	#include <analyses.dms>
-	#include <simplification.dms>
+	//#include <simplification.dms>
 	#include <exports.dms>
 }
