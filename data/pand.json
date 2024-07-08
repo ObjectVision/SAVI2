@@ -1,0 +1,14 @@
+{
+	"pand_12": {
+		"target_name": "pand",
+		"description": "Bouwjaar",
+		"minzoom": 12,
+		"maxzoom": 12
+	},
+	"pand_13": {
+		"target_name": "pand",
+		"description": "Bouwjaar",
+		"minzoom": 13,
+		"maxzoom": 13
+	}
+}

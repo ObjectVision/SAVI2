@@ -1,8 +1,8 @@
 container Exports {
 
-	container buurt_indicators := Templates/ExportStrategiesToTilejson();
+	//container buurt_indicators := Templates/ExportStrategiesToTilejson();
 	
-	container all_strats { 
+	container strats { 
 		container export_strat1 := Templates/ExportStrategieToTilejson(false, 1b);
 		container export_strat2 := Templates/ExportStrategieToTilejson(false, 2b);
 		container export_strat3 := Templates/ExportStrategieToTilejson(false, 3b);
@@ -12,19 +12,21 @@ container Exports {
 		container export_strat7 := Templates/ExportStrategieToTilejson(true, 7b);  // ref30
 		container export_strat8 := Templates/ExportStrategieToTilejson(false, 8b); // stratNL
 		
-		parameter<string> export_all := "Done", ExplicitSuppliers="Exports/all_strats/export_strat1/MVT/all_zoom_levels/dataset;Exports/all_strats/export_strat2/MVT/all_zoom_levels/dataset;Exports/all_strats/export_strat3/MVT/all_zoom_levels/dataset;Exports/all_strats/export_strat4/MVT/all_zoom_levels/dataset;Exports/all_strats/export_strat5/MVT/all_zoom_levels/dataset;Exports/all_strats/export_strat6/MVT/all_zoom_levels/dataset;Exports/all_strats/export_strat7/MVT/all_zoom_levels/dataset;Exports/all_strats/export_strat8/MVT/all_zoom_levels/dataset";
+		parameter<string> export_all := "Done", ExplicitSuppliers="Exports/strats/export_strat1/MVT/all_zoom_levels/dataset;Exports/strats/export_strat2/MVT/all_zoom_levels/dataset;Exports/strats/export_strat3/MVT/all_zoom_levels/dataset;Exports/strats/export_strat4/MVT/all_zoom_levels/dataset;Exports/strats/export_strat5/MVT/all_zoom_levels/dataset;Exports/strats/export_strat6/MVT/all_zoom_levels/dataset;Exports/strats/export_strat7/MVT/all_zoom_levels/dataset;Exports/strats/export_strat8/MVT/all_zoom_levels/dataset";
 	}
 	
-	unit<uint32> optionSet := range(uint32, 0, 9);
-	attribute<string> GDAL_Options (optionSet) : ['MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/pand.json'];
-	parameter<string> GDAL_Driver : ['MVT'];
-	container pand
-	: StorageName="%LocalDataDir%/startanalyse_2_0/pand"
-	, StorageType="gdalwrite.vect"
-	, StorageReadOnly = "False"
-	{
-		unit<uint32> pand_12 := select_with_attr_by_cond(SourceData/pand/pand_fss_read, const(true, SourceData/pand/pand_fss_read));
-		unit<uint32> pand_13 := select_with_attr_by_cond(SourceData/pand/pand_fss_read, const(true, SourceData/pand/pand_fss_read));
+	container panden {
+		unit<uint32> optionSet := range(uint32, 0, 9);
+		attribute<string> GDAL_Options (optionSet) : ['MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/pand.json'];
+		parameter<string> GDAL_Driver : ['MVT'];
+		container pand
+		: StorageName="%LocalDataDir%/startanalyse_2_0/pand"
+		, StorageType="gdalwrite.vect"
+		, StorageReadOnly = "False"
+		{
+			unit<uint32> pand_12 := select_with_attr_by_cond(SourceData/pand/pand_fss_read, const(true, SourceData/pand/pand_fss_read));
+			unit<uint32> pand_13 := select_with_attr_by_cond(SourceData/pand/pand_fss_read, const(true, SourceData/pand/pand_fss_read));
+		}
 	}
 
 	container aanbod {
@@ -44,7 +46,7 @@ container Exports {
 		, storageType="gdalwrite.vect"
 		, StorageReadOnly = "False"
 		{
-			attribute<geography/wm_m> geometry (arc) := convert(SourceData/aanbod/geothermie/geometry, geography/wm_m);
+			attribute<geography/wm_m> geometry (poly) := convert(SourceData/aanbod/geothermie/geometry, geography/wm_m);
 		}
 		
 		container puntbronnen {
@@ -53,7 +55,7 @@ container Exports {
 			, storageType="gdalwrite.vect"
 			, StorageReadOnly = "False"
 			{
-				attribute<geography/wm_m> geometry := SourceData/aanbod/puntbronnen/lt/geometry[geography/wm_m];
+				attribute<geography/wgs_base> geometry := SourceData/aanbod/puntbronnen/lt/geometry[geography/wgs_base];
 				attribute<string> bron_naam := SourceData/aanbod/puntbronnen/lt/bron_naam;
 				attribute<string> bron_type := SourceData/aanbod/puntbronnen/lt/type_bron;
 				attribute<string> MWcapaciteit := SourceData/aanbod/puntbronnen/lt/MWcapaciteit;
@@ -65,7 +67,7 @@ container Exports {
 			, storageType="gdalwrite.vect"
 			, StorageReadOnly = "False"
 			{
-				attribute<geography/wm_m> geometry := convert(SourceData/aanbod/puntbronnen/mt/geometry, geography/wm_m);
+				attribute<geography/wgs_base> geometry := convert(SourceData/aanbod/puntbronnen/mt/geometry, geography/wgs_base);
 				attribute<string> bron_naam := SourceData/aanbod/puntbronnen/mt/bron_naam;
 				attribute<string> bron_type := SourceData/aanbod/puntbronnen/mt/type_bron;
 				attribute<string> MWcapaciteit := SourceData/aanbod/puntbronnen/mt/MWcapaciteit;
