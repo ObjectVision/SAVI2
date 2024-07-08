@@ -52,5 +52,17 @@
 		"description": "CBS buurten met codes",
 		"minzoom": 13,
 		"maxzoom": 13
+	},
+	"strat_14": {
+		"target_name": "strat2",
+		"description": "CBS buurten met codes",
+		"minzoom": 14,
+		"maxzoom": 14
+	},
+	"strat_15": {
+		"target_name": "strat2",
+		"description": "CBS buurten met codes",
+		"minzoom": 15,
+		"maxzoom": 15
 	}
 }
