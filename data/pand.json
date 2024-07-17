@@ -10,5 +10,35 @@
 		"description": "Bouwjaar",
 		"minzoom": 13,
 		"maxzoom": 13
+	},
+	"pand_14": {
+		"target_name": "pand",
+		"description": "Bouwjaar",
+		"minzoom": 14,
+		"maxzoom": 14
+	},
+	"pand_15": {
+		"target_name": "pand",
+		"description": "Bouwjaar",
+		"minzoom": 15,
+		"maxzoom": 15
+	},
+	"pand_16": {
+		"target_name": "pand",
+		"description": "Bouwjaar",
+		"minzoom": 16,
+		"maxzoom": 16
+	},
+	"pand_17": {
+		"target_name": "pand",
+		"description": "Bouwjaar",
+		"minzoom": 17,
+		"maxzoom": 17
+	},
+	"pand_18": {
+		"target_name": "pand",
+		"description": "Bouwjaar",
+		"minzoom": 18,
+		"maxzoom": 18
 	}
 }
