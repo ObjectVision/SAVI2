@@ -709,7 +709,7 @@ container Templates {
 				parameter<units/m> mid_f := 100[units/m];
 				parameter<units/mm> mid_r := 10000[units/mm];
 				
-				parameter<units/m> high_f := 3[units/m];
+				parameter<units/m> high_f := 1[units/m];
 				parameter<units/mm> high_r := 5000[units/mm];
 				
 				container z_5  := Templates/GetSimplifiedResults(min_r, min_f);
