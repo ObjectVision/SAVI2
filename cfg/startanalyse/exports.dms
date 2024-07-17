@@ -17,7 +17,7 @@ container Exports {
 	
 	container panden {
 		unit<uint32> optionSet := range(uint32, 0, 9);
-		attribute<string> GDAL_Options (optionSet) : ['MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=13', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/pand.json'];
+		attribute<string> GDAL_Options (optionSet) : ['MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=12', 'MAXZOOM=18', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/pand.json'];
 		parameter<string> GDAL_Driver : ['MVT'];
 		container pand
 		: StorageName="%LocalDataDir%/startanalyse_2_0/pand"
@@ -26,28 +26,80 @@ container Exports {
 		{
 			unit<uint32> pand_12 := select_with_attr_by_cond(SourceData/pand/pand_fss_read, const(true, SourceData/pand/pand_fss_read));
 			unit<uint32> pand_13 := select_with_attr_by_cond(SourceData/pand/pand_fss_read, const(true, SourceData/pand/pand_fss_read));
+			unit<uint32> pand_14 := select_with_attr_by_cond(SourceData/pand/pand_fss_read, const(true, SourceData/pand/pand_fss_read));
+			unit<uint32> pand_15 := select_with_attr_by_cond(SourceData/pand/pand_fss_read, const(true, SourceData/pand/pand_fss_read));
+			unit<uint32> pand_16 := select_with_attr_by_cond(SourceData/pand/pand_fss_read, const(true, SourceData/pand/pand_fss_read));
+			unit<uint32> pand_17 := select_with_attr_by_cond(SourceData/pand/pand_fss_read, const(true, SourceData/pand/pand_fss_read));
+			unit<uint32> pand_18 := select_with_attr_by_cond(SourceData/pand/pand_fss_read, const(true, SourceData/pand/pand_fss_read));
 		}
 	}
 
 	container aanbod {
+		parameter<string> export_all := "Done", ExplicitSuppliers="Exports/strats/export_strat1/MVT/all_zoom_levels/dataset;Exports/strats/export_strat2/MVT/all_zoom_levels/dataset;Exports/strats/export_strat3/MVT/all_zoom_levels/dataset;Exports/strats/export_strat4/MVT/all_zoom_levels/dataset;Exports/strats/export_strat5/MVT/all_zoom_levels/dataset;Exports/strats/export_strat6/MVT/all_zoom_levels/dataset;Exports/strats/export_strat7/MVT/all_zoom_levels/dataset;Exports/strats/export_strat8/MVT/all_zoom_levels/dataset";
+		
 		container gas := Templates/ExportGasTilejson();
+		container geothermie {
+
+			
+			/*parameter<units/m> mid_f := 700[units/m];
+			parameter<units/mm> mid_r := 100000[units/mm];
+			unit<uint2> Direction {
+				attribute<string> Label : [ 'North', 'East', 'South', 'West'];
+				container V:= for_each_nedv(Label, string(ID(.))+'[..]', void, .);
+				attribute<.> Next    := union_data(., V/West, V/North, V/East, V/South);
+				attribute<.> Reverse := union_data(., V/South, V/West, V/North, V/East);
+			}*/
+			
+			//container grid := Templates/grid_template(mid_r, geography/rdc_mm_upper_left, geography/rdc_mm_lower_right);
+			//container simplify := Templates/SimplifyPolygons_ipoint(SourceData/aanbod/geothermie, grid/domain, mid_f);
+			container base { 
+				unit<uint32> data := SourceData/aanbod/geothermie {
+					attribute<uint32> id := id(.);
+					attribute<geography/rdc_m_ipoint> geometry (poly) := SourceData/aanbod/geothermie/geometry_rdc_m_ipoint;
+					attribute<uint32> class := uint32(SourceData/aanbod/geothermie/gridcode);
+				}
+				
+				unit<uint32> split_polygons := split_polygon(data/geometry);
+				unit<uint32> final := split_polygons {
+					attribute<uint32> id := split_polygons/polygon_rel;
+					attribute<uint32> class := data/class[split_polygons/polygon_rel];
+					attribute<geography/wm_m> geometry (poly) := convert(split_polygons/geometry, geography/wm_m);
+				}
+			}
+			
+			container MVT {
+				parameter<string> GDAL_Driver : ['MVT'];
+			
+				unit<uint32> optionSet := range(uint32, 0, 9);				
+				attribute<string> GDAL_Options (optionSet) : ['MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=15', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_geothermie.json'];
+				
+				container dataset
+				: StorageName="%LocalDataDir%/startanalyse_2_0/aanbod/Geothermie"
+				, StorageType="gdalwrite.vect"
+				, StorageReadOnly = "False"
+				{
+					unit<uint32> strat_05 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_06 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_07 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_08 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_09 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_10 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_11 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_12 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_13 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_14 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_15 := select_with_attr_by_cond(base/final, const(true, base/final));
+				}
+			}
+		}
 		
-		/*unit<uint32> gas := SourceData/aanbod/gas
-		, storageName="%LocalDataDir%/startanalyse_2_0/aanbod/gas.geojson"
-		, storageType="gdalwrite.vect"
-		, StorageReadOnly = "False"
-		{
-			attribute<geography/wm_m> geometry (arc) := convert(SourceData/aanbod/gas/geometry, geography/wm_m);
-			attribute<string> Categorie := SourceData/aanbod/gas/Categorie;
-		}*/
-		
-		unit<uint32> geothermie := SourceData/aanbod/geothermie
+		/*unit<uint32> geothermie := SourceData/aanbod/geothermie
 		, storageName="%LocalDataDir%/startanalyse_2_0/aanbod/geothermie.geojson"
 		, storageType="gdalwrite.vect"
 		, StorageReadOnly = "False"
 		{
 			attribute<geography/wm_m> geometry (poly) := convert(SourceData/aanbod/geothermie/geometry, geography/wm_m);
-		}
+		}*/
 		
 		container puntbronnen {
 			unit<uint32> lt := SourceData/aanbod/puntbronnen/lt
@@ -76,6 +128,90 @@ container Exports {
 		}
 		
 		container WKO {
+			container base { 
+				unit<uint32> data := SourceData/aanbod/WKO {
+					attribute<uint32> id := id(.);
+					attribute<geography/rdc_m_ipoint> geometry (poly) := SourceData/aanbod/WKO/geometry_rdc_m_ipoint;
+				}
+				
+				unit<uint32> split_polygons := split_polygon(data/geometry);
+				unit<uint32> final := split_polygons {
+					attribute<uint32> id := split_polygons/polygon_rel;
+					attribute<geography/wm_m> geometry (poly) := convert(split_polygons/geometry, geography/wm_m);
+				}
+			}
+			
+			container MVT {
+				parameter<string> GDAL_Driver : ['MVT'];
+			
+				unit<uint32> optionSet := range(uint32, 0, 9);				
+				attribute<string> GDAL_Options (optionSet) : ['MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=15', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_wko.json'];
+				
+				container dataset
+				: StorageName="%LocalDataDir%/startanalyse_2_0/aanbod/WKO"
+				, StorageType="gdalwrite.vect"
+				, StorageReadOnly = "False"
+				{
+					unit<uint32> strat_05 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_06 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_07 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_08 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_09 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_10 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_11 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_12 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_13 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_14 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_15 := select_with_attr_by_cond(base/final, const(true, base/final));
+				}
+			}
+		}
+		
+		container TEO {
+			container base { 
+				unit<uint32> data := SourceData/aanbod/TEO {
+					attribute<uint32> id := id(.);
+					attribute<geography/rdc_m_ipoint> geometry (poly) := SourceData/aanbod/TEO/geometry_rdc_m_ipoint;
+				}
+				
+				unit<uint32> split_polygons := split_polygon(data/geometry);
+				unit<uint32> final := split_polygons {
+					attribute<uint32> id := split_polygons/polygon_rel;
+					attribute<geography/wm_m> geometry (poly) := convert(split_polygons/geometry, geography/wm_m);
+					attribute<string> naam := SourceData/aanbod/TEO/naam[split_polygons/polygon_rel];
+					attribute<string> waterschap := SourceData/aanbod/TEO/waterschap[split_polygons/polygon_rel];
+					attribute<float32> Potentie := float32(SourceData/aanbod/TEO/pot_mwh[split_polygons/polygon_rel]);
+				}
+			}
+			
+			container MVT {
+				parameter<string> GDAL_Driver : ['MVT'];
+			
+				unit<uint32> optionSet := range(uint32, 0, 9);				
+				attribute<string> GDAL_Options (optionSet) : ['MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=15', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_teo.json'];
+				
+				container dataset
+				: StorageName="%LocalDataDir%/startanalyse_2_0/aanbod/TEO"
+				, StorageType="gdalwrite.vect"
+				, StorageReadOnly = "False"
+				{
+					unit<uint32> strat_05 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_06 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_07 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_08 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_09 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_10 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_11 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_12 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_13 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_14 := select_with_attr_by_cond(base/final, const(true, base/final));
+					unit<uint32> strat_15 := select_with_attr_by_cond(base/final, const(true, base/final));
+				}
+			}
+		}
+		
+
+		/*container WKO {
 			unit<uint32> WKO := SourceData/aanbod/WKO/WKO 
 			, storageName="%LocalDataDir%/startanalyse_2_0/aanbod/wko.geojson"
 			, storageType="gdalwrite.vect"
@@ -92,6 +228,6 @@ container Exports {
 				attribute<geography/wm_m> geometry (poly) := convert(SourceData/aanbod/WKO/TEO/geometry, geography/wm_m);
 				attribute<string> naam := SourceData/aanbod/WKO/TEO/NAAM;
 			}
-		}
+		}*/
 	}
 }

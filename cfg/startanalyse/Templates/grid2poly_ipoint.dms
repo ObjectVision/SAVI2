@@ -7,7 +7,8 @@ template grid2poly_ipoint
 	unit<ipoint> domain_grid;
 	unit<uint32> Zone;
 	attribute<Zone> zone_rel (domain_grid);
-	parameter<float64> simplifyFactor;
+	parameter<float64> simplifyBinnenFactor;
+	parameter<float64> simplifyBuitenFactor := 10.0;
 	// end case parameters
 
 	parameter<Zone> NoZone := #Zone + lowerbound(Zone); // outside study area indicator
@@ -210,7 +211,7 @@ template grid2poly_ipoint
 		}
 		attribute<geography/rdc_m_ipoint> geometry       (poly) := points2polygon(Point/geometry, Point/sequence_rel, Point/ordinal);
 		attribute<units/mm>            area                  := area(geometry, units/mm);
-		attribute<geography/rdc_m_ipoint> SimplifiedRing (poly) := bg_simplify_polygon(geometry, simplifyFactor);
+		attribute<geography/rdc_m_ipoint> SimplifiedRing (poly) := bg_simplify_polygon(geometry, simplifyBinnenFactor);
 		attribute<units/mm>          simplified_area       := area(SimplifiedRing, units/mm);
 	}
 
@@ -260,14 +261,17 @@ template grid2poly_ipoint
 			attribute<uint32>             ordinal      := union_data(., const(0, JFLineString), Point/ordinal+1, NrPoints+1);
 		}
 
+		attribute<uint8> NrRealZoneRings := sum(JFLS2/NrRealZoneRings, union_data(JFLS2, id(.), id(.))); 
+		
 		attribute<geography/rdc_m_ipoint> LineString               (arc) := points2sequence(Point/geometry, Point/sequence_rel, Point/ordinal);
 		attribute<geography/rdc_m_ipoint> LineStringWithConnectors (arc) := points2sequence(PointwithConnectors/geometry, PointwithConnectors/sequence_rel, PointwithConnectors/ordinal);
-		attribute<geography/rdc_m_ipoint> SimplifiedLineString     (arc) := bg_simplify_linestring(LineStringWithConnectors, simplifyFactor);
+		attribute<geography/rdc_m_ipoint> SimplifiedLineString     (arc) := bg_simplify_linestring(LineStringWithConnectors, (NrRealZoneRings < 2b) ? simplifyBuitenFactor : simplifyBinnenFactor);
 
 		unit<uint32>                SimplifiedPoints          := sequence2points(SimplifiedLineString);
 		attribute<uint32>           SimplifiedPointOrdinalMax := max(SimplifiedPoints/ordinal, SimplifiedPoints/Sequence_rel);
 		attribute<uint32>           NrSimplifiedPoints        := SimplifiedPointOrdinalMax+1;
 		attribute<SimplifiedPoints> SimplifiedPointBase       := value(cumulate(NrSimplifiedPoints) - NrSimplifiedPoints, SimplifiedPoints);
+		
 	}
 
 	unit<uint32>  JFLS2 := union_unit(JFLineString, JFLineString) {
@@ -275,6 +279,7 @@ template grid2poly_ipoint
 		attribute<uint32>       NrSimplifiedPoints := union_data(., JFLineString/NrSimplifiedPoints, JFLineString/NrSimplifiedPoints);
 		attribute<JunctionLink> Other_rel          := union_data(., JFLineString/last_JL_rel, JFLineString/firstJL_rel);
 		attribute<JFLS2_Point>  JFLS2_Point_Base   := cumulate(NrSimplifiedPoints) - NrSimplifiedPoints;
+		attribute<uint8>        NrRealZoneRings    := sum_uint8(ZoneRingJunction/ZoneRing_rel->IsRealRing, ZoneRingJunction/JFLS2_rel);
 	}
 	unit<uint32> JFLS2_Point := range(uint32, 0, sum(JFLS2/NrSimplifiedPoints)) {
 		attribute<JFLS2> JFLS2_rel := classify(ID(.), JFLS2/JFLS2_Point_Base);
@@ -303,6 +308,8 @@ template grid2poly_ipoint
 
 		attribute<geography/rdc_m_ipoint> geometry(poly) := points2polygon(ClosedZoneRingPoint/geometry, ClosedZoneRingPoint/ZoneRing_rel, ClosedZoneRingPoint/Ring_ordinal);
 		attribute<units/mm>            area           := area(geometry, units/mm);
+		
+		attribute<bool> IsRealRing := IsDefined(FirstZone_rel);
 	}
 
 	unit<uint32> ZoneRingJunction := range(uint32, 0, sum(ZoneRing/nrJunctions)) {

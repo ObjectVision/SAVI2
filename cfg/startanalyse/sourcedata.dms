@@ -123,6 +123,7 @@ container SourceData {
 	    unit<uint32> geothermie : StorageName="%SourceDataDir%/StartAnalyse/V1/aanbod/geothermie/technisch_pot_aardwarmte_ThermoGIS21_maart_2019_EBN.shp", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<geography/rdc_m> geometry (poly);
+			attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := convert(geometry, geography/rdc_m_ipoint);
 		}
 		
 		container puntbronnen {
@@ -137,17 +138,16 @@ container SourceData {
 			}	
 		}
 		
-		container WKO {
-			unit<uint32> WKO : StorageName="%SourceDataDir%/StartAnalyse/V1/aanbod/WKO/20180802_WKO_potentiecontour.shp", StorageType="gdal.vect", StorageReadOnly="True"
-			{
-				attribute<geography/rdc_m> geometry (poly);
-			}	
-			
-			unit<uint32> TEO : StorageName="%SourceDataDir%/StartAnalyse/V1/aanbod/WKO/20200211_TEO_potentiecontour.shp", StorageType="gdal.vect", StorageReadOnly="True"
-			{
-				attribute<geography/rdc_m> geometry (poly);
-			}	
-			
+		unit<uint32> WKO : StorageName="%SourceDataDir%/StartAnalyse/V1/aanbod/WKO/20180802_WKO_potentiecontour.shp", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<geography/rdc_m> geometry (poly);
+			attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := convert(geometry, geography/rdc_m_ipoint);
+		}	
+		
+		unit<uint32> TEO : StorageName="%SourceDataDir%/StartAnalyse/V1/aanbod/WKO/20200211_TEO_potentiecontour.shp", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<geography/rdc_m> geometry (poly);
+			attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := convert(geometry, geography/rdc_m_ipoint);
 		}
 	}
 }

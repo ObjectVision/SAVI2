@@ -271,8 +271,6 @@ container Templates {
 		}
 	
 		container grid := Templates/grid_template(grid_size, geography/rdc_mm_upper_left, geography/rdc_mm_lower_right);
-	
-		//container result := ='Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, /geography/gridsets/m_' + string(grid_size) + '/domain,' + string(factor) + '[units/m])';
 		container simplify := Templates/SimplifyPolygons_ipoint(SourceData/buurt2020, grid/domain, factor);
 	
 		unit<uint32> property : nrofrows = 1 {
@@ -702,21 +700,24 @@ container Templates {
 			}
 			
 			container all_zoom_levels {
-				parameter<units/m> min_f := 1000000[units/m];
-				parameter<units/mm> min_r := 100000[units/mm];
+				parameter<units/m> min_f := 10000[units/m];
+				parameter<units/mm> min_r := 10000[units/mm];
 				
 				parameter<units/m> low_f := 500[units/m]; 
 				parameter<units/mm> low_r := 10000[units/mm];
 				
-				parameter<units/m> mid_f := 250[units/m]; // 12
+				parameter<units/m> mid_f := 100[units/m];
 				parameter<units/mm> mid_r := 10000[units/mm];
+				
+				parameter<units/m> high_f := 3[units/m];
+				parameter<units/mm> high_r := 5000[units/mm];
 				
 				container z_5  := Templates/GetSimplifiedResults(min_r, min_f);
 				container z_6  := Templates/GetSimplifiedResults(low_r, low_f);
 				container z_7  := Templates/GetSimplifiedResults(low_r, low_f);
 				container z_8  := Templates/GetSimplifiedResults(mid_r, mid_f);
 				container z_9  := Templates/GetSimplifiedResults(mid_r, mid_f);
-				container z_10 := Templates/GetSimplifiedResults(mid_r, mid_f);
+				container z_10 := Templates/GetSimplifiedResults(high_r, high_f);
 				
 				parameter<string> GDAL_Driver : ['MVT'];
 				
