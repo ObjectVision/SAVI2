@@ -16,11 +16,13 @@ container Exports {
 	}
 	
 	container panden {
+		//ogr2ogr -f MVT ./test_tiles .\pand.gpkg -dsco MAX_SIZE=50000000 -dsco MAX_FEATURES=2000000 -dsco MINZOOM=12 -dsco MAXZOOM=18 -dsco COMPRESS=NO -dsco SIMPLIFICATION=0.0 -dsco SIMPLIFICATION_MAX_ZOOM=0.0 -dsco FORMAT=DIRECTORY -dsco CONF=C:/Users/Cicada/prj/SAVI2/data/pand.json
+		
 		unit<uint32> optionSet := range(uint32, 0, 9);
-		attribute<string> GDAL_Options (optionSet) : ['MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=12', 'MAXZOOM=18', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/pand.json'];
-		parameter<string> GDAL_Driver : ['MVT'];
+		//attribute<string> GDAL_Options (optionSet) : ['MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=12', 'MAXZOOM=18', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/pand.json'];
+		parameter<string> GDAL_Driver : ['GPKG'];
 		container pand
-		: StorageName="%LocalDataDir%/startanalyse_2_0/pand"
+		: StorageName="%LocalDataDir%/startanalyse_2_0/pand/pand.gpkg"
 		, StorageType="gdalwrite.vect"
 		, StorageReadOnly = "False"
 		{
@@ -209,25 +211,15 @@ container Exports {
 				}
 			}
 		}
-		
-
-		/*container WKO {
-			unit<uint32> WKO := SourceData/aanbod/WKO/WKO 
-			, storageName="%LocalDataDir%/startanalyse_2_0/aanbod/wko.geojson"
-			, storageType="gdalwrite.vect"
-			, StorageReadOnly = "False"
-			{
-				attribute<geography/wm_m> geometry (poly) := convert(SourceData/aanbod/WKO/WKO/geometry, geography/wm_m);
-			}
-			
-			unit<uint32> TEO := SourceData/aanbod/WKO/TEO
-			, storageName="%LocalDataDir%/startanalyse_2_0/aanbod/teo.geojson"
-			, storageType="gdalwrite.vect"
-			, StorageReadOnly = "False"
-			{
-				attribute<geography/wm_m> geometry (poly) := convert(SourceData/aanbod/WKO/TEO/geometry, geography/wm_m);
-				attribute<string> naam := SourceData/aanbod/WKO/TEO/NAAM;
-			}
-		}*/
+	}
+	
+	container klimaat {
+	    parameter<string> GDAL_Driver : ['MBTiles'];
+		unit<spoint> referentie_1981_2010 := SourceData/klimaat/referentie_1981_2010
+		,   StorageName = "%LocalDataDir%/startanalyse_2_0/klimaat/klimaat_1981_2010.mbtiles"
+		,   StorageType = "gdalwrite.grid" 
+		{    
+			attribute<uint8> GridData := uint8(SourceData/klimaat/referentie_1981_2010/GridData);
+		}
 	}
 }

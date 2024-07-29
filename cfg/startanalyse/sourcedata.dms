@@ -150,4 +150,15 @@ container SourceData {
 			attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := convert(geometry, geography/rdc_m_ipoint);
 		}
 	}
+	
+	container klimaat {
+		unit<spoint> referentie_1981_2010
+		:   StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/1981-2010/klimaat_1981_2010.tif" 
+		,   StorageType = "gdalwrite.grid" 
+		,   DialogData  = "geography/rdc_m"
+		{    
+			attribute<float32> GridData;
+			attribute<spoint> id := id(.); 
+		}
+	}
 }
