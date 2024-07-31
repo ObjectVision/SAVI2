@@ -682,8 +682,8 @@ container Templates {
 			attribute<units/Euro_per_Year> H16_Nationale_meerkosten                           := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]); // Euro/jaar
 			attribute<units/Euro_per_ton_CO2_per_yr> H17_Nationale_meerkosten_CO2             := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
 			attribute<units/Euro_per_woning_per_yr> H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
-			attribute<units/Euro_per_m3> H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
-			attribute<units/m3> H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
+			//attribute<units/Euro_per_m3> H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
+			//attribute<units/m3> H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
 			attribute<units/Euro_per_ton_CO2> G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
 			attribute<units/Euro_per_ton_CO2> G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G02_Nat_meerkost_CO2_Kost_Reductie_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
 			attribute<units/Euro_per_ton_CO2> G03_Nat_meerkost_CO2_En_Prijzen_Laag            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G03_Nat_meerkost_CO2_En_Prijzen_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
@@ -856,6 +856,41 @@ container Templates {
 				}
 			}
 		}
+	}
+	
+	Template export_strategy_downloads {
+		// begin case parameters
+		parameter<string> strategy_id;
+		parameter<string> filename;
+		// end case parameters
+
+		unit<uint32> export_set :== "select_with_attr_by_cond(Exports/strats/export_strat" + strategy_id + "/Buurtindicatoren, const(true, Exports/strats/export_strat" + strategy_id + "/Buurtindicatoren))" 
+		{
+			attribute<geography/rdc_m> geometry (poly) := rjoin(BU_CODE, SourceData/buurt2020/BU_CODE, SourceData/buurt2020/geometry);
+		}
+		
+		container gpkg {
+			unit<uint32> sa2020strat := select_with_attr_by_cond(export_set, const(true, export_set))
+			, StorageName     = "='%localDataDir%/startanalyse_2_0/downloads/' + filename + '.gpkg'"
+			, StorageType     = "gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container csv {
+			unit<uint32> sa2020strat := select_with_attr_by_cond(Exports/strats/export_strat1/Buurtindicatoren, const(true, Exports/strats/export_strat1/Buurtindicatoren))
+			, StorageName     = "='%localDataDir%/startanalyse_2_0/downloads/' + filename + '.csv'"
+			, StorageType     = "gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container geojson {
+			unit<uint32> sa2020strat := select_with_attr_by_cond(export_set, const(true, export_set))
+			, StorageName     = "='%localDataDir%/startanalyse_2_0/downloads/' + filename + '.geojson'"
+			, StorageType     = "gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		parameter<string> export_all := "ready", ExplicitSuppliers="gpkg/sa2020strat; csv/sa2020strat; geojson/sa2020strat";
 	}
 }
 

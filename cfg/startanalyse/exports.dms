@@ -222,4 +222,514 @@ container Exports {
 			attribute<uint8> GridData := uint8(SourceData/klimaat/referentie_1981_2010/GridData);
 		}
 	}
+	
+	container downloads {
+		container strats {
+			container S1 := Templates/export_strategy_downloads("1", "strat1");
+			container S2 := Templates/export_strategy_downloads("2", "strat2");
+			container S3 := Templates/export_strategy_downloads("3", "strat3");
+			container S4 := Templates/export_strategy_downloads("4", "strat4");
+			container S5 := Templates/export_strategy_downloads("5", "strat5");
+			container R19 := Templates/export_strategy_downloads("6", "ref19");
+			container R30 := Templates/export_strategy_downloads("7", "ref30");
+			container LN := Templates/export_strategy_downloads("8", "stratLN");
+			parameter<string> export_all := "ready", ExplicitSuppliers="S1/export_all; S2/export_all; S3/export_all; S4/export_all; S5/export_all; R19/export_all; R30/export_all; LN/export_all;";
+		}
+	}
+	
+	container meta {
+		container components {
+			parameter<string> m_header := '<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+			<div> 
+			<p>
+			<img id="@@@STRAT_ID@@@ Thumbnail" src="https://geo.asa2024.nl/symbolen/@@@STRAT_ID@@@.png" alt="Openen in Map Viewer">
+			</p>';
+			
+
+			
+			parameter<string> b_kaart_header := '<p> 
+													<h3>Beschrijving kaartlaag</h3>
+													<span>';
+													
+			parameter<string> b_kaart_common := 'Deze kaartlaag vermeldt voor <b>@@@STRAT_ID@@@</b> onder code @@@STRAT_LAYER@@@ </a>';
+			
+			parameter<string> b_kaart_H01 := 'hoe groot het energieverbruik per woningequivalent is. Het betreft hier het
+												totale energieverbruik in de woning, dus niet alleen het deel dat nodig is voor energie in de vorm
+												van warmte. @@@STRAT_H01@@@ omvat bijvoorbeeld ook energie in de vorm van elektriciteit, nodig voor
+												apparaten en licht.';
+												
+			parameter<string> b_kaart_H02 := 'hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt besteed aan ruimteverwarming. 
+											  Hierin is bijvoorbeeld ook de elektriciteit voor warmtepompen opgenomen.';
+											  
+			parameter<string> b_kaart_H03 := 'hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt gebruikt in de vorm van warm tapwater.';
+			
+			parameter<string> b_kaart_H04 := 'hoeveel van het energieverbruik in de vorm van elektriciteit (@@@STRAT_H01@@@) nodig is
+											  voor ventilatoren, welke ervoor zorgen dat de luchtkwaliteit in het gebouw voldoende van kwaliteit
+											  is. Alleen bij gebouwen met label B is hiervan sprake; bij gebouwen met schillabel D is er meer
+											  natuurlijke ventilatie.';
+		
+			parameter<string> b_kaart_H05 := 'het energieverbruik voor koeling (koude-levering). 
+        De koudevraag neemt in de komende jaren toe omdat de gemiddelde buitentemperatuur stijgt door klimaatverandering.
+        In woningen worden geen maatregelen verondersteld om aan die vraag te voldoen, omdat niet
+        duidelijk is welke maatregelen daarvoor zullen worden gekozen. Omdat in toekomstige
+        berekeningen wel te kunnen, is aanvullend onderzoek nodig. Het gaat hier dus om een
+        theoretische, functionele koudevraag, waar - in onze berekeningen - geen elektriciteitsvraag uit
+        voortkomt. Kortom, er worden nog geen maatregelen genomen om tot koude-levering te komen.
+        Uitzondering zijn varianten van S3 waar in de zomer koude wordt geleverd uit een WKO-systeem
+        als onderdeel van het warmtenet.
+<br><br>
+
+
+        In bepaalde typen bedrijfsgebouwen, zoals zorginstellingen, winkels en kantoren, worden wel
+        maatregelen genomen om te koelen. Dat is onderdeel van het normale bedrijfsproces. De kosten
+        van die maatregelen en het bijbehorende energieverbruik zijn opgenomen in de berekeningen.
+<br><br>
+
+
+        Buurten met een substantiële koudevraag naast een warmtevraag zijn geschikt voor toepassing
+        van WKO-systemen, mits de ondergrond daarvoor geschikt is. Gebouwen met een koudevraag
+        kunnen efficiënt gebruikmaken van warmtepompen die in beperkte mate ook voor koeling kunnen
+        worden ingezet. Dat stelt wel weer eisen aan het warmteafgiftesysteem in gebouwen:
+        vloerverwarming is meer geschikt dan LT-radiatoren.<br><br>';
+		
+			parameter<string> b_kaart_H06 := 'hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt gebruikt voor verlichting en
+											  apparaten. De elektriciteit nodig voor het gebruik van warmtepompen is hierin niet meegenomen.';
+			
+			parameter<string> b_kaart_H07 := 'het warmteverbruik per hectare. Het warmteverbruik per hectare is een maat voor de ruimtelijke dichtheid van de warmtevraag.
+												Buurten met een hoge warmtevraag per hectare zijn bijvoorbeeld meer geschikt voor warmtenetten, omdat de kosten per aansluiting van de benodigde infrastructuur in dergelijke buurten
+												relatief laag zijn.';
+												
+			parameter<string> b_kaart_H08 := 'hoeveel energie er gemiddeld per woningequivalent geleverd wordt. Het
+        betreft de levering van verschillende vormen van energiedragers (@@@STRAT_H09@@@ - @@@STRAT_H14@@@) aan de buurt ten
+        behoeve van de warmte- en elektriciteitsvoorziening van gebouwen. @@@STRAT_H08@@@ is inclusief
+        warmtebronnen, hulpketels, pompen van geothermie en warmteverlies van warmtenetten (ook als
+        dit plaatsvindt buiten de buurt) maar exclusief transport- en omzettingsverlies van de productie
+        van elektriciteit en gas binnen en buiten de buurt.';
+			parameter<string> b_kaart_H09 := 'hoeveel van de energielevering (@@@STRAT_H08@@@) bestaat uit aardgas. Aardgas wordt alleen in 2019 en in het referentiebeeld 2030 verbruikt; in de strategieën waar gas
+            gebruikt wordt, wordt aardgas immers volledig vervangen door duurzaam gas (@@@STRAT_H10@@@).';
+			parameter<string> b_kaart_H10 := 'hoeveel van de energielevering (@@@STRAT_H08@@@) uit duurzaam gas bestaat. In
+            strategieën S4 en S5 wordt hiervan gebruik gemaakt, evenals in strategie S2, waar duurzaam gas gebruikt wordt in de piekketels.';
+			parameter<string> b_kaart_H11 := 'bestaat uit de gemiddelde totale elektriciteitslevering in een buurt, uitgedrukt per woningequivalent per jaar. Het betreft de elektriciteit voor alle toepassingen in een buurt, dus voor
+            verwarming binnen gebouwen (bijvoorbeeld voor individuele warmtepompen), voor andere
+            toepassingen in gebouwen (zoals verlichting en apparaten) en voor verwarmingsinstallaties in de
+            buurt (zoals voor pompen in warmtenetten en collectieve warmtepompen).
+			
+			<br><br>
+			
+			            Deze informatie is nuttig voor discussies over de noodzaak om het elektriciteitsnet in een buurt te
+            verzwaren. Of verzwaren noodzakelijk is, is ook afhankelijk van de aanwezigheid van zonnecellen en oplaadstations voor elektrische voertuigen. Het verwachte elektriciteitsverbruik voor het
+            opladen van elektrische voertuigen is in de berekeningen echter niet meegenomen. Deze
+            indicator geeft ook een ordegrootte voor de omvang van de opgave voor hernieuwbare
+            elektriciteitsproductie. <br><br> 
+			            @@@STRAT_H11@@@ is altijd minstens net zo groot als @@@STRAT_H06@@@. Het verschil tussen @@@STRAT_H06@@@ en @@@STRAT_H11@@@
+            komt door het verbruik in de warmtevoorziening, bijvoorbeeld door warmtepompen.';
+			
+			parameter<string> b_kaart_H12 := 'hoeveel van de energielevering (@@@STRAT_H08@@@) van gebouwen uit een aansluiting op een
+            MT-net komt. In sommige gevallen komt dat niet alleen voor bij strategie S2, maar ook bij andere
+            strategieën als gebouwen nu al op een warmtenet zijn aangesloten.';
+			
+			parameter<string> b_kaart_H13 := 'hoeveel van de energielevering (@@@STRAT_H09@@@) van gebouwen komt uit aansluitingen op een LT-net plus de
+            warmte die gebouwen aan de WKOs hebben toegevoegd door koeling. ';
+			
+			parameter<string> b_kaart_H14 := 'hoeveel van de energielevering (@@@STRAT_H08@@@) voort komt uit benutting van omgevingswarmte, die met name wordt gebruikt
+            door warmtepompen, en het verlies van warmte aan de omgeving door warmteleidingen, wat
+            vooral gebeurt bij warmtenetten en gasketels. Door de benutting van de omgevingswarmte kan
+            dit getal een negatieve waarde hebben.';
+			
+			parameter<string> b_kaart_H15 := 'de CO2-uitstoot van de levering van aardgas, elektriciteit en warmte ten
+            behoeve van de warmtevoorziening van de gebouwde omgeving. De CO2-uitstoot van elektriciteit
+            ten behoeve van apparaten en verlichting wordt in dit kader niet meegeteld.';
+			
+			parameter<string> b_kaart_H16 := 'hoeveel 2030 jaarlijks extra kost ten opzichte van het
+            referentiebeeld in 2030. Deze indicator geeft eigenlijk aan hoeveel het jaarlijks per strategie kost
+            om de CO2-uitstoot tot nul te reduceren. De werkelijke kosten kunnen afwijken. Met behulp van
+            gevoeligheidsanalyses (paragraaf 4.2.5) geven we aan wat de gevolgen zijn voor de (extra)
+            nationale kosten als ontwikkelingen op het gebied van kostenreductie en energiekosten tot 2030
+            afwijken van de centrale veronderstellingen. De totale extra nationale kosten zijn uit te splitsen in
+            de kosten in de vorm van kapitaalslasten (K10) en in de vorm van variabele kosten (K18).';
+			parameter<string> b_kaart_H17 := 'de jaarlijkse extra nationale kosten per ton CO2-reductie.
+            Deze zijn berekend door de extra nationale kosten (@@@STRAT_H16@@@, zie vorige paragrafen) te delen door de
+            berekende CO2-reductie ten opzichte van de 2030 referentie in de buurt, zie CO2-uitstoot @@@STRAT_H15@@@ in
+            kolom 2030 ref. van tabel 5.2. Merk op dat deze waarde afwijkt van de CO2-uitstoot in het
+            startjaar, die bovenaan de set buurtabellen is vermeld. Dat verschil ontstaat door vermindering
+            van de warmtevraag als gevolg van de verwachte stijging van de buitentemperatuur vanaf het
+            startjaar. Deze indicator @@@STRAT_H17@@@ helpt strategieën en buurten te selecteren waar de CO2-uitstoot het
+            meest kosten-efficiënt is te reduceren. De uitkomsten voor H17 staan eveneens weergegeven in
+            figuur 2.2 (paragraaf 4.2.4).';
+			parameter<string> b_kaart_H18 := 'de jaarlijkse extra nationale kosten per woningequivalent
+            in 2030. Let wel: dat zijn níet de kosten die een woningeigenaar moet betalen. Een (nu nog onbekend) deel van die kosten wordt door anderen betaald, zoals energiebedrijven en verhuurders
+            (die investeringen doen) of overheden (die bijvoorbeeld subsidies verstrekken). Die kosten
+            kunnen wel geheel of gedeeltelijk worden doorberekend in tarieven voor energielevering of
+            belastingen aan eindverbruikers (maar dat blijft hier verder buiten beschouwing).
+            Het aantal woningequivalenten in een buurt is gelijk aan het aantal woningen in buurt plus het
+            aantal woningequivalenten van utiliteitsgebouwen in die buurt. Utiliteitsgebouwen worden
+            omgerekend in woningequivalenten door 130 m2 aan utiliteitsoppervlakte (bruto vloeroppervlak)
+            gelijk te stellen aan één woningequivalent.
+			
+			<br><br>
+			
+			            Door de kosten per woningequivalent te vermelden, kunnen de kosten van strategieën
+            gemakkelijker worden vergeleken met kosten in andere buurten. Verschillen tussen buurten
+            worden veroorzaakt door verschillen in de huidige samenstelling van de gebouwvoorraad
+            (aantallen en typen gebouwen, ruimtelijke spreiding) en door verschillen in isolatieniveaus en de
+            beschikbaarheid en nabijheid van energiebronnen.
+			
+			<br><br>
+			Voor de vergelijking van de kosten van strategieën binnen één buurt maakt het niet uit of deze
+            kosten worden uitgedrukt als Extra nationale kosten (@@@STRAT_H16@@@), Extra nationale kosten per ton CO2-
+            reductie (@@@STRAT_H17@@@) of Extra nationale kosten per woningequivalent (@@@STRAT_H18@@@). Elke strategie wordt
+            namelijk voor eenzelfde hoeveelheid woningequivalenten uitgevoerd. Het kan handig zijn om
+            kosten ook per woningequivalent weer te geven. Dat is namelijk een eenheid waar mensen zich
+            iets bij kunnen voorstellen: euro per gemiddelde woning. Zoals aangegeven, het is echter niet
+            zo dat de woningeigenaar die gemiddelde nationale kosten helemaal zelf moet betalen. Het gaat
+            hier om alle kosten van de strategie, zowel kosten aan een gebouw als kosten aan
+            energienetwerken buiten de gebouwen.
+			';
+												
+			parameter<string> b_kaart_calc_hoofd := 'Deze kaartlaag wordt berekend als ';
+			parameter<string> b_kaart_calc_sub := 'Deze kaartlaag is onderdeel van de berekening van ';
+			parameter<string> b_kaart_calc_common := '@@@STRAT_H01@@@ := 
+														   @@@STRAT_H02@@@(ruimteverwarming) + 
+														   @@@STRAT_H03@@@(warm tapwater) +
+														   @@@STRAT_H04@@@(ventilatie) +
+														   @@@STRAT_H05@@@(koude) + 
+														   @@@STRAT_H06@@@(apparaten en licht). @@@STRAT_H01@@@ is exclusief de omgevingswarmte die in de gebouwen wordt
+															benut (zie @@@STRAT_H08@@@(energielevering) en @@@STRAT_H14@@@(energielevering overig)). Tenslotte zijn @@@STRAT_H01@@@(energieverbruik) en @@@STRAT_H08@@@(energielevering) altijd gelijk
+															aan elkaar.';										
+			
+													
+			parameter<string> b_kaart_footer := '   </span>
+												 </p>';
+			
+			
+			
+			
+			
+			parameter<string> rel_header := '    <p>
+													<h3>Gerelateerde kaartlagen</h3>
+													<span>
+														<ul class="list-group">';
+														parameter<string> rel_footer := '              </ul>
+													</span>
+												</p>';
+			parameter<string> rel_items := '<li class="list-group-item d-flex justify-content-between align-items-start">
+												<div class="ms-2 me-auto">
+												  <div class="fw-bold">
+													  <img style="max-width:10%;" class="inline-block" src="https://geo.asa2024.nl/symbolen/@@@STRAT_ID@@@.png" alt="@@@STRAT_ID@@@ thumpnail">
+													  @@@TITLE@@@
+												  </div>
+												</div>
+												<span class="material-icons"><a class="text-decoration-none link-dark" href="@@@LAYER_LINK@@@" target="_blank">add_circle_outline</a></span>
+											  </li>';
+			
+			parameter<string> b_S1 := '<p> 
+										  <h3>Beschrijving strategie 1</h3>
+											<span>
+												Strategie 1 is een all-electric strategie met twee varianten: S1a en S1b.
+											</span>
+										</p>
+											
+										<p>
+											<h5>Strategie S1a</h5>
+											<span>
+												Bij variant S1a zorgt een combiwarmtepomp voor de verwarming van het gebouw. De combiwarmtepomp onttrekt daarvoor warmte aan de buitenlucht. De gebouwen worden geïsoleerd tot schillabel B. De combiwarmtepomp waardeert de warmte op individueel gebouwniveau op tot het gewenste temperatuurniveau voor ruimteverwarming en warm tapwater. Om te kunnen voorzien in de warm tapwatervraag wordt daarnaast een buffervat geplaatst. De standaardradiatoren worden vervangen door lagetemperatuurradiatoren. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+											</span>
+										</p>
+
+										<p>
+											<h5>Strategie S1b</h5>
+											<span>
+												Bij variant S1b zorgt een combiwarmtepomp voor de verwarming van het gebouw. De combiwarmtepomp onttrekt daarvoor warmte aan de bodem. De gebouwen worden geïsoleerd tot schillabel B. De combiwarmtepomp waardeert de warmte op individueel gebouwniveau op tot het gewenste temperatuurniveau voor ruimteverwarming en warm tapwater. Om te kunnen voorzien in de warm tapwatervraag wordt daarnaast een buffervat geplaatst. De standaardradiatoren worden vervangen door lagetemperatuurradiatoren. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+											</span> 
+										</p>';
+										
+			parameter<string> b_S2 := '    <p> 
+       <h3>Beschrijving strategie 2</h3>
+										<span>
+											Strategie 2 is een strategie op basis van een warmtenet met een midden- tot hogetemperatuurbron. Deze strategie heeft zes varianten: S2a, S2b, S2c, S2d, S2e, S2f.
+										</span>
+									</p>
+										
+									<p>
+										<h5>Strategie S2a</h5>
+										<span>
+											Bij variant S2a wordt het gebouw verwarmd met een warmtenet gevoed door warmtebronnen met warmte van 70°C of hoger, zoals bijvoorbeeld restwarmte van de industrie. De gebouwen worden tot schillabel B geïsoleerd. Met dit isolatieniveau is de warmte met het temperatuurniveau van 70°C direct geschikt voor zowel ruimteverwarming als warm tapwater. Hierdoor hoeven de standaardradiatoren niet aangepast te worden. Het elektriciteitsnet hoeft voor deze variant niet verzwaard te worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd..
+										</span>
+									</p>
+
+									<p>
+										<h5>Strategie S2b</h5>
+										<span>
+											Bij variant S2b wordt het gebouw verwarmd met een warmtenet gevoed door geothermiebronnen die aardwarmte leveren van 70°C of hoger. Niet overal in Nederland is bekend of de ondergrond daarvoor geschikt is. In deze variant wordt alleen gebruikgemaakt van gebieden waar voldoende informatie over de ondergrond beschikbaar is.* De gebouwen worden tot schillabel B geïsoleerd. Met dit isolatieniveau is de warmte met het temperatuurniveau van 70°C direct geschikt voor zowel ruimteverwarming als warm tapwater. Hierdoor hoeven de standaardradiatoren niet aangepast te worden. Het elektriciteitsnet hoeft voor deze variant niet verzwaard te worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+										</span> 
+									</p>
+
+									<p>
+									  <h5>Strategie S2c</h5>
+									  <span>
+										Bij variant S2c wordt het gebouw verwarmd met een warmtenet gevoed door geothermiebronnen die aardwarmte leveren van 70°C of hoger. In deze variant worden ook gebieden meegenomen in de berekening waarvan niet bekend is of de ondergrond geschikt is voor geothermie.* De gebouwen worden tot schillabel B geïsoleerd. Met dit isolatieniveau is de warmte met het temperatuurniveau van 70°C direct geschikt voor zowel ruimteverwarming als warm tapwater. Hierdoor hoeven de standaardradiatoren niet aangepast te worden. Het elektriciteitsnet hoeft voor deze variant niet verzwaard te worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+									  </span> 
+									</p>
+
+									<p>
+									  <h5>Strategie S2d</h5>
+									  <span>
+										  Bij variant S2d wordt het gebouw verwarmd met een warmtenet gevoed door warmtebronnen met warmte van 70°C of hoger, zoals bijvoorbeeld restwarmte van de industrie. De gebouwen worden tot schillabel D geïsoleerd. Met dit isolatieniveau is de warmte met het temperatuurniveau van 70°C direct geschikt voor zowel ruimteverwarming als warm tapwater. Hierdoor hoeven de standaardradiatoren niet aangepast te worden. Het elektriciteitsnet hoeft voor deze variant niet verzwaard te worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+									  </span> 
+									</p>
+
+									<p>
+									  <h5>Strategie S2e</h5>
+									  <span>
+										  Bij variant S2e wordt het gebouw verwarmd met een warmtenet gevoed door geothermiebronnen die aardwarmte leveren van 70°C of hoger. Niet overal in Nederland is bekend of de ondergrond daarvoor geschikt is. In deze variant wordt alleen gebruikgemaakt van gebieden waar voldoende informatie over de ondergrond beschikbaar is.* De gebouwen worden tot schillabel D geïsoleerd. Met dit isolatieniveau is de warmte met het temperatuurniveau van 70°C direct geschikt voor zowel ruimteverwarming als warm tapwater. Hierdoor hoeven de standaardradiatoren niet aangepast te worden. Het elektriciteitsnet hoeft voor deze variant niet verzwaard te worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+									  </span> 
+									</p>
+
+									<p>
+									  <h5>Strategie S2f</h5>
+									  <span>
+										  Bij variant S2f wordt het gebouw verwarmd met een warmtenet gevoed door geothermiebronnen die aardwarmte leveren van 70°C of hoger. In deze variant worden ook gebieden meegenomen in de berekening waarvan niet bekend is of de ondergrond geschikt is voor geothermie.* De gebouwen worden tot schillabel D geïsoleerd. Met dit isolatieniveau is de warmte met het temperatuurniveau van 70°C direct geschikt voor zowel ruimteverwarming als warm tapwater. Hierdoor hoeven de standaardradiatoren niet aangepast te worden. Het elektriciteitsnet hoeft voor deze variant niet verzwaard te worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+									  </span> 
+									</p>';
+									
+			parameter<string> b_S3 := '    <p> 
+										  <h3>Beschrijving strategie 3</h3>
+										   <span>
+											Strategie 3 is een strategie op basis van een warmtenet met lagetemperatuurbron. Deze strategie heeft acht varianten: S3a, S3b, S3c, S3d, S3e, S3f, S3g.
+										   </span>
+									   </p>
+										   
+									   <p>
+										   <h5>Strategie S3a</h5>
+										   <span>
+											Bij variant a wordt het gebouw verwarmd met een warmtenet gevoed met lage temperatuurwarmte bronnen, bijvoorbeeld restwarmte uit een datacenter. In deze variant wordt de berekening gemaakt op basis van de veronderstelling dat (een deel van) de buurt overgaat op het warmtenet. Voor de gebouwen die niet overgaan op het warmtenet, wordt gekeken naar een elektrische warmteoplossing zoals beschreven in S1. Voor gebouwen die wel op het warmtenet zitten, wordt de warmte uit deze bronnen aangeleverd op een temperatuurniveau van 30°C. De gebouwen worden tot schillabel B geïsoleerd. Binnen het gebouw wordt een combiwarmtepomp geplaatst, die de warmte op individueel gebouwniveau opwaardeert tot het gewenste temperatuurniveau voor ruimteverwarming en warm tapwater. De standaardradiatoren worden vervangen door lagetemperatuurradiatoren. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+										   </span>
+									   </p>
+
+									   <p>
+										   <h5>Strategie S3b</h5>
+										   <span>
+											Bij variant b wordt het gebouw verwarmd met een warmtenet gevoed met lagetemperatuurwarmtebronnen, bijvoorbeeld restwarmte uit een datacenter. In deze variant wordt de berekening gemaakt op basis van de veronderstelling dat (een deel van) de buurt overgaat op het warmtenet. Voor de gebouwen die niet overgaan op het warmtenet, wordt gekeken naar een elektrische warmteoplossing zoals beschreven in S1. Voor gebouwen die wel op het warmtenet zitten wordt de warmte met een collectieve warmtepomp opgewaardeerd tot 70°C voordat het aan de gebouwen wordt geleverd. De gebouwen worden tot schillabel B geïsoleerd. Met dit isolatieniveau is de warmte met het temperatuurniveau van 70°C direct geschikt voor zowel ruimteverwarming als warm tapwater. Hierdoor hoeven de standaardradiatoren niet aangepast te worden. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+										   </span> 
+									   </p>
+
+									   <p>
+										 <h5>Strategie S3c</h5>
+										 <span>
+										  Bij variant c wordt het gebouw verwarmd met een warmtenet gevoed met zeer zeer lagetemperatuurwarmtebronnen (ZLT), die o.a. gebruikmaakt van warmteoverschot uit gebouwen. Deze warmte wordt opgeslagen in een warmte-koudeopslag (WKO). De berekening in deze variant wordt gemaakt op basis van de veronderstelling dat de hele buurt overgaat op het warmtenet. Deze bron levert zeer lage temperatuurwarmte (15°C), die naar 70°C wordt opgewaardeerd door een collectieve warmtepomp. De gebouwen worden tot schillabel B geïsoleerd. Met dit isolatieniveau is de warmte met het temperatuurniveau van 70°C direct geschikt voor zowel ruimteverwarming als warm tapwater. Hierdoor hoeven de standaardradiatoren niet aangepast te worden. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+										 </span> 
+									   </p>
+
+									   <p>
+										 <h5>Strategie S3d</h5>
+										 <span>
+										  Bij variant d wordt het gebouw verwarmd met een warmtenet gevoed met zeer lagetemperatuurwarmtebronnen (ZLT), die o.a. gebruikmaakt van warmteoverschot uit gebouwen. Deze warmte wordt opgeslagen in een warmte-koudeopslag (WKO). De berekening in deze variant wordt gemaakt op basis van de veronderstelling dat (een deel van) de buurt overgaat op het warmtenet. Voor de gebouwen die niet overgaan op het warmtenet, wordt gekeken naar een elektrische warmteoplossing zoals beschreven in S1. Voor gebouwen die wel op het warmtenet zitten wordt de zeer lagetemperatuurwarmte (15°C) opgewaardeerd tot 50°C met een collectieve warmtepomp voordat het aan de gebouwen wordt geleverd. De gebouwen worden tot schillabel B geïsoleerd. Met dit isolatieniveau is de warmte met het temperatuurniveau van 50°C direct geschikt voor ruimteverwarming. Voor de tapwatervoorziening wordt in elk gebouw een individuele boosterwarmtepomp geplaatst. De standaardradiatoren worden vervangen door lagetemperatuurradiatoren. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+										 </span> 
+									   </p>
+
+									   <p>
+										 <h5>Strategie S3e</h5>
+										 <span>
+											 Bij variant S3e wordt het gebouw verwarmd met een warmtenet gevoed met zeer lagetemperatuurwarmtebronnen (ZLT). Naast de warmte uit gebouwen wordt in deze variant in de zomer warm water gewonnen uit oppervlaktewater zoals rivieren en plassen. Deze warmte wordt opgeslagen in een warmte-koudeopslag (WKO). In deze variant wordt de berekening gemaakt op basis van de veronderstelling dat (een deel van) de buurt overgaat op het warmtenet. Voor de gebouwen die niet overgaan op het warmtenet, wordt gekeken naar een elektrische warmteoplossing zoals beschreven in S1. Voor gebouwen die wel op het warmtenet zitten wordt de zeer lagetemperatuurwarmte (15°C) opgewaardeerd tot 70°C met een collectieve warmtepomp voordat het aan de gebouwen wordt geleverd. De gebouwen worden tot schillabel B geïsoleerd. Met dit isolatieniveau is de warmte met het temperatuurniveau van 70°C direct geschikt voor zowel ruimteverwarming als warm tapwater. Hierdoor hoeven de standaardradiatoren niet aangepast te worden. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+										 </span> 
+									   </p>
+
+									   <p>
+										 <h5>Strategie S3f</h5>
+										 <span>
+											 Bij variant S3f wordt het gebouw verwarmd met een warmtenet gevoed met lagetemperatuurwarmtebronnen, bijvoorbeeld restwarmte uit een datacenter. In deze variant wordt de berekening gemaakt op basis van de veronderstelling dat (een deel van) de buurt overgaat op het warmtenet. Voor de gebouwen die niet overgaan op het warmtenet, wordt gekeken naar een elektrische warmteoplossing zoals beschreven in S1. Voor gebouwen die wel op het warmtenet zitten wordt de warmte met een collectieve warmtepomp opgewaardeerd tot 70°C voordat het aan de gebouwen wordt geleverd. De gebouwen worden tot schillabel D geïsoleerd. Met dit isolatieniveau is de warmte met het temperatuurniveau van 70°C direct geschikt voor zowel ruimteverwarming als warm tapwater. Hierdoor hoeven de standaardradiatoren niet aangepast te worden. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+										 </span> 
+									   </p>
+
+									   <p>
+										<h5>Strategie S3g</h5>
+										<span>
+											Bij variant S3g wordt het gebouw verwarmd met een warmtenet gevoed met zeer zeer lagetemperatuurwarmtebronnen (ZLT), die o.a. gebruikmaakt van warmteoverschot uit gebouwen. Deze warmte wordt opgeslagen in een warmte-koudeopslag (WKO). De berekening in deze variant wordt gemaakt op basis van de veronderstelling dat de hele buurt overgaat op het warmtenet. Deze bron levert zeer lagetemperatuurwarmte (15°C), die naar 70°C wordt opgewaardeerd door een collectieve warmtepomp. De gebouwen worden tot schillabel D geïsoleerd. Met dit isolatieniveau is de warmte met het temperatuurniveau van 70°C direct geschikt voor zowel ruimteverwarming als warm tapwater. Hierdoor hoeven de standaardradiatoren niet aangepast te worden. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+										</span> 
+									  </p>
+
+									  <p>
+										<h5>Strategie S3h</h5>
+										<span>
+											Bij variant S3h wordt het gebouw verwarmd met een warmtenet gevoed met zeer lagetemperatuurwarmtebronnen (ZLT). Naast de warmte uit gebouwen wordt in deze variant in de zomer warm water gewonnen uit oppervlaktewater zoals rivieren en plassen. Deze warmte wordt opgeslagen in een warmtekoudeopslag (WKO). In deze variant wordt de berekening gemaakt op basis van de veronderstelling dat (een deel van) de buurt overgaat op het warmtenet. Voor de gebouwen die niet overgaan op het warmtenet, wordt gekeken naar een elektrische warmteoplossing zoals beschreven in S1. Voor gebouwen die wel op het warmtenet zitten wordt de zeer lagetemperatuurwarmte (15°C) met een collectieve warmtepomp opgewaardeerd tot 70°C voordat het aan de gebouwen wordt geleverd. De gebouwen worden tot schillabel D geïsoleerd. Met dit isolatieniveau is de warmte met het temperatuurniveau van 70°C direct geschikt voor zowel ruimteverwarming als warm tapwater. Hierdoor hoeven de standaardradiatoren niet aangepast te worden. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+										</span> 
+									  </p>';
+									  
+			parameter<string> b_S4 := ' <p> 
+											<h3>Beschrijving strategie 4</h3>
+											  <span>
+												 Strategie 4 is een strategie op basis van groengas. Deze strategie heeft vier varianten: 4a, 4b, 4c, 4d.
+											  </span>
+										  </p>
+											  
+										  <p>
+											  <h5>Strategie S4a</h5>
+											  <span>
+												  Bij variant S4a worden de gebouwen tot schillabel B geïsoleerd. Binnen het gebouw wordt een hybride warmtepomp geplaatst, die warmte levert tot het gewenste temperatuurniveau voor ruimteverwarming en warm tapwater. De standaardradiatoren hoeven niet te worden aangepast. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Afhankelijk van de staat van het gasnet moet deze mogelijk aangepast worden. De levering van aardgas wordt vervangen door de levering van groengas.
+											  </span>
+										  </p>
+
+										  <p>
+											  <h5>Strategie S4b</h5>
+											  <span>
+												  Bij variant S4b worden de gebouwen tot schillabel D geïsoleerd. Binnen het gebouw wordt een hybride warmtepomp geplaatst, die warmte levert tot het gewenste temperatuurniveau voor ruimteverwarming en warm tapwater. De standaardradiatoren hoeven niet te worden aangepast. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Afhankelijk van de staat van het gasnet moet deze mogelijk aangepast worden. De levering van aardgas wordt vervangen door de levering van groengas.
+											  </span> 
+										  </p>
+
+										  <p>
+											<h5>Strategie S4c</h5>
+											<span>
+												Bij variant S4c zorgt een combiwarmtepomp voor de verwarming van het gebouw. De combiwarmtepomp onttrekt daarvoor warmte aan de buitenlucht. De gebouwen worden geïsoleerd tot schillabel B. De combiwarmtepomp waardeert de warmte op individueel gebouwniveau op tot het gewenste temperatuurniveau voor ruimteverwarming en warm tapwater. Om te kunnen voorzien in de warm tapwatervraag wordt daarnaast een buffervat geplaatst. De standaardradiatoren worden vervangen door lagetemperatuurradiatoren. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Ten slotte worden het gasnet en alle gasaansluitingen verwijderd.
+											</span>
+										</p>
+
+										<p>
+											<h5>Strategie S4d</h5>
+											<span>
+												Bij variant S4d worden de gebouwen tot schillabel D geïsoleerd. Binnen het gebouw blijft de huidige HR-ketel behouden die, net als in de huidige situatie, warmte levert tot het gewenste temperatuurniveau voor ruimteverwarming en warm tapwater. De standaardradiatoren hoeven niet te worden aangepast. Het elektriciteitsnet hoeft voor deze variant niet verzwaard te worden. Afhankelijk van de staat van het gasnet moet deze mogelijk aangepast worden. De levering van aardgas wordt vervangen door de levering van groengas.
+											</span> 
+										</p>';
+			parameter<string> b_S5 := '<p> 
+		  <h3>Beschrijving strategie 5</h3>
+			<span>
+			  Strategie 5 is een strategie op basis van waterstof. Deze strategie heeft vier varianten: 5a, 5b, 5c, 5d.
+			</span>
+		</p>
+			
+		<p>
+			<h5>Strategie S5a</h5>
+			<span>
+				Bij variant S5a worden gebouwen tot schillabel B geïsoleerd. Binnen het gebouw wordt een hybride warmtepomp geplaatst, die geschikt is voor waterstof. De hybride warmtepomp levert warmte tot het gewenste temperatuurniveau voor ruimteverwarming en warm tapwater. De standaardradiatoren hoeven niet te worden aangepast. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Afhankelijk van de staat van het gasnet moet deze mogelijk aangepast worden. De levering van aardgas wordt vervangen door de levering van waterstof.
+			</span>
+		</p>
+
+		<p>
+			<h5>Strategie S5b</h5>
+			<span>
+				Bij variant S5b worden gebouwen tot schillabel B geïsoleerd. Binnen het gebouw moet de huidige HR-ketel aangepast worden, zodat die geschikt is voor waterstof. De HR-ketel levert, net als in de huidige situatie, warmte tot het gewenste temperatuurniveau voor ruimteverwarming en warm tapwater. De standaardradiatoren hoeven niet te worden aangepast. Het elektriciteitsnet hoeft voor deze variant niet verzwaard te worden. Afhankelijk van de staat van het gasnet moet deze mogelijk aangepast worden. De levering van aardgas wordt vervangen door de levering van waterstof.
+			</span> 
+		</p>
+
+		<p>
+		  <h5>Strategie S5c</h5>
+		  <span>
+			  Bij variant S5c worden gebouwen tot schillabel D geïsoleerd. Binnen het gebouw wordt een hybride warmtepomp geplaatst, die geschikt is voor waterstof. De hybride warmtepomp levert warmte tot het gewenste temperatuurniveau voor ruimteverwarming en warm tapwater. De standaardradiatoren hoeven niet te worden aangepast. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Afhankelijk van de staat van het gasnet moet deze mogelijk aangepast worden. De levering van aardgas wordt vervangen door de levering van waterstof.
+		  </span>
+		</p>
+
+		<p>
+		  <h5>Strategie S5d</h5>
+		  <span>
+			  Bij variant S5d worden gebouwen tot schillabel D geïsoleerd. Binnen het gebouw wordt een hybride warmtepomp geplaatst, die geschikt is voor waterstof. De hybride warmtepomp levert warmte tot het gewenste temperatuurniveau voor ruimteverwarming en warm tapwater. De standaardradiatoren hoeven niet te worden aangepast. Het elektriciteitsnet moet voor deze variant mogelijk verzwaard worden. Afhankelijk van de staat van het gasnet moet deze mogelijk aangepast worden. De levering van aardgas wordt vervangen door de levering van waterstof.
+
+		  </span> 
+		</p>';
+					parameter<string> b_R19R30 := '<p> 
+		  <h3>Beschrijving referentiebeelden R19 en R30</h3>
+			<span>
+			  De SA-2020 maakt gebruik van twee referentiebeelden: één voor de huidige situatie (startjaar 2019)
+			  en één voor de referentiesituatie in 2030. De kosten van de aardgasvrije strategieën, maar ook de
+			  kosten van de huidige situatie (2019) worden afgezet ten opzichte van het referentiebeeld 2030. Dit
+			  noemen wij de extra nationale kosten van strategieën in 2030 (of van de huidige situatie in 2019)
+			  t.o.v. het referentiebeeld 2030.
+			</span>
+		</p>';
+			
+			
+			parameter<string> footer := '<footer class="container-fluid footer">
+										   <p>Metadata op basis van <a href="https://kaartviewer.asa2024.nl/app/map/main/101?layerIds=275" target="_blank">Startanalyse aardgasvrije buurten</a> (gemeenterapport),
+											 <a href="https://www.pbl.nl/sites/default/files/downloads/pbl-2022-achtergrondrapport-startanalyse-aardgasvrije-buurten-2020-achtergrondrapport_4917.pdf" target="_blank">Startanalyse aardgasvrije buurten</a> (achtergrondrapport) en 
+											 <a href="https://expertisecentrumwarmte.nl/themas/de+leidraad/infographic+startanalyse/default.aspx" target="_blank">Expertise Centrum Warmte</a>
+										   </p>
+										 </footer>';
+										 
+			parameter<string> m_footer := '</div>';
+		}
+
+		container LN {
+			container H01 {
+				
+				container gerelateerde_kaartlagen
+				{
+					parameter<string> S1_t := components/rel_items;
+					parameter<string> S1_t_1 := replace(S1_t, "@@@STRAT_ID@@@", "S1");
+					parameter<string> S1_t_2 := replace(S1_t_1, "@@@LAYER_LINK@@@", rjoin("S1_H01", SourceData/meta/Links/key, SourceData/meta/Links/layer));
+					parameter<string> S1 := replace(S1_t_2, "@@@TITLE@@@", rjoin("S1_H01", SourceData/meta/Links/key, SourceData/meta/Links/title));
+					
+					parameter<string> S2_t := components/rel_items;
+					parameter<string> S2_t_1 := replace(S2_t, "@@@STRAT_ID@@@", "S2");
+					parameter<string> S2_t_2 := replace(S2_t_1, "@@@LAYER_LINK@@@", rjoin("S2_H01", SourceData/meta/Links/key, SourceData/meta/Links/layer));
+					parameter<string> S2 := replace(S2_t_2, "@@@TITLE@@@", rjoin("S2_H01", SourceData/meta/Links/key, SourceData/meta/Links/title));
+					
+					parameter<string> S3_t := components/rel_items;
+					parameter<string> S3_t_1 := replace(S3_t, "@@@STRAT_ID@@@", "S3");
+					parameter<string> S3_t_2 := replace(S3_t_1, "@@@LAYER_LINK@@@", rjoin("S3_H01", SourceData/meta/Links/key, SourceData/meta/Links/layer));
+					parameter<string> S3 := replace(S3_t_2, "@@@TITLE@@@", rjoin("S3_H01", SourceData/meta/Links/key, SourceData/meta/Links/title));
+					
+					parameter<string> S4_t := components/rel_items;
+					parameter<string> S4_t_1 := replace(S4_t, "@@@STRAT_ID@@@", "S4");
+					parameter<string> S4_t_2 := replace(S4_t_1, "@@@LAYER_LINK@@@", rjoin("S4_H01", SourceData/meta/Links/key, SourceData/meta/Links/layer));
+					parameter<string> S4 := replace(S4_t_2, "@@@TITLE@@@", rjoin("S4_H01", SourceData/meta/Links/key, SourceData/meta/Links/title));
+					
+					parameter<string> S5_t := components/rel_items;
+					parameter<string> S5_t_1 := replace(S5_t, "@@@STRAT_ID@@@", "S5");
+					parameter<string> S5_t_2 := replace(S5_t_1, "@@@LAYER_LINK@@@", rjoin("S5_H01", SourceData/meta/Links/key, SourceData/meta/Links/layer));
+					parameter<string> S5 := replace(S5_t_2, "@@@TITLE@@@", rjoin("S5_H01", SourceData/meta/Links/key, SourceData/meta/Links/title));
+					
+					parameter<string> R19_t := components/rel_items;
+					parameter<string> R19_t_1 := replace(R19_t, "@@@STRAT_ID@@@", "R19");
+					parameter<string> R19_t_2 := replace(R19_t_1, "@@@LAYER_LINK@@@", rjoin("R19_H01", SourceData/meta/Links/key, SourceData/meta/Links/layer));
+					parameter<string> R19 := replace(R19_t_2, "@@@TITLE@@@", rjoin("R19_H01", SourceData/meta/Links/key, SourceData/meta/Links/title));
+					
+					parameter<string> R30_t := components/rel_items;
+					parameter<string> R30_t_1 := replace(R30_t, "@@@STRAT_ID@@@", "R30");
+					parameter<string> R30_t_2 := replace(R30_t_1, "@@@LAYER_LINK@@@", rjoin("R30_H01", SourceData/meta/Links/key, SourceData/meta/Links/layer));
+					parameter<string> R30 := replace(R30_t_2, "@@@TITLE@@@", rjoin("R30_H01", SourceData/meta/Links/key, SourceData/meta/Links/title));
+					
+					parameter<string> samen := S1 + S2 + S3 + S4 + S5 + R19 + R30;
+				}
+				
+				parameter<string> final_t :=   components/m_header
+											 + components/b_kaart_header
+											 + components/b_kaart_common
+											 + components/b_kaart_H01
+											 + components/b_kaart_calc_hoofd
+											 + components/b_kaart_calc_common
+											 + components/b_kaart_footer
+											 + components/rel_header
+											 + gerelateerde_kaartlagen/samen
+											 + components/rel_footer
+											 + components/b_S1
+											 + components/b_S2
+											 + components/b_S3
+											 + components/b_S4
+											 + components/b_S5
+											 + components/b_R19R30
+											 + components/footer
+											 + components/m_footer;
+											 
+				parameter<string> final_t_0 := replace(final_t, "@@@STRAT_ID@@@", "LN");
+				parameter<string> final_t_1 := replace(final_t_0, "@@@STRAT_LAYER@@@", "@@@STRAT_H01@@@");
+				parameter<string> final_t_2 := replace(final_t_1, "@@@STRAT_H01@@@", "<a href=" + rjoin("LN_H01", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H01</a>');
+				parameter<string> final_t_3 := replace(final_t_2, "@@@STRAT_H02@@@", "<a href=" + rjoin("LN_H02", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H02</a>');
+				parameter<string> final_t_4 := replace(final_t_3, "@@@STRAT_H03@@@", "<a href=" + rjoin("LN_H03", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H03</a>');
+				parameter<string> final_t_5 := replace(final_t_4, "@@@STRAT_H04@@@", "<a href=" + rjoin("LN_H04", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H04</a>');
+				parameter<string> final_t_6 := replace(final_t_5, "@@@STRAT_H05@@@", "<a href=" + rjoin("LN_H05", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H05</a>');
+				parameter<string> final_t_7 := replace(final_t_6, "@@@STRAT_H06@@@", "<a href=" + rjoin("LN_H06", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H06</a>');
+				parameter<string> final_t_8 := replace(final_t_7, "@@@STRAT_H07@@@", "<a href=" + rjoin("LN_H07", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H07</a>');
+				parameter<string> final_t_9 := replace(final_t_8, "@@@STRAT_H08@@@", "<a href=" + rjoin("LN_H08", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H08</a>');
+				parameter<string> final_t_10 := replace(final_t_9, "@@@STRAT_H09@@@", "<a href=" + rjoin("LN_H09", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H09</a>');
+				parameter<string> final_t_11 := replace(final_t_10, "@@@STRAT_H10@@@", "<a href=" + rjoin("LN_H10", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H10</a>');
+				parameter<string> final_t_12 := replace(final_t_11, "@@@STRAT_H11@@@", "<a href=" + rjoin("LN_H11", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H11</a>');
+				parameter<string> final_t_13 := replace(final_t_12, "@@@STRAT_H12@@@", "<a href=" + rjoin("LN_H12", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H12</a>');
+				parameter<string> final_t_14 := replace(final_t_13, "@@@STRAT_H13@@@", "<a href=" + rjoin("LN_H13", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H13</a>');
+				parameter<string> final_t_15 := replace(final_t_14, "@@@STRAT_H14@@@", "<a href=" + rjoin("LN_H14", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H14</a>');
+				parameter<string> final_t_16 := replace(final_t_15, "@@@STRAT_H15@@@", "<a href=" + rjoin("LN_H15", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H15</a>');
+				parameter<string> final_t_17 := replace(final_t_16, "@@@STRAT_H16@@@", "<a href=" + rjoin("LN_H16", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H16</a>');
+				parameter<string> final_t_18 := replace(final_t_17, "@@@STRAT_H17@@@", "<a href=" + rjoin("LN_H17", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H17</a>');
+				parameter<string> final_t_19 := replace(final_t_18, "@@@STRAT_H18@@@", "<a href=" + rjoin("LN_H18", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H18</a>'), StorageName = "%LocalDataDir%/startanalyse_2_0/meta/LN_H01.html"
+																								, StorageType = "str";
+			}
+		}
+	}
 }
