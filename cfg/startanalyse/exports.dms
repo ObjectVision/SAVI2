@@ -251,24 +251,24 @@ container Exports {
 													<h3>Beschrijving kaartlaag</h3>
 													<span>';
 													
-			parameter<string> b_kaart_common := 'Deze kaartlaag vermeldt voor <b>@@@STRAT_ID@@@</b> onder code @@@STRAT_LAYER@@@ </a>';
+			parameter<string> b_kaart_common := ' Deze kaartlaag vermeldt voor <b>@@@STRAT_ID@@@</b> onder code @@@STRAT_LAYER@@@';
 			
-			parameter<string> b_kaart_H01 := 'hoe groot het energieverbruik per woningequivalent is. Het betreft hier het
+			parameter<string> b_kaart_H01 := ' hoe groot het energieverbruik per woningequivalent is. Het betreft hier het
 												totale energieverbruik in de woning, dus niet alleen het deel dat nodig is voor energie in de vorm
 												van warmte. @@@STRAT_H01@@@ omvat bijvoorbeeld ook energie in de vorm van elektriciteit, nodig voor
 												apparaten en licht.';
 												
-			parameter<string> b_kaart_H02 := 'hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt besteed aan ruimteverwarming. 
+			parameter<string> b_kaart_H02 := ' hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt besteed aan ruimteverwarming. 
 											  Hierin is bijvoorbeeld ook de elektriciteit voor warmtepompen opgenomen.';
 											  
-			parameter<string> b_kaart_H03 := 'hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt gebruikt in de vorm van warm tapwater.';
+			parameter<string> b_kaart_H03 := ' hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt gebruikt in de vorm van warm tapwater.';
 			
-			parameter<string> b_kaart_H04 := 'hoeveel van het energieverbruik in de vorm van elektriciteit (@@@STRAT_H01@@@) nodig is
+			parameter<string> b_kaart_H04 := ' hoeveel van het energieverbruik in de vorm van elektriciteit (@@@STRAT_H01@@@) nodig is
 											  voor ventilatoren, welke ervoor zorgen dat de luchtkwaliteit in het gebouw voldoende van kwaliteit
 											  is. Alleen bij gebouwen met label B is hiervan sprake; bij gebouwen met schillabel D is er meer
 											  natuurlijke ventilatie.';
 		
-			parameter<string> b_kaart_H05 := 'het energieverbruik voor koeling (koude-levering). 
+			parameter<string> b_kaart_H05 := ' het energieverbruik voor koeling (koude-levering). 
         De koudevraag neemt in de komende jaren toe omdat de gemiddelde buitentemperatuur stijgt door klimaatverandering.
         In woningen worden geen maatregelen verondersteld om aan die vraag te voldoen, omdat niet
         duidelijk is welke maatregelen daarvoor zullen worden gekozen. Omdat in toekomstige
@@ -292,24 +292,24 @@ container Exports {
         worden ingezet. Dat stelt wel weer eisen aan het warmteafgiftesysteem in gebouwen:
         vloerverwarming is meer geschikt dan LT-radiatoren.<br><br>';
 		
-			parameter<string> b_kaart_H06 := 'hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt gebruikt voor verlichting en
+			parameter<string> b_kaart_H06 := ' hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt gebruikt voor verlichting en
 											  apparaten. De elektriciteit nodig voor het gebruik van warmtepompen is hierin niet meegenomen.';
 			
-			parameter<string> b_kaart_H07 := 'het warmteverbruik per hectare. Het warmteverbruik per hectare is een maat voor de ruimtelijke dichtheid van de warmtevraag.
+			parameter<string> b_kaart_H07 := ' het warmteverbruik per hectare. Het warmteverbruik per hectare is een maat voor de ruimtelijke dichtheid van de warmtevraag.
 												Buurten met een hoge warmtevraag per hectare zijn bijvoorbeeld meer geschikt voor warmtenetten, omdat de kosten per aansluiting van de benodigde infrastructuur in dergelijke buurten
 												relatief laag zijn.';
 												
-			parameter<string> b_kaart_H08 := 'hoeveel energie er gemiddeld per woningequivalent geleverd wordt. Het
+			parameter<string> b_kaart_H08 := ' hoeveel energie er gemiddeld per woningequivalent geleverd wordt. Het
         betreft de levering van verschillende vormen van energiedragers (@@@STRAT_H09@@@ - @@@STRAT_H14@@@) aan de buurt ten
         behoeve van de warmte- en elektriciteitsvoorziening van gebouwen. @@@STRAT_H08@@@ is inclusief
         warmtebronnen, hulpketels, pompen van geothermie en warmteverlies van warmtenetten (ook als
         dit plaatsvindt buiten de buurt) maar exclusief transport- en omzettingsverlies van de productie
         van elektriciteit en gas binnen en buiten de buurt.';
-			parameter<string> b_kaart_H09 := 'hoeveel van de energielevering (@@@STRAT_H08@@@) bestaat uit aardgas. Aardgas wordt alleen in 2019 en in het referentiebeeld 2030 verbruikt; in de strategieën waar gas
+			parameter<string> b_kaart_H09 := ' hoeveel van de energielevering (@@@STRAT_H08@@@) bestaat uit aardgas. Aardgas wordt alleen in 2019 en in het referentiebeeld 2030 verbruikt; in de strategieën waar gas
             gebruikt wordt, wordt aardgas immers volledig vervangen door duurzaam gas (@@@STRAT_H10@@@).';
-			parameter<string> b_kaart_H10 := 'hoeveel van de energielevering (@@@STRAT_H08@@@) uit duurzaam gas bestaat. In
+			parameter<string> b_kaart_H10 := ' hoeveel van de energielevering (@@@STRAT_H08@@@) uit duurzaam gas bestaat. In
             strategieën S4 en S5 wordt hiervan gebruik gemaakt, evenals in strategie S2, waar duurzaam gas gebruikt wordt in de piekketels.';
-			parameter<string> b_kaart_H11 := 'bestaat uit de gemiddelde totale elektriciteitslevering in een buurt, uitgedrukt per woningequivalent per jaar. Het betreft de elektriciteit voor alle toepassingen in een buurt, dus voor
+			parameter<string> b_kaart_H11 := ' bestaat uit de gemiddelde totale elektriciteitslevering in een buurt, uitgedrukt per woningequivalent per jaar. Het betreft de elektriciteit voor alle toepassingen in een buurt, dus voor
             verwarming binnen gebouwen (bijvoorbeeld voor individuele warmtepompen), voor andere
             toepassingen in gebouwen (zoals verlichting en apparaten) en voor verwarmingsinstallaties in de
             buurt (zoals voor pompen in warmtenetten en collectieve warmtepompen).
@@ -324,30 +324,30 @@ container Exports {
 			            @@@STRAT_H11@@@ is altijd minstens net zo groot als @@@STRAT_H06@@@. Het verschil tussen @@@STRAT_H06@@@ en @@@STRAT_H11@@@
             komt door het verbruik in de warmtevoorziening, bijvoorbeeld door warmtepompen.';
 			
-			parameter<string> b_kaart_H12 := 'hoeveel van de energielevering (@@@STRAT_H08@@@) van gebouwen uit een aansluiting op een
+			parameter<string> b_kaart_H12 := ' hoeveel van de energielevering (@@@STRAT_H08@@@) van gebouwen uit een aansluiting op een
             MT-net komt. In sommige gevallen komt dat niet alleen voor bij strategie S2, maar ook bij andere
             strategieën als gebouwen nu al op een warmtenet zijn aangesloten.';
 			
-			parameter<string> b_kaart_H13 := 'hoeveel van de energielevering (@@@STRAT_H09@@@) van gebouwen komt uit aansluitingen op een LT-net plus de
+			parameter<string> b_kaart_H13 := ' hoeveel van de energielevering (@@@STRAT_H09@@@) van gebouwen komt uit aansluitingen op een LT-net plus de
             warmte die gebouwen aan de WKOs hebben toegevoegd door koeling. ';
 			
-			parameter<string> b_kaart_H14 := 'hoeveel van de energielevering (@@@STRAT_H08@@@) voort komt uit benutting van omgevingswarmte, die met name wordt gebruikt
+			parameter<string> b_kaart_H14 := ' hoeveel van de energielevering (@@@STRAT_H08@@@) voort komt uit benutting van omgevingswarmte, die met name wordt gebruikt
             door warmtepompen, en het verlies van warmte aan de omgeving door warmteleidingen, wat
             vooral gebeurt bij warmtenetten en gasketels. Door de benutting van de omgevingswarmte kan
             dit getal een negatieve waarde hebben.';
 			
-			parameter<string> b_kaart_H15 := 'de CO2-uitstoot van de levering van aardgas, elektriciteit en warmte ten
+			parameter<string> b_kaart_H15 := ' de CO2-uitstoot van de levering van aardgas, elektriciteit en warmte ten
             behoeve van de warmtevoorziening van de gebouwde omgeving. De CO2-uitstoot van elektriciteit
             ten behoeve van apparaten en verlichting wordt in dit kader niet meegeteld.';
 			
-			parameter<string> b_kaart_H16 := 'hoeveel 2030 jaarlijks extra kost ten opzichte van het
+			parameter<string> b_kaart_H16 := ' hoeveel 2030 jaarlijks extra kost ten opzichte van het
             referentiebeeld in 2030. Deze indicator geeft eigenlijk aan hoeveel het jaarlijks per strategie kost
             om de CO2-uitstoot tot nul te reduceren. De werkelijke kosten kunnen afwijken. Met behulp van
             gevoeligheidsanalyses (paragraaf 4.2.5) geven we aan wat de gevolgen zijn voor de (extra)
             nationale kosten als ontwikkelingen op het gebied van kostenreductie en energiekosten tot 2030
             afwijken van de centrale veronderstellingen. De totale extra nationale kosten zijn uit te splitsen in
             de kosten in de vorm van kapitaalslasten (K10) en in de vorm van variabele kosten (K18).';
-			parameter<string> b_kaart_H17 := 'de jaarlijkse extra nationale kosten per ton CO2-reductie.
+			parameter<string> b_kaart_H17 := ' de jaarlijkse extra nationale kosten per ton CO2-reductie.
             Deze zijn berekend door de extra nationale kosten (@@@STRAT_H16@@@, zie vorige paragrafen) te delen door de
             berekende CO2-reductie ten opzichte van de 2030 referentie in de buurt, zie CO2-uitstoot @@@STRAT_H15@@@ in
             kolom 2030 ref. van tabel 5.2. Merk op dat deze waarde afwijkt van de CO2-uitstoot in het
@@ -356,7 +356,7 @@ container Exports {
             startjaar. Deze indicator @@@STRAT_H17@@@ helpt strategieën en buurten te selecteren waar de CO2-uitstoot het
             meest kosten-efficiënt is te reduceren. De uitkomsten voor H17 staan eveneens weergegeven in
             figuur 2.2 (paragraaf 4.2.4).';
-			parameter<string> b_kaart_H18 := 'de jaarlijkse extra nationale kosten per woningequivalent
+			parameter<string> b_kaart_H18 := ' de jaarlijkse extra nationale kosten per woningequivalent
             in 2030. Let wel: dat zijn níet de kosten die een woningeigenaar moet betalen. Een (nu nog onbekend) deel van die kosten wordt door anderen betaald, zoals energiebedrijven en verhuurders
             (die investeringen doen) of overheden (die bijvoorbeeld subsidies verstrekken). Die kosten
             kunnen wel geheel of gedeeltelijk worden doorberekend in tarieven voor energielevering of
@@ -730,6 +730,9 @@ container Exports {
 				parameter<string> final_t_19 := replace(final_t_18, "@@@STRAT_H18@@@", "<a href=" + rjoin("LN_H18", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   'target="_blank">H18</a>'), StorageName = "%LocalDataDir%/startanalyse_2_0/meta/LN_H01.html"
 																								, StorageType = "str";
 			}
+
+			container H01_t := templates/export_layer_metainfo("LN", "H01", "S1 + S2 + S3 + S4 + S5 + R19 + R30", "components/m_header + components/b_kaart_header + components/b_kaart_common + components/b_kaart_H01 + components/b_kaart_calc_hoofd + components/b_kaart_calc_common + components/b_kaart_footer + components/rel_header + gerelateerde_kaartlagen/samen + components/rel_footer + components/b_S1 + components/b_S2 + components/b_S3 + components/b_S4 + components/b_S5 + components/b_R19R30 + components/footer + components/m_footer");
+			container H02 := templates/export_layer_metainfo("LN", "H02", "S1 + S2 + S3 + S4 + S5 + R19 + R30", "components/m_header + components/b_kaart_header + components/b_kaart_common + components/b_kaart_H02 + components/b_kaart_calc_hoofd + components/b_kaart_calc_common + components/b_kaart_footer + components/rel_header + gerelateerde_kaartlagen/samen + components/rel_footer + components/b_S1 + components/b_S2 + components/b_S3 + components/b_S4 + components/b_S5 + components/b_R19R30 + components/footer + components/m_footer");
 		}
 	}
 }

@@ -892,5 +892,102 @@ container Templates {
 		
 		parameter<string> export_all := "ready", ExplicitSuppliers="gpkg/sa2020strat; csv/sa2020strat; geojson/sa2020strat";
 	}
+	
+	template export_layer_metainfo {
+		// begin case parameters
+		parameter<string> strat_id; // S1
+		parameter<string> layer_id; // H01, H02 etc..
+		parameter<string> rel_layer_expr;
+		parameter<string> final_expr;
+		// end case parameters
+		
+		container gerelateerde_kaartlagen
+		{
+			parameter<string> LN_t := components/rel_items;
+			parameter<string> LN_t_1 := replace(LN_t, "@@@STRAT_ID@@@", "LN");
+			parameter<string> LN_t_2 :== 'replace(LN_t_1, "@@@LAYER_LINK@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/layer))';
+			parameter<string> LN :== 'replace(LN_t_2, "@@@TITLE@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/title))';
+			
+			parameter<string> S1_t := components/rel_items;
+			parameter<string> S1_t_1 := replace(S1_t, "@@@STRAT_ID@@@", "S1");
+			parameter<string> S1_t_2 :== 'replace(S1_t_1, "@@@LAYER_LINK@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/layer))';
+			parameter<string> S1 :== 'replace(S1_t_2, "@@@TITLE@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/title))';
+			
+			parameter<string> S2_t := components/rel_items;
+			parameter<string> S2_t_1 := replace(S2_t, "@@@STRAT_ID@@@", "S2");
+			parameter<string> S2_t_2 :== 'replace(S2_t_1, "@@@LAYER_LINK@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/layer))';
+			parameter<string> S2 :== 'replace(S2_t_2, "@@@TITLE@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/title))';
+			
+			parameter<string> S3_t := components/rel_items;
+			parameter<string> S3_t_1 := replace(S3_t, "@@@STRAT_ID@@@", "S3");
+			parameter<string> S3_t_2 :== 'replace(S3_t_1, "@@@LAYER_LINK@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/layer))';
+			parameter<string> S3 :== 'replace(S3_t_2, "@@@TITLE@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/title))';
+			
+			parameter<string> S4_t := components/rel_items;
+			parameter<string> S4_t_1 := replace(S4_t, "@@@STRAT_ID@@@", "S4");
+			parameter<string> S4_t_2 :== 'replace(S4_t_1, "@@@LAYER_LINK@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/layer))';
+			parameter<string> S4 :== 'replace(S4_t_2, "@@@TITLE@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/title))';
+			
+			parameter<string> S5_t := components/rel_items;
+			parameter<string> S5_t_1 := replace(S5_t, "@@@STRAT_ID@@@", "S5");
+			parameter<string> S5_t_2 :== 'replace(S5_t_1, "@@@LAYER_LINK@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/layer))';
+			parameter<string> S5 :== 'replace(S5_t_2, "@@@TITLE@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/title))';
+			
+			parameter<string> R19_t := components/rel_items;
+			parameter<string> R19_t_1 := replace(R19_t, "@@@STRAT_ID@@@", "R19");
+			parameter<string> R19_t_2 :== 'replace(R19_t_1, "@@@LAYER_LINK@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/layer))';
+			parameter<string> R19 :== 'replace(R19_t_2, "@@@TITLE@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/title))';
+			
+			parameter<string> R30_t := components/rel_items;
+			parameter<string> R30_t_1 := replace(R30_t, "@@@STRAT_ID@@@", "R30");
+			parameter<string> R30_t_2 :== 'replace(R30_t_1, "@@@LAYER_LINK@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/layer))';
+			parameter<string> R30 :== 'replace(R30_t_2, "@@@TITLE@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/title))';
+			
+			parameter<string> samen :== rel_layer_expr; //S1 + S2 + S3 + S4 + S5 + R19 + R30;
+		}
+		
+		parameter<string> final_t :== final_expr; /*   components/m_header
+									 + components/b_kaart_header
+									 + components/b_kaart_common
+									 + components/b_kaart_H01
+									 + components/b_kaart_calc_hoofd
+									 + components/b_kaart_calc_common
+									 + components/b_kaart_footer
+									 + components/rel_header
+									 + gerelateerde_kaartlagen/samen
+									 + components/rel_footer
+									 + components/b_S1
+									 + components/b_S2
+									 + components/b_S3
+									 + components/b_S4
+									 + components/b_S5
+									 + components/b_R19R30
+									 + components/footer
+									 + components/m_footer;*/
+									 
+		parameter<string> final_t_0 := replace(final_t, "@@@STRAT_ID@@@", strat_id);
+		parameter<string> final_t_1 := replace(final_t_0, "@@@STRAT_LAYER@@@", "@@@STRAT_H01@@@");
+		parameter<string> final_t_2 :== 'replace(final_t_1, "@@@STRAT_H01@@@", "<a href=" + rjoin("' + strat_id + '_H01", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H01</a>'')';
+		parameter<string> final_t_3 :== 'replace(final_t_2, "@@@STRAT_H02@@@", "<a href=" + rjoin("' + strat_id + '_H02", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H02</a>'')';
+		parameter<string> final_t_4 :== 'replace(final_t_3, "@@@STRAT_H03@@@", "<a href=" + rjoin("' + strat_id + '_H03", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H03</a>'')';
+		parameter<string> final_t_5 :== 'replace(final_t_4, "@@@STRAT_H04@@@", "<a href=" + rjoin("' + strat_id + '_H04", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H04</a>'')';
+		parameter<string> final_t_6 :== 'replace(final_t_5, "@@@STRAT_H05@@@", "<a href=" + rjoin("' + strat_id + '_H05", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H05</a>'')';
+		parameter<string> final_t_7 :== 'replace(final_t_6, "@@@STRAT_H06@@@", "<a href=" + rjoin("' + strat_id + '_H06", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H06</a>'')';
+		parameter<string> final_t_8 :== 'replace(final_t_7, "@@@STRAT_H07@@@", "<a href=" + rjoin("' + strat_id + '_H07", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H07</a>'')';
+		parameter<string> final_t_9 :== 'replace(final_t_8, "@@@STRAT_H08@@@", "<a href=" + rjoin("' + strat_id + '_H08", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H08</a>'')';
+		parameter<string> final_t_10 :== 'replace(final_t_9, "@@@STRAT_H09@@@", "<a href=" + rjoin("' + strat_id + '_H09", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H09</a>'')';
+		parameter<string> final_t_11 :== 'replace(final_t_10, "@@@STRAT_H10@@@", "<a href=" + rjoin("' + strat_id + '_H10", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H10</a>'')';
+		parameter<string> final_t_12 :== 'replace(final_t_11, "@@@STRAT_H11@@@", "<a href=" + rjoin("' + strat_id + '_H11", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H11</a>'')';
+		parameter<string> final_t_13 :== 'replace(final_t_12, "@@@STRAT_H12@@@", "<a href=" + rjoin("' + strat_id + '_H12", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H12</a>'')';
+		parameter<string> final_t_14 :== 'replace(final_t_13, "@@@STRAT_H13@@@", "<a href=" + rjoin("' + strat_id + '_H13", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H13</a>'')';
+		parameter<string> final_t_15 :== 'replace(final_t_14, "@@@STRAT_H14@@@", "<a href=" + rjoin("' + strat_id + '_H14", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H14</a>'')';
+		parameter<string> final_t_16 :== 'replace(final_t_15, "@@@STRAT_H15@@@", "<a href=" + rjoin("' + strat_id + '_H15", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H15</a>'')';
+		parameter<string> final_t_17 :== 'replace(final_t_16, "@@@STRAT_H16@@@", "<a href=" + rjoin("' + strat_id + '_H16", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H16</a>'')';
+		parameter<string> final_t_18 :== 'replace(final_t_17, "@@@STRAT_H17@@@", "<a href=" + rjoin("' + strat_id + '_H17", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H17</a>'')';
+		
+		parameter<string> filename := "%LocalDataDir%/startanalyse_2_0/meta/" + strat_id + "_" + layer_id + ".html";
+		parameter<string> final_t_19 :== 'replace(final_t_18, "@@@STRAT_H18@@@", "<a href=" + rjoin("' + strat_id + '_H18", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   ''target="_blank">H18</a>'')', 
+		StorageName = "=filename", StorageType = "str";
+	}
 }
 
