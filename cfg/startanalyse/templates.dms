@@ -966,7 +966,7 @@ container Templates {
 									 + components/m_footer;*/
 									 
 		parameter<string> final_t_0 := replace(final_t, "@@@STRAT_ID@@@", strat_id);
-		parameter<string> final_t_1 := replace(final_t_0, "@@@STRAT_LAYER@@@", "@@@STRAT_H01@@@");
+		parameter<string> final_t_1 :== 'replace(final_t_0, "@@@STRAT_LAYER@@@", "@@@STRAT_' + layer_id + '@@@")';
 		parameter<string> final_t_2 :== 'replace(final_t_1, "@@@STRAT_H01@@@", "<a href=" + rjoin("' + strat_id + '_H01", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H01</a>'')';
 		parameter<string> final_t_3 :== 'replace(final_t_2, "@@@STRAT_H02@@@", "<a href=" + rjoin("' + strat_id + '_H02", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H02</a>'')';
 		parameter<string> final_t_4 :== 'replace(final_t_3, "@@@STRAT_H03@@@", "<a href=" + rjoin("' + strat_id + '_H03", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H03</a>'')';
