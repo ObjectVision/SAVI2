@@ -723,14 +723,14 @@ container Templates {
 				
 				unit<uint32> optionSet := range(uint32, 0, 10);
 				container gdal_options_per_strat {
-					attribute<string> GDAL_Options_1 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=15', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_1.json'];
-					attribute<string> GDAL_Options_2 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=15', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_2.json'];
-					attribute<string> GDAL_Options_3 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=15', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_3.json'];
-					attribute<string> GDAL_Options_4 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=15', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_4.json'];
-					attribute<string> GDAL_Options_5 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=15', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_5.json'];
-					attribute<string> GDAL_Options_6 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=15', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_6.json'];
-					attribute<string> GDAL_Options_7 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=15', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_7.json'];
-					attribute<string> GDAL_Options_8 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=15', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_8.json'];
+					attribute<string> GDAL_Options_1 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=18', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_1.json'];
+					attribute<string> GDAL_Options_2 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=18', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_2.json'];
+					attribute<string> GDAL_Options_3 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=18', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_3.json'];
+					attribute<string> GDAL_Options_4 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=18', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_4.json'];
+					attribute<string> GDAL_Options_5 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=18', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_5.json'];
+					attribute<string> GDAL_Options_6 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=18', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_6.json'];
+					attribute<string> GDAL_Options_7 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=18', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_7.json'];
+					attribute<string> GDAL_Options_8 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=18', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_8.json'];
 				}
 				
 				attribute<string> GDAL_Options (optionSet) :== "gdal_options_per_strat/GDAL_Options_" + string(strategie_id);
@@ -743,17 +743,17 @@ container Templates {
 					unit<uint32> strat_05 := select_with_attr_by_cond(z_5/split_polygon_results/results/per_strat, const(true, z_5/split_polygon_results/results/per_strat));
 					unit<uint32> strat_06 := select_with_attr_by_cond(z_6/split_polygon_results/results/per_strat, const(true, z_6/split_polygon_results/results/per_strat));
 					unit<uint32> strat_07 := select_with_attr_by_cond(z_7/split_polygon_results/results/per_strat, const(true, z_7/split_polygon_results/results/per_strat));
-					
 					unit<uint32> strat_08 := select_with_attr_by_cond(z_8/split_polygon_results/results/per_strat, const(true, z_8/split_polygon_results/results/per_strat));
 					unit<uint32> strat_09 := select_with_attr_by_cond(z_9/split_polygon_results/results/per_strat, const(true, z_9/split_polygon_results/results/per_strat));
-					//unit<uint32> strat_10 := select_with_attr_by_cond(z_10/split_polygon_results/results/per_strat, const(true, z_10/split_polygon_results/results/per_strat));
-					
 					unit<uint32> strat_10 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
 					unit<uint32> strat_11 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
 					unit<uint32> strat_12 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
 					unit<uint32> strat_13 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
 					unit<uint32> strat_14 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
 					unit<uint32> strat_15 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
+					unit<uint32> strat_16 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
+					unit<uint32> strat_17 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
+					unit<uint32> strat_18 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
 				}
 			}	
 		}
