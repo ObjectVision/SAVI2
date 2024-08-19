@@ -214,13 +214,39 @@ container Exports {
 	}
 	
 	container klimaat {
-	    parameter<string> GDAL_Driver : ['MBTiles'];
-		unit<spoint> referentie_1981_2010 := SourceData/klimaat/referentie_1981_2010
-		,   StorageName = "%LocalDataDir%/startanalyse_2_0/klimaat/klimaat_1981_2010.mbtiles"
-		,   StorageType = "gdalwrite.grid" 
-		{    
-			attribute<uint8> GridData := uint8(SourceData/klimaat/referentie_1981_2010/GridData);
-		}
+		// GH
+		container export_GH_2010 := templates/export_klimaat_kaart("SourceData/Klimaat/GH/GH_2010", "GH_2010");
+		container export_GH_2020 := templates/export_klimaat_kaart("SourceData/Klimaat/GH/GH_2020", "GH_2020");
+		container export_GH_2030 := templates/export_klimaat_kaart("SourceData/Klimaat/GH/GH_2030", "GH_2030");
+		container export_GH_2040 := templates/export_klimaat_kaart("SourceData/Klimaat/GH/GH_2040", "GH_2040");
+		container export_GH_2050 := templates/export_klimaat_kaart("SourceData/Klimaat/GH/GH_2050", "GH_2050");
+		
+		// GL
+		container export_GL_2010 := templates/export_klimaat_kaart("SourceData/Klimaat/GL/GL_2010", "GL_2010");
+		container export_GL_2020 := templates/export_klimaat_kaart("SourceData/Klimaat/GL/GL_2020", "GL_2020");
+		container export_GL_2030 := templates/export_klimaat_kaart("SourceData/Klimaat/GL/GL_2030", "GL_2030");
+		container export_GL_2040 := templates/export_klimaat_kaart("SourceData/Klimaat/GL/GL_2040", "GL_2040");
+		container export_GL_2050 := templates/export_klimaat_kaart("SourceData/Klimaat/GL/GL_2050", "GL_2050");
+	
+		// WH
+		container export_WH_2010 := templates/export_klimaat_kaart("SourceData/Klimaat/WH/WH_2010", "WH_2010");
+		container export_WH_2020 := templates/export_klimaat_kaart("SourceData/Klimaat/WH/WH_2020", "WH_2020");
+		container export_WH_2030 := templates/export_klimaat_kaart("SourceData/Klimaat/WH/WH_2030", "WH_2030");
+		container export_WH_2040 := templates/export_klimaat_kaart("SourceData/Klimaat/WH/WH_2040", "WH_2040");
+		container export_WH_2050 := templates/export_klimaat_kaart("SourceData/Klimaat/WH/WH_2050", "WH_2050");
+	
+		// WL
+		container export_WL_2010 := templates/export_klimaat_kaart("SourceData/Klimaat/WL/WL_2010", "WL_2010");
+		container export_WL_2020 := templates/export_klimaat_kaart("SourceData/Klimaat/WL/WL_2020", "WL_2020");
+		container export_WL_2030 := templates/export_klimaat_kaart("SourceData/Klimaat/WL/WL_2030", "WL_2030");
+		container export_WL_2040 := templates/export_klimaat_kaart("SourceData/Klimaat/WL/WL_2040", "WL_2040");
+		container export_WL_2050 := templates/export_klimaat_kaart("SourceData/Klimaat/WL/WL_2050", "WL_2050");
+		
+		parameter<string> export_GH := "Done", ExplicitSuppliers="export_GH_2010/Export;export_GH_2020/Export;export_GH_2030/Export;export_GH_2040/Export;export_GH_2050/Export";
+		parameter<string> export_GL := "Done", ExplicitSuppliers="export_GL_2010/Export;export_GL_2020/Export;export_GL_2030/Export;export_GL_2040/Export;export_GL_2050/Export";
+		parameter<string> export_WH := "Done", ExplicitSuppliers="export_WH_2010/Export;export_WH_2020/Export;export_WH_2030/Export;export_WH_2040/Export;export_WH_2050/Export";
+		parameter<string> export_WL := "Done", ExplicitSuppliers="export_WL_2010/Export;export_WL_2020/Export;export_WL_2030/Export;export_WL_2040/Export;export_WL_2050/Export";
+		parameter<string> export_all := "Done", ExplicitSuppliers="export_GH;export_GL;export_WH;export_WL";
 	}
 	
 	container downloads {

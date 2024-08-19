@@ -89,27 +89,29 @@ container SourceData {
 	}
 	
 	container pand {
-		unit<uint32> pand_shp : StorageName="%SourceDataDir%/StartAnalyse/V1/pand/bouwjaar.shp", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> pand_read : StorageName="%SourceDataDir%/StartAnalyse/V1/pand/pand.gpkg", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<geography/rdc_m> geometry (poly);
 		}
 		
-		unit<uint32> pand_fss_write := pand/pand_shp
-			, StorageName="%SourceDataDir%/StartAnalyse/V1/pand/bouwjaar.fss"
+		unit<uint32> pand_fss_write := pand/pand_read
+			, StorageName="%SourceDataDir%/StartAnalyse/V1/pand/pand.fss"
 			, StorageType="fss", StorageReadOnly="False" 
 		{
-			attribute<geography/wm_m> geometry (poly) := convert(pand_shp/geometry, geography/wm_m);
-			attribute<int32> bouwjaar := pand_shp/bouwjaar;
-			
+			attribute<geography/wm_m> geometry (poly) := convert(pand_read/geometry, geography/wm_m);
+			attribute<uint16> bouwjaar := pand_read/bouwjaar;
+			attribute<uint16> SchilLabel_rel := uint16(pand_read/SchilLabel_rel);
 		}
 			
 		unit<uint32> pand_fss_read 
-		    : StorageName="%SourceDataDir%/StartAnalyse/V1/pand/bouwjaar.fss"
+		    : StorageName="%SourceDataDir%/StartAnalyse/V1/pand/pand.fss"
 			, StorageType="fss", StorageReadOnly="True"
 		{
-			attribute<uint32> id := id(.);
 			attribute<geography/wm_m> geometry (poly);
-			attribute<int32> bouwjaar;
+			attribute<uint16> bouwjaar;
+			attribute<uint16> SchilLabel_rel;
+			
+			attribute<uint32> id := id(.);
 		}
 		
 	}
@@ -152,13 +154,216 @@ container SourceData {
 	}
 	
 	container klimaat {
+		
+		unit<uint8> years : nrofrows=5
+		{
+			attribute<uint32> year : [2010, 2020, 2030, 2040, 2050];
+		}
+		
 		unit<spoint> referentie_1981_2010
-		:   StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/1981-2010/klimaat_1981_2010.tif" 
-		,   StorageType = "gdalwrite.grid" 
+		:   StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/1981-2010/klimaat_1981_2010.tif" // TODO: invalid data, only 0s
+		,   StorageType = "gdal.grid" 
 		,   DialogData  = "geography/rdc_m"
 		{    
 			attribute<float32> GridData;
 			attribute<spoint> id := id(.); 
+		}
+
+		container GH {
+			unit<spoint> GH_2010 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/GH/GH_2010.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> GH_2020 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/GH/GH_2020.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> GH_2030 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/GH/GH_2030.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> GH_2040 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/GH/GH_2040.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> GH_2050 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/GH/GH_2050.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+		}
+
+		container GL {
+			unit<spoint> GL_2010 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/GL/GL_2010.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> GL_2020 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/GL/GL_2020.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> GL_2030 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/GL/GL_2030.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> GL_2040 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/GL/GL_2040.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> GL_2050 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/GL/GL_2050.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+		}
+
+		container WH {
+			unit<spoint> WH_2010 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/WH/WH_2010.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> WH_2020 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/WH/WH_2020.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> WH_2030 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/WH/WH_2030.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> WH_2040 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/WH/WH_2040.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> WH_2050 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/WH/WH_2050.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+		}
+
+		container WL {
+			unit<spoint> WL_2010 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/WL/WL_2010.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> WL_2020 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/WL/WL_2020.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> WL_2030 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/WL/WL_2030.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> WL_2040 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/WL/WL_2040.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+			unit<spoint> WL_2050 
+			: StorageName = "%SourceDataDir%/StartAnalyse/V1/klimaat/WL/WL_2050.tif"
+			, StorageType = "gdal.grid"
+			, DialogData  = "geography/rdc_m"
+			, StorageReadOnly = "true"
+			{
+				attribute<float32> GridData;
+			}
+			
+
+
+
+
+
+
+
+			// 0.65 0.69 0.74 0.80 0.86 0.91 0.92 0.93 0.94 0.95 0.96 0.97 0.98 0.99 1.00 1.01 1.02 1.03 1.04 1.05 1.06 1.07 1.08 1.09
 		}
 	}
 	

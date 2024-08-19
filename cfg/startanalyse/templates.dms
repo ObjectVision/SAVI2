@@ -989,5 +989,52 @@ container Templates {
 		parameter<string> final_t_19 :== 'replace(final_t_18, "@@@STRAT_H18@@@", "<a href=" + rjoin("' + strat_id + '_H18", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   ''target="_blank">H18</a>'')', 
 		StorageName = "=filename", StorageType = "str";
 	}
+	
+	template export_klimaat_kaart {
+		// begin case parameters
+		parameter<string> klimaat_item;
+		parameter<string> output_name;
+		// end case parameters
+		
+		unit<spoint> grid_rounded :== klimaat_item
+		{
+			attribute<uint32> GridData :== "uint32(round(" + klimaat_item  + "/GridData*100f))";
+		}
+		
+		unit<uint32> unit_district := district(grid_rounded/GridData);
+		unit<uint32> unique_values := unique(grid_rounded/GridData);
+		
+		parameter<units/m> gridsize := 1000[units/m];
+		unit<uint32> polydomain := select_with_org_rel(IsDefined(grid_rounded/GridData))
+		{
+		   attribute<geography/rdc_m> point_rdc       := org_rel[geography/rdc_m];
+		   attribute<geography/rdc_m> geometry (poly) := points2sequence(pointset/point, pointset/sequence, pointset/ordinal);
+		   attribute<uint32> WL := grid_rounded/GridData[org_rel];
+		   attribute<unique_values> unique_values_rel := rlookup(WL, unique_values/values);
+
+		   unit<uint32> pointset := union_unit(.,.,.,.,.)
+		   {
+			   attribute<geography/rdc_m>    point    := union_data(.
+				   , point_rdc
+				   , point_rdc + point_yx(0[units/m] , gridsize, geography/rdc_m)
+				   , point_rdc + point_yx(-gridsize, gridsize, geography/rdc_m)
+				   , point_rdc + point_yx(-gridsize, 0[units/m], geography/rdc_m)
+				   , point_rdc
+			   );
+			   attribute<..>     sequence := union_data(., id(..), id(..), id(..), id(..), id(..))[uint32];
+			   attribute<uint32> ordinal  := 
+				  union_data(., const(0,..), const(1,..), const(2,..), const(3,..), const(4,..));
+			}
+		}
+		
+		unit<uint32> export := unique_values
+			, storageName="='%LocalDataDir%/startanalyse_2_0/klimaat/' + output_name + '.geojson'"
+			, storageType="gdalwrite.vect"
+			, StorageReadOnly = "False"
+		{
+			attribute<Geography/wgs_base>  geometry (polygon, .) := convert(Partitioned_union_polygon(ipolygon(polydomain/geometry), polydomain/unique_values_rel), Geography/wgs_base);
+			attribute<float32> klimaat := float32(unique_values/values) / 100f;
+		}
+	}
 }
 
