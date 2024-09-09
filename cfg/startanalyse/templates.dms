@@ -885,7 +885,7 @@ container Templates {
 		
 		container geojson {
 			unit<uint32> sa2020strat := select_with_attr_by_cond(export_set, const(true, export_set))
-			, StorageName     = "='%localDataDir%/startanalyse_2_0/downloads/' + filename + '.geojson'"
+			, StorageName     = "='%localDataDir%/startanalyse_2_0/downloads/' + filename + '.json'"
 			, StorageType     = "gdalwrite.vect"
 			, StorageReadOnly = "False";
 		}
@@ -1027,14 +1027,27 @@ container Templates {
 			}
 		}
 		
-		unit<uint32> export := unique_values
+		unit<uint32> multi_polygon_results := unique_values
+		{
+			attribute<uint32> id := id(.);
+			attribute<geography/rdc_m_ipoint>  geometry (polygon, .) := convert(Partitioned_union_polygon(ipolygon(polydomain/geometry), polydomain/unique_values_rel), Geography/rdc_m_ipoint);
+			attribute<float32> dt := float32(unique_values/values) / 100f; 
+		}
+		
+		unit<uint32> single_polygon_results := split_polygon(multi_polygon_results/geometry);
+		
+		unit<uint32> export := single_polygon_results 
 			, storageName="='%LocalDataDir%/startanalyse_2_0/klimaat/' + output_name + '.geojson'"
 			, storageType="gdalwrite.vect"
 			, StorageReadOnly = "False"
 		{
-			attribute<Geography/wgs_base>  geometry (polygon, .) := convert(Partitioned_union_polygon(ipolygon(polydomain/geometry), polydomain/unique_values_rel), Geography/wgs_base);
-			attribute<float32> klimaat := float32(unique_values/values) / 100f;
+			attribute<uint32> id := single_polygon_results/polygon_rel;
+			attribute<geography/wgs_base> geometry (poly) := convert(single_polygon_results/geometry, geography/wgs_base);
+			attribute<float32> dt := multi_polygon_results/dt[single_polygon_results/polygon_rel];
+			attribute<int32> dt_int32 := int32(dt*100f);
 		}
+		
+		unit<uint32> test := unique(export/dt_int32);
 	}
 }
 

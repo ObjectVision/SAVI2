@@ -27,7 +27,8 @@ container geography : using = "units" {
 		parameter<m> y_max := pointrow(upper_left)[m];			
 	}
 
-	unit<dpoint> wgs_base : SPatialReference = "EPSG:4326";
+	unit<dpoint> wgs_base : SpatialReference = "EPSG:4326";
+	unit<ipoint> wgs_i_base : SpatialReference = "EPSG:4326";
 	unit<dpoint> rdc_base : DialogData = "wmts_rd_layer",	SpatialReference = "EPSG:28992";
 	unit<dpoint> rdc_m  := range(rdc_base, point_yx(300000.0, 0.0), point_yx(625000.0, 280000.0));
 	unit<ipoint> rdc_m_ipoint := range(rdc_base, point_yx(300000i, 0i), point_yx(625000i, 280000i));
