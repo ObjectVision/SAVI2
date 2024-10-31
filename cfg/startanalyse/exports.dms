@@ -15,6 +15,32 @@ container Exports {
 		parameter<string> export_all := "Done", ExplicitSuppliers="Exports/strats/export_strat1/MVT/all_zoom_levels/dataset;Exports/strats/export_strat2/MVT/all_zoom_levels/dataset;Exports/strats/export_strat3/MVT/all_zoom_levels/dataset;Exports/strats/export_strat4/MVT/all_zoom_levels/dataset;Exports/strats/export_strat5/MVT/all_zoom_levels/dataset;Exports/strats/export_strat6/MVT/all_zoom_levels/dataset;Exports/strats/export_strat7/MVT/all_zoom_levels/dataset;Exports/strats/export_strat8/MVT/all_zoom_levels/dataset";
 	}
 	
+	container top2
+	{
+		unit<uint32> kosten := SourceData/buurt2020
+		{
+			attribute<units/Euro_per_ton_CO2_per_yr> S1H17 := Exports/strats/export_strat1/Buurtindicatoren/H17_Nationale_meerkosten_CO2;
+			attribute<units/Euro_per_ton_CO2_per_yr> S2H17 := Exports/strats/export_strat2/Buurtindicatoren/H17_Nationale_meerkosten_CO2;
+			attribute<units/Euro_per_ton_CO2_per_yr> S3H17 := Exports/strats/export_strat3/Buurtindicatoren/H17_Nationale_meerkosten_CO2;
+			//attribute<units/Euro_per_ton_CO2_per_yr> S4H17 := Exports/strats/export_strat4/Buurtindicatoren/H17_Nationale_meerkosten_CO2;
+			attribute<units/Euro_per_ton_CO2_per_yr> S5H17 := Exports/strats/export_strat5/Buurtindicatoren/H17_Nationale_meerkosten_CO2;
+			
+			attribute<uint32> min_index := argmin(S1H17, S2H17, S3H17, S5H17);
+			attribute<float32> best_value := min_elem(S1H17, S2H17, S3H17, S5H17);
+			
+			
+			attribute<units/Euro_per_ton_CO2_per_yr> S1H17_or_not := min_index==0?(0/0)[units/Euro_per_ton_CO2_per_yr]:S1H17;
+			attribute<units/Euro_per_ton_CO2_per_yr> S2H17_or_not := min_index==1?(0/0)[units/Euro_per_ton_CO2_per_yr]:S1H17;
+			attribute<units/Euro_per_ton_CO2_per_yr> S3H17_or_not := min_index==2?(0/0)[units/Euro_per_ton_CO2_per_yr]:S1H17;
+			//attribute<units/Euro_per_ton_CO2_per_yr> S4H17 := Exports/strats/export_strat4/Buurtindicatoren/H17_Nationale_meerkosten_CO2;
+			attribute<units/Euro_per_ton_CO2_per_yr> S5H17_or_not := min_index==3?(0/0)[units/Euro_per_ton_CO2_per_yr]:S1H17;
+			
+			attribute<float32> second_best_value := min_elem(S1H17_or_not, S2H17_or_not, S3H17_or_not, S5H17_or_not);
+			
+			attribute<float32> difference := second_best_value - best_value;
+		}
+	}
+	
 	container panden {
 		//ogr2ogr -f MVT ./test_tiles .\pand.gpkg -dsco MAX_SIZE=50000000 -dsco MAX_FEATURES=2000000 -dsco MINZOOM=12 -dsco MAXZOOM=18 -dsco COMPRESS=NO -dsco SIMPLIFICATION=0.0 -dsco SIMPLIFICATION_MAX_ZOOM=0.0 -dsco FORMAT=DIRECTORY -dsco CONF=C:/Users/Cicada/prj/SAVI2/data/pand.json
 		
@@ -101,6 +127,30 @@ container Exports {
 		, StorageReadOnly = "False"
 		{
 			attribute<geography/wm_m> geometry (poly) := convert(SourceData/aanbod/geothermie/geometry, geography/wm_m);
+		}*/
+		
+		container RES 
+		{
+			unit<uint32> split_polygons := split_polygon(SourceData/CBS2020Gebiedsindelingen/regionale_energiestrategie_gegeneraliseerd/geometry);
+			unit<uint32> final := split_polygons 
+			, storageName="%LocalDataDir%/startanalyse_2_0/res/res_regios.json"
+			, storageType="gdalwrite.vect"
+			, StorageReadOnly = "False"
+			{
+				attribute<uint32> id := split_polygons/polygon_rel;
+				attribute<geography/wgs_base> geometry (poly) := split_polygons/geometry[geography/wgs_base];
+				attribute<string> statnaam := SourceData/CBS2020Gebiedsindelingen/regionale_energiestrategie_gegeneraliseerd/statnaam[split_polygons/polygon_rel];
+				attribute<string> JRSTATCODE := SourceData/CBS2020Gebiedsindelingen/regionale_energiestrategie_gegeneraliseerd/JRSTATCODE[split_polygons/polygon_rel];
+			}
+		}
+		/*unit<uint32> RES := SourceData/CBS2020Gebiedsindelingen/regionale_energiestrategie_gegeneraliseerd
+		, storageName="%LocalDataDir%/startanalyse_2_0/res/res_regios.json"
+		, storageType="gdalwrite.vect"
+		, StorageReadOnly = "False"
+		{
+			attribute<geography/wgs_base> geometry (poly) := SourceData/CBS2020Gebiedsindelingen/regionale_energiestrategie_gegeneraliseerd/geometry[geography/wgs_base];
+			attribute<string> stat_naam := SourceData/CBS2020Gebiedsindelingen/regionale_energiestrategie_gegeneraliseerd/statnaam;
+			attribute<string> JRSTATCODE := SourceData/CBS2020Gebiedsindelingen/regionale_energiestrategie_gegeneraliseerd/JRSTATCODE;
 		}*/
 		
 		container puntbronnen {
@@ -277,24 +327,24 @@ container Exports {
 													<h3>Beschrijving kaartlaag</h3>
 													<span>';
 													
-			parameter<string> b_kaart_common := ' Deze kaartlaag vermeldt voor <b>@@@STRAT_ID@@@</b> onder code @@@STRAT_LAYER@@@';
+			parameter<string> b_kaart_common := ' Deze kaartlaag vermeldt voor <b>@@@STRAT_ID@@@</b>';
 			
-			parameter<string> b_kaart_H01 := ' hoe groot het energieverbruik per woningequivalent is. Het betreft hier het
+			parameter<string> b_kaart_H01 := ' hoe groot het energieverbruik per woningequivalent is(@@@STRAT_LAYER@@@). Het betreft hier het
 												totale energieverbruik in de woning, dus niet alleen het deel dat nodig is voor energie in de vorm
 												van warmte. @@@STRAT_H01@@@ omvat bijvoorbeeld ook energie in de vorm van elektriciteit, nodig voor
 												apparaten en licht.';
 												
-			parameter<string> b_kaart_H02 := ' hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt besteed aan ruimteverwarming. 
+			parameter<string> b_kaart_H02 := ' hoeveel van het energieverbruik(@@@STRAT_H01@@@) wordt besteed aan ruimteverwarming(@@@STRAT_LAYER@@@). 
 											  Hierin is bijvoorbeeld ook de elektriciteit voor warmtepompen opgenomen.';
 											  
-			parameter<string> b_kaart_H03 := ' hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt gebruikt in de vorm van warm tapwater.';
+			parameter<string> b_kaart_H03 := ' hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt gebruikt in de vorm van warm tapwater(@@@STRAT_LAYER@@@).';
 			
 			parameter<string> b_kaart_H04 := ' hoeveel van het energieverbruik in de vorm van elektriciteit (@@@STRAT_H01@@@) nodig is
-											  voor ventilatoren, welke ervoor zorgen dat de luchtkwaliteit in het gebouw voldoende van kwaliteit
+											  voor ventilatoren(@@@STRAT_LAYER@@@), welke ervoor zorgen dat de luchtkwaliteit in het gebouw voldoende van kwaliteit
 											  is. Alleen bij gebouwen met label B is hiervan sprake; bij gebouwen met schillabel D is er meer
 											  natuurlijke ventilatie.';
 		
-			parameter<string> b_kaart_H05 := ' het energieverbruik voor koeling (koude-levering). 
+			parameter<string> b_kaart_H05 := ' het energieverbruik voor koeling (koude-levering)(@@@STRAT_LAYER@@@). 
         De koudevraag neemt in de komende jaren toe omdat de gemiddelde buitentemperatuur stijgt door klimaatverandering.
         In woningen worden geen maatregelen verondersteld om aan die vraag te voldoen, omdat niet
         duidelijk is welke maatregelen daarvoor zullen worden gekozen. Omdat in toekomstige
@@ -319,13 +369,13 @@ container Exports {
         vloerverwarming is meer geschikt dan LT-radiatoren.<br><br>';
 		
 			parameter<string> b_kaart_H06 := ' hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt gebruikt voor verlichting en
-											  apparaten. De elektriciteit nodig voor het gebruik van warmtepompen is hierin niet meegenomen.';
+											  apparaten(@@@STRAT_LAYER@@@). De elektriciteit nodig voor het gebruik van warmtepompen is hierin niet meegenomen.';
 			
-			parameter<string> b_kaart_H07 := ' het warmteverbruik per hectare. Het warmteverbruik per hectare is een maat voor de ruimtelijke dichtheid van de warmtevraag.
+			parameter<string> b_kaart_H07 := ' het warmteverbruik per hectare(@@@STRAT_LAYER@@@). Het warmteverbruik per hectare is een maat voor de ruimtelijke dichtheid van de warmtevraag.
 												Buurten met een hoge warmtevraag per hectare zijn bijvoorbeeld meer geschikt voor warmtenetten, omdat de kosten per aansluiting van de benodigde infrastructuur in dergelijke buurten
 												relatief laag zijn.';
 												
-			parameter<string> b_kaart_H08 := ' hoeveel energie er gemiddeld per woningequivalent geleverd wordt. Het
+			parameter<string> b_kaart_H08 := ' hoeveel energie er gemiddeld per woningequivalent geleverd wordt(@@@STRAT_LAYER@@@). Het
         betreft de levering van verschillende vormen van energiedragers (@@@STRAT_H09@@@ - @@@STRAT_H14@@@) aan de buurt ten
         behoeve van de warmte- en elektriciteitsvoorziening van gebouwen. @@@STRAT_H08@@@ is inclusief
         warmtebronnen, hulpketels, pompen van geothermie en warmteverlies van warmtenetten (ook als
@@ -413,22 +463,22 @@ container Exports {
 			';
 												
 			parameter<string> b_kaart_calc_hoofd := ' Deze kaartlaag is onderdeel van de berekening ';
-			parameter<string> b_kaart_calc_common := '@@@STRAT_H01@@@ := 
-														   @@@STRAT_H02@@@(ruimteverwarming) + 
-														   @@@STRAT_H03@@@(warm tapwater) +
-														   @@@STRAT_H04@@@(ventilatie) +
-														   @@@STRAT_H05@@@(koude) + 
-														   @@@STRAT_H06@@@(apparaten en licht). @@@STRAT_H01@@@ is exclusief de omgevingswarmte die in de gebouwen wordt
-															benut (zie @@@STRAT_H08@@@(energielevering) en @@@STRAT_H14@@@(energielevering overig)). Tenslotte zijn @@@STRAT_H01@@@(energieverbruik) en @@@STRAT_H08@@@(energielevering) altijd gelijk
+			parameter<string> b_kaart_calc_common := 'Energieverbruik(@@@STRAT_H01@@@) := 
+														   ruimteverwarming(@@@STRAT_H02@@@) + 
+														   warm tapwater(@@@STRAT_H03@@@) +
+														   ventilatie(@@@STRAT_H04@@@) +
+														   koude(@@@STRAT_H05@@@) + 
+														   apparaten en licht(@@@STRAT_H06@@@). Energieverbruik(@@@STRAT_H01@@@) is exclusief de omgevingswarmte die in de gebouwen wordt
+															benut (zie energielevering (@@@STRAT_H08@@@) en energielevering overig(@@@STRAT_H14@@@). Tenslotte zijn energieverbruik(@@@STRAT_H01@@@) en energielevering (@@@STRAT_H08@@@) altijd gelijk
 															aan elkaar.';
 
-			parameter<string> b_kaart_calc_common2 := '@@@STRAT_H08@@@ := 
-														   @@@STRAT_H09@@@(aardgas) + 
-														   @@@STRAT_H10@@@(duurzaam gas) +
-														   @@@STRAT_H11@@@(elektriciteit) +
-														   @@@STRAT_H12@@@(MT-warmtebron) + 
-														   @@@STRAT_H13@@@(LT-warmtebron) +
-														   @@@STRAT_H14@@@(overig).';															
+			parameter<string> b_kaart_calc_common2 := 'Energielevering(@@@STRAT_H08@@@) := 
+														   aardgas(@@@STRAT_H09@@@) + 
+														   duurzaam gas(@@@STRAT_H10@@@) +
+														   elektriciteit(@@@STRAT_H11@@@) +
+														   MT-warmtebron(@@@STRAT_H12@@@) + 
+														   LT-warmtebron(@@@STRAT_H13@@@) +
+														   overig(@@@STRAT_H14@@@).';															
 			
 													
 			parameter<string> b_kaart_footer := '   </span>
