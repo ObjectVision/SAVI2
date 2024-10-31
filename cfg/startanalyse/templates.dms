@@ -188,6 +188,7 @@ container Templates {
 				attribute<units/ton_CO2_per_yr> H15_CO2_uitstoot                                  := MakeDefined(domain/H15_CO2_uitstoot[split_polygons/polygon_rel], nodata_value);
 				attribute<units/Euro_per_Year> H16_Nationale_meerkosten                           := MakeDefined(domain/H16_Nationale_meerkosten[split_polygons/polygon_rel], nodata_value);
 				attribute<units/Euro_per_ton_CO2_per_yr> H17_Nationale_meerkosten_CO2             := MakeDefined(domain/H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel], nodata_value);
+				attribute<units/Euro_per_ton_CO2_per_yr> H17_difference             := MakeDefined(domain/H17_difference[split_polygons/polygon_rel], nodata_value);
 				attribute<units/Euro_per_woning_per_yr> H18_Nationale_meerkosten_extra            := MakeDefined(domain/H18_Nationale_meerkosten_extra[split_polygons/polygon_rel], nodata_value);
 				//attribute<units/Euro_per_m3> H19_waarde_hernieuwbaar_gas                          := domain/H19_waarde_hernieuwbaar_gas[split_polygons/polygon_rel];
 				//attribute<units/m3> H20_beschikbaarheid_hernieuwbaar_gas                          := domain/H20_beschikbaarheid_hernieuwbaar_gas[split_polygons/polygon_rel];
@@ -681,6 +682,7 @@ container Templates {
 			attribute<units/ton_CO2_per_yr> H15_CO2_uitstoot                                  := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H15_CO2_uitstoot_mega_g_per_yr_[units/ton_CO2_per_yr]); // ton/jaar
 			attribute<units/Euro_per_Year> H16_Nationale_meerkosten                           := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]); // Euro/jaar
 			attribute<units/Euro_per_ton_CO2_per_yr> H17_Nationale_meerkosten_CO2             := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			attribute<units/Euro_per_ton_CO2> H17_difference  								  := Exports/top2/kosten/difference;
 			attribute<units/Euro_per_woning_per_yr> H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
 			//attribute<units/Euro_per_m3> H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
 			//attribute<units/m3> H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
@@ -719,7 +721,7 @@ container Templates {
 				container z_9  := Templates/GetSimplifiedResults(mid_r, mid_f);
 				container z_10 := Templates/GetSimplifiedResults(high_r, high_f);
 				
-				parameter<string> GDAL_Driver : ['MVT'];
+				//parameter<string> GDAL_Driver : ['MVT'];
 				
 				unit<uint32> optionSet := range(uint32, 0, 10);
 				container gdal_options_per_strat {
@@ -733,10 +735,11 @@ container Templates {
 					attribute<string> GDAL_Options_8 (optionSet) : ['BUFFER=100', 'MAX_SIZE=50000000', 'MAX_FEATURES=2000000', 'MINZOOM=5', 'MAXZOOM=18', 'COMPRESS=NO', 'SIMPLIFICATION=0.0', 'SIMPLIFICATION_MAX_ZOOM=0.0', 'FORMAT=DIRECTORY', 'CONF=C:/Users/Cicada/prj/SAVI2/data/conf_zoom_strat_8.json'];
 				}
 				
-				attribute<string> GDAL_Options (optionSet) :== "gdal_options_per_strat/GDAL_Options_" + string(strategie_id);
+				//attribute<string> GDAL_Options (optionSet) :== "gdal_options_per_strat/GDAL_Options_" + string(strategie_id);
 				
+				parameter<string> GDAL_Driver : ['GPKG'];
 				container dataset
-				: StorageName='="%LocalDataDir%/startanalyse_2_0/Strategie"+string(strategie_id)'
+				: StorageName='="%LocalDataDir%/startanalyse_2_0/Strategie"+string(strategie_id) + ".gpkg"'
 				, StorageType="gdalwrite.vect"
 				, StorageReadOnly = "False"
 				{
@@ -1037,7 +1040,7 @@ container Templates {
 		unit<uint32> single_polygon_results := split_polygon(multi_polygon_results/geometry);
 		
 		unit<uint32> export := single_polygon_results 
-			, storageName="='%LocalDataDir%/startanalyse_2_0/klimaat/' + output_name + '.geojson'"
+			, storageName="='%LocalDataDir%/startanalyse_2_0/klimaat/' + output_name + '.json'"
 			, storageType="gdalwrite.vect"
 			, StorageReadOnly = "False"
 		{
