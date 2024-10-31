@@ -8,15 +8,32 @@ container SourceData {
 	:  StorageName  = "%SourceDataDir%/CBS/2020/cbsgebiedsindelingen2020.gpkg"
 	,  StorageType     = "gdal.vect"
 	,  StorageReadOnly = "True"
-	,  SyncMode        = "None"
+	,  SyncMode        = "AllTables"
 	,  DialogData      = "geography/rdc_m" 
 	{
-		unit<uint32> buurt_gegeneraliseerd 
+		unit<uint32> regionale_energiestrategie_gegeneraliseerd 
 		{
 			attribute<geography/rdc_m_ipoint> geometry (poly);
-			attribute<string> statcode;
+			attribute<string> statnaam;
+			attribute<string> JRSTATCODE;
+		}
+		
+		unit<uint32> buurt_gegeneraliseerd
+		{
+			attribute<geography/rdc_m_ipoint> geometry (poly);
+			attribute<string> statnaam;
+			attribute<string> JRSTATCODE;
 			attribute<string> BU_CODE := statcode;
 		}
+	}
+	
+	container CBS2024Gebiedsindelingen 
+	:  StorageName  = "%SourceDataDir%/CBS/2024/cbsgebiedsindelingen2024.gpkg"
+	,  StorageType     = "gdal.vect"
+	,  StorageReadOnly = "True"
+	,  SyncMode        = "AllTables"
+	,  DialogData      = "geography/rdc_m" 
+	{
 	}
 	
 	unit<uint32> buurt2020_with_H2O : StorageName = "%SourceDataDir%/StartAnalyse/V1/cbs_buurt_2020/buurt_2020_v3.shp", StorageType="gdal.vect", StorageReadOnly="True"
@@ -86,6 +103,11 @@ container SourceData {
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 			//attribute<bool> I13_Uitgesloten_ := _I13_Uitgesloten_ == "False" ? False : True;
 		}
+	}
+	
+	container StartAnalyse_2_0
+	{
+		
 	}
 	
 	container pand {
