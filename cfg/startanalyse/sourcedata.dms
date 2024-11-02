@@ -36,12 +36,38 @@ container SourceData {
 	{
 	}
 	
+	container CBS2023Gebiedsindelingen 
+	: StorageName = "%SourceDataDir%/CBS/2023/cbsgebiedsindelingen2023.gpkg"
+	, StorageType="gdal.vect"
+	, StorageReadOnly="True"
+	{
+		unit<uint32> buurt_niet_gegeneraliseerd
+		{			
+			attribute<geography/rdc_m> geometry (poly);
+			attribute<geography/rdc_mm> geometry_mm (poly) := geometry[geography/rdc_mm];
+		}
+	}
+	
+	container CBSwijkenbuurten_2023_v2
+	: StorageName = "%SourceDataDir%/CBS/2023/wijkenbuurten_2023_v2.gpkg"
+	, StorageType = "gdal.vect"
+	, StorageReadOnly = "True"
+	{
+		unit<uint32> buurten
+		{			
+			attribute<geography/rdc_m> geometry (poly);
+			attribute<geography/rdc_mm> geometry_mm (poly) := geometry[geography/rdc_mm];
+			attribute<string> BU_CODE := buurtcode;
+		}
+	}
+	
 	unit<uint32> buurt2020_with_H2O : StorageName = "%SourceDataDir%/StartAnalyse/V1/cbs_buurt_2020/buurt_2020_v3.shp", StorageType="gdal.vect", StorageReadOnly="True"
 	{
 		attribute<geography/rdc_m> geometry (poly);
 		attribute<geography/rdc_mm> geometry_mm (poly) := geometry[geography/rdc_mm];
 	}
 	
+
 	unit<uint32> buurt2020 := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee')// &&  id(buurt2020_with_H2O)>13885);
 	{
 		attribute<geography/wm_m> geometry_wm (poly) := convert(geometry, geography/wm_m);
@@ -50,10 +76,10 @@ container SourceData {
 		attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := rjoin(BU_CODE, CBS2020Gebiedsindelingen/buurt_gegeneraliseerd/BU_CODE, CBS2020Gebiedsindelingen/buurt_gegeneraliseerd/geometry);
 	}
 	
-	/*unit<uint32> buurt2020_testset := select_with_attr_by_org_rel(buurt2020_with_H2O, lowercase(buurt2020_with_H2O/H2O)=='nee' &&  id(buurt2020_with_H2O)>13885)
+	unit<uint32> buurt2023 := select_with_attr_by_org_rel(CBSwijkenbuurten_2023_v2/buurten, lowercase(CBSwijkenbuurten_2023_v2/buurten/water)=='nee') // &&  id(buurt2020_with_H2O)>13885);
 	{
 		attribute<geography/wm_m> geometry_wm (poly) := convert(geometry, geography/wm_m);
-	}*/
+	}
 
 	container StartAnalyse_1_0
 	{
