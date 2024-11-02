@@ -107,7 +107,48 @@ container SourceData {
 	
 	container StartAnalyse_2_0
 	{
+		unit<uint32> optionSet := range(uint32, 0, 2);				
+		attribute<string> GDAL_Options (optionSet) : ['QUOTED_FIELDS_AS_STRING=YES', 'EMPTY_STRING_AS_NULL=YES'];
 		
+		unit<uint32> ViewerIndicatoren_Strategie_1 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241022_Results_run2_v2/Strategie_1_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		unit<uint32> ViewerIndicatoren_Strategie_2 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241022_Results_run2_v2/Strategie_2_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		unit<uint32> ViewerIndicatoren_Strategie_3 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241022_Results_run2_v2/Strategie_3_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		unit<uint32> ViewerIndicatoren_Strategie_4 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241022_Results_run2_v2/Strategie_4_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		unit<uint32> ViewerIndicatoren_Strategie_5 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241022_Results_run2_v2/Strategie_5_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		unit<uint32> ViewerIndicatoren_Strategie_6 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241022_Results_run2_v2/Ref_2019_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		unit<uint32> ViewerIndicatoren_Strategie_7 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241022_Results_run2_v2/Ref_2030_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		unit<uint32> ViewerIndicatoren_Strategie_8 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241022_Results_run2_v2/LNHoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
 	}
 	
 	container pand {
