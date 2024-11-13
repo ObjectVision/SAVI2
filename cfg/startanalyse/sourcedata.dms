@@ -41,6 +41,13 @@ container SourceData {
 	, StorageType="gdal.vect"
 	, StorageReadOnly="True"
 	{
+		unit<uint32> buurt_gegeneraliseerd
+		{			
+			attribute<geography/rdc_m_ipoint> geometry (poly);
+			attribute<geography/rdc_mm> geometry_mm (poly) := geometry[geography/rdc_mm];
+			attribute<string> BU_CODE := statcode;
+		}
+		
 		unit<uint32> buurt_niet_gegeneraliseerd
 		{			
 			attribute<geography/rdc_m> geometry (poly);
@@ -52,12 +59,14 @@ container SourceData {
 	: StorageName = "%SourceDataDir%/CBS/2023/wijkenbuurten_2023_v2.gpkg"
 	, StorageType = "gdal.vect"
 	, StorageReadOnly = "True"
+	, SyncMode = "AllTables"
 	{
 		unit<uint32> buurten
 		{			
 			attribute<geography/rdc_m> geometry (poly);
 			attribute<geography/rdc_mm> geometry_mm (poly) := geometry[geography/rdc_mm];
 			attribute<string> BU_CODE := buurtcode;
+			attribute<string> Wijknaam := rjoin(Wijkcode, wijken/Wijkcode, wijken/wijknaam);
 		}
 	}
 	
@@ -79,6 +88,7 @@ container SourceData {
 	unit<uint32> buurt2023 := select_with_attr_by_org_rel(CBSwijkenbuurten_2023_v2/buurten, lowercase(CBSwijkenbuurten_2023_v2/buurten/water)=='nee') // &&  id(buurt2020_with_H2O)>13885);
 	{
 		attribute<geography/wm_m> geometry_wm (poly) := convert(geometry, geography/wm_m);
+		attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := rjoin(BU_CODE, CBS2023Gebiedsindelingen/buurt_gegeneraliseerd/BU_CODE, CBS2023Gebiedsindelingen/buurt_gegeneraliseerd/geometry);
 	}
 
 	container StartAnalyse_1_0
@@ -174,6 +184,13 @@ container SourceData {
 		unit<uint32> ViewerIndicatoren_Strategie_8 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241022_Results_run2_v2/LNHoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// statisch
+		unit<uint32> statisch : StorageName="%SourceDataDir%/StartAnalyse/V2/20241022_Results_run2_v2/Statisch.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+			//attribute<bool> I13_Uitgesloten_ := _I13_Uitgesloten_ == "False" ? False : True;
 		}
 	}
 	
