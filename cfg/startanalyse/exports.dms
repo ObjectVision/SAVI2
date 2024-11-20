@@ -666,12 +666,12 @@ container Exports {
 	
 		
 		parameter<string> b_R19R30 := '<p> 
-		  <h3>Beschrijving referentiebeelden R19 en R30</h3>
+		  <h3>Beschrijving referentiebeelden R23 en R30</h3>
 			<span>
-			  De SA-2020 maakt gebruik van twee referentiebeelden: één voor de huidige situatie (startjaar 2019)
+			  De actualisatie startanalyse 2024 maakt gebruik van twee referentiebeelden: één voor de huidige situatie (startjaar 2023)
 			  en één voor de referentiesituatie in 2030. De kosten van de aardgasvrije strategieën, maar ook de
-			  kosten van de huidige situatie (2019) worden afgezet ten opzichte van het referentiebeeld 2030. Dit
-			  noemen wij de extra nationale kosten van strategieën in 2030 (of van de huidige situatie in 2019)
+			  kosten van de huidige situatie (2023) worden afgezet ten opzichte van het referentiebeeld 2030. Dit
+			  noemen wij de extra nationale kosten van strategieën in 2030 (of van de huidige situatie in 2023)
 			  t.o.v. het referentiebeeld 2030.
 			</span>
 		</p>';

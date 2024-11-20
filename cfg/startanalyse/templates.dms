@@ -1053,11 +1053,11 @@ container Templates {
 		parameter<string> final_t_14 :== 'replace(final_t_13, "@@@STRAT_H13@@@", "<a href=" + rjoin("' + strat_id + '_H13", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H13</a>'')';
 		parameter<string> final_t_15 :== 'replace(final_t_14, "@@@STRAT_H14@@@", "<a href=" + rjoin("' + strat_id + '_H14", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H14</a>'')';
 		parameter<string> final_t_16 :== 'replace(final_t_15, "@@@STRAT_H15@@@", "<a href=" + rjoin("' + strat_id + '_H15", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H15</a>'')';
-		parameter<string> final_t_17 :== 'replace(final_t_16, "@@@STRAT_H16@@@", "<a href=" + rjoin("' + strat_id + '_H16", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H16</a>'')';
-		parameter<string> final_t_18 :== 'replace(final_t_17, "@@@STRAT_H17@@@", "<a href=" + rjoin("' + strat_id + '_H17", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H17</a>'')';
+		parameter<string> final_t_17 :== 'MakeDefined(replace(final_t_16, "@@@STRAT_H16@@@", "<a href=" + rjoin("' + strat_id + '_H16", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H16</a>''),final_t_16)';
+		parameter<string> final_t_18 :== 'MakeDefined(replace(final_t_17, "@@@STRAT_H17@@@", "<a href=" + rjoin("' + strat_id + '_H17", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H17</a>''),final_t_17)';
 		
 		parameter<string> filename := "%LocalDataDir%/startanalyse_2_0/meta/" + strat_id + "_" + layer_id + ".html";
-		parameter<string> final_t_19 :== 'replace(final_t_18, "@@@STRAT_H18@@@", "<a href=" + rjoin("' + strat_id + '_H18", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   ''target="_blank">H18</a>'')', 
+		parameter<string> final_t_19 :== 'MakeDefined(replace(final_t_18, "@@@STRAT_H18@@@", "<a href=" + rjoin("' + strat_id + '_H18", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   ''target="_blank">H18</a>''),final_t_18)', 
 		StorageName = "=filename", StorageType = "str";
 	}
 	
