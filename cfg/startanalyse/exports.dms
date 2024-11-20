@@ -333,12 +333,12 @@ container Exports {
 													
 			parameter<string> b_kaart_common := ' Deze kaartlaag vermeldt voor <b>@@@STRAT_ID@@@</b>';
 			
-			parameter<string> b_kaart_H01 := ' hoe groot het energieverbruik per woningequivalent is(@@@STRAT_LAYER@@@). Het betreft hier het
+			parameter<string> b_kaart_H01 := ' hoe groot het energieverbruik per woningequivalent is (@@@STRAT_LAYER@@@). Het betreft hier het
 												totale energieverbruik in de woning, dus niet alleen het deel dat nodig is voor energie in de vorm
 												van warmte. @@@STRAT_H01@@@ omvat bijvoorbeeld ook energie in de vorm van elektriciteit, nodig voor
 												apparaten en licht.';
 												
-			parameter<string> b_kaart_H02 := ' hoeveel van het energieverbruik(@@@STRAT_H01@@@) wordt besteed aan ruimteverwarming(@@@STRAT_LAYER@@@). 
+			parameter<string> b_kaart_H02 := ' hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt besteed aan ruimteverwarming (@@@STRAT_LAYER@@@). 
 											  Hierin is bijvoorbeeld ook de elektriciteit voor warmtepompen opgenomen.';
 											  
 			parameter<string> b_kaart_H03 := ' hoeveel van het energieverbruik (@@@STRAT_H01@@@) wordt gebruikt in de vorm van warm tapwater(@@@STRAT_LAYER@@@).';
@@ -467,13 +467,13 @@ container Exports {
 			';
 												
 			parameter<string> b_kaart_calc_hoofd := ' Deze kaartlaag is onderdeel van de berekening ';
-			parameter<string> b_kaart_calc_common := 'Energieverbruik(@@@STRAT_H01@@@) := 
-														   ruimteverwarming(@@@STRAT_H02@@@) + 
-														   warm tapwater(@@@STRAT_H03@@@) +
-														   ventilatie(@@@STRAT_H04@@@) +
-														   koude(@@@STRAT_H05@@@) + 
-														   apparaten en licht(@@@STRAT_H06@@@). Energieverbruik(@@@STRAT_H01@@@) is exclusief de omgevingswarmte die in de gebouwen wordt
-															benut (zie energielevering (@@@STRAT_H08@@@) en energielevering overig(@@@STRAT_H14@@@). Tenslotte zijn energieverbruik(@@@STRAT_H01@@@) en energielevering (@@@STRAT_H08@@@) altijd gelijk
+			parameter<string> b_kaart_calc_common := 'Energieverbruik (@@@STRAT_H01@@@) := 
+														   ruimteverwarming (@@@STRAT_H02@@@) + 
+														   warm tapwater (@@@STRAT_H03@@@) +
+														   ventilatie (@@@STRAT_H04@@@) +
+														   koude (@@@STRAT_H05@@@) + 
+														   apparaten en licht (@@@STRAT_H06@@@). Energieverbruik (@@@STRAT_H01@@@) is exclusief de omgevingswarmte die in de gebouwen wordt
+															benut (zie energielevering (@@@STRAT_H08@@@) en energielevering overig (@@@STRAT_H14@@@). Tenslotte zijn energieverbruik (@@@STRAT_H01@@@) en energielevering (@@@STRAT_H08@@@) altijd gelijk
 															aan elkaar.';
 
 			parameter<string> b_kaart_calc_common2 := 'Energielevering(@@@STRAT_H08@@@) := 

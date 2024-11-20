@@ -188,6 +188,14 @@ container Templates {
 				attribute<units/ton_CO2_per_yr> H15_CO2_uitstoot                                  := MakeDefined(domain/H15_CO2_uitstoot[split_polygons/polygon_rel], nodata_value);
 				attribute<units/Euro_per_Year> H16_Nationale_meerkosten                           := MakeDefined(domain/H16_Nationale_meerkosten[split_polygons/polygon_rel], nodata_value);
 				attribute<units/Euro_per_ton_CO2_per_yr> H17_Nationale_meerkosten_CO2             := MakeDefined(domain/H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel], nodata_value);
+
+				// H17 for all strategies
+				attribute<units/Euro_per_ton_CO2_per_yr> S1H17_Nationale_meerkosten_CO2           := MakeDefined(domain/S1H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel], nodata_value);
+				attribute<units/Euro_per_ton_CO2_per_yr> S2H17_Nationale_meerkosten_CO2           := MakeDefined(domain/S2H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel], nodata_value);
+				attribute<units/Euro_per_ton_CO2_per_yr> S3H17_Nationale_meerkosten_CO2           := MakeDefined(domain/S3H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel], nodata_value);
+				attribute<units/Euro_per_ton_CO2_per_yr> S4H17_Nationale_meerkosten_CO2           := MakeDefined(domain/S4H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel], nodata_value);
+			
+				
 				attribute<units/Euro_per_ton_CO2_per_yr> H17_difference             := MakeDefined(domain/H17_difference[split_polygons/polygon_rel], nodata_value);
 				attribute<units/Euro_per_woning_per_yr> H18_Nationale_meerkosten_extra            := MakeDefined(domain/H18_Nationale_meerkosten_extra[split_polygons/polygon_rel], nodata_value);
 				//attribute<units/Euro_per_m3> H19_waarde_hernieuwbaar_gas                          := domain/H19_waarde_hernieuwbaar_gas[split_polygons/polygon_rel];
@@ -648,8 +656,14 @@ container Templates {
 		//parameter<string> strategie_domain_str := "SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_" + string(strategie_id);
 		parameter<string> strategie_domain_str := "SourceData/StartAnalyse_2_0/ViewerIndicatoren_Strategie_" + string(strategie_id);
 		unit<uint32> strategie_domain :== strategie_domain_str;
+		unit<uint32> strat1_domain := SourceData/StartAnalyse_2_0/ViewerIndicatoren_Strategie_1;
+		unit<uint32> strat2_domain := SourceData/StartAnalyse_2_0/ViewerIndicatoren_Strategie_2;
+		unit<uint32> strat3_domain := SourceData/StartAnalyse_2_0/ViewerIndicatoren_Strategie_3;
+		unit<uint32> strat4_domain := SourceData/StartAnalyse_2_0/ViewerIndicatoren_Strategie_4;
 
 		attribute<string> BU_CODE_strategie (strategie_domain) := strategie_domain/BU_CODE;
+		
+		
 		//attribute<string> BU_CODE_strategie1 (SourceData/StartAnalyse_2_0/ViewerIndicatoren_Strategie_1) := SourceData/StartAnalyse_2_0/ViewerIndicatoren_Strategie_1/BU_CODE;
 		
 		unit<uint32> Buurtindicatoren_2020 := SourceData/buurt2020 {
@@ -687,16 +701,17 @@ container Templates {
 			attribute<units/Euro_per_Year> H16_Nationale_meerkosten                           := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]); // Euro/jaar
 			attribute<units/Euro_per_ton_CO2_per_yr> H17_Nationale_meerkosten_CO2             := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
 			
-			//attribute<units/Euro_per_ton_CO2_per_yr> H17S1_Nationale_meerkosten_CO2           := rjoin(BU_CODE, BU_CODE_strategie1, strategie_domain/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			attribute<units/Euro_per_ton_CO2_per_yr> H17S1_Nationale_meerkosten_CO2           := rjoin(BU_CODE, BU_CODE_strategie1, strategie_domain/_H17_Nat_meerkost_CO2_micro_Euro_per_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
 			
 			attribute<units/Euro_per_ton_CO2> H17_difference  								  := Exports/top2/kosten/difference;
 			attribute<units/Euro_per_woning_per_yr> H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
 			//attribute<units/Euro_per_m3> H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
 			//attribute<units/m3> H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
-			attribute<units/Euro_per_ton_CO2> G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+			
+			/*attribute<units/Euro_per_ton_CO2> G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
 			attribute<units/Euro_per_ton_CO2> G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G02_Nat_meerkost_CO2_Kost_Reductie_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
 			attribute<units/Euro_per_ton_CO2> G03_Nat_meerkost_CO2_En_Prijzen_Laag            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G03_Nat_meerkost_CO2_En_Prijzen_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
-			attribute<units/Euro_per_ton_CO2> G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G04_Nat_meerkost_CO2_En_Prijzen_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
+			attribute<units/Euro_per_ton_CO2> G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G04_Nat_meerkost_CO2_En_Prijzen_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2*/
 		}
 		
 		unit<uint32> Buurtindicatoren := SourceData/buurt2023 {
@@ -706,9 +721,9 @@ container Templates {
 			attribute<string> Wijkcode := SourceData/buurt2023/Wijkcode;
 			attribute<string> Wijknaam := SourceData/buurt2023/Wijknaam;
 			attribute<string> Gemeentecode := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I05_gemeentecode_);
-			attribute<string> Gemeentenaam := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I06_gemeentenaam_);
-			attribute<string> Energieregionaam := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I07_energieregionaam_);
-			attribute<string> Provincienaam := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I08_provincienaam_);
+			attribute<string> Gemeentenaam := replace(rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I06_gemeentenaam_), "'", "");
+			attribute<string> Energieregionaam := replace(rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I07_energieregionaam_), "'", "");
+			attribute<string> Provincienaam := replace(rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I08_provincienaam_), "'", "");
 			attribute<string> AantalWoningen := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I09_aantal_woningen_Aansluiting_);
 			attribute<string> AantalUtiliteiten := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I10_aantal_utiliteit_Aansluiting_);
 			attribute<string> WoningEquivalenten := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I11_woningequivalenten_Woning_);
@@ -734,7 +749,11 @@ container Templates {
 			attribute<units/Euro_per_Year> H16_Nationale_meerkosten                           := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H16_Nat_meerkost_Euro_per_yr_[units/Euro_per_Year]); // Euro/jaar
 			attribute<units/Euro_per_ton_CO2_per_yr> H17_Nationale_meerkosten_CO2             := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H17_Nat_meerkost_CO2_Euro_per_mega_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
 			
-			attribute<units/Euro_per_ton_CO2_per_yr> S1H17_Nationale_meerkosten_CO2           := rjoin(BU_CODE, BU_CODE_strategie1, strategie_domain/_H17_Nat_meerkost_CO2_Euro_per_mega_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			// H17 for all strategies
+			attribute<units/Euro_per_ton_CO2_per_yr> S1H17_Nationale_meerkosten_CO2           := rjoin(BU_CODE, strat1_domain/BU_CODE, strat1_domain/_H17_Nat_meerkost_CO2_Euro_per_mega_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			attribute<units/Euro_per_ton_CO2_per_yr> S2H17_Nationale_meerkosten_CO2           := rjoin(BU_CODE, strat2_domain/BU_CODE, strat2_domain/_H17_Nat_meerkost_CO2_Euro_per_mega_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			attribute<units/Euro_per_ton_CO2_per_yr> S3H17_Nationale_meerkosten_CO2           := rjoin(BU_CODE, strat3_domain/BU_CODE, strat3_domain/_H17_Nat_meerkost_CO2_Euro_per_mega_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
+			attribute<units/Euro_per_ton_CO2_per_yr> S4H17_Nationale_meerkosten_CO2           := rjoin(BU_CODE, strat4_domain/BU_CODE, strat4_domain/_H17_Nat_meerkost_CO2_Euro_per_mega_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
 			
 			attribute<units/Euro_per_ton_CO2> H17_difference  								  := Exports/top2/kosten/difference;
 			attribute<units/Euro_per_woning_per_yr> H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
@@ -808,9 +827,9 @@ container Templates {
 					unit<uint32> strat_13 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
 					unit<uint32> strat_14 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
 					unit<uint32> strat_15 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
-					unit<uint32> strat_16 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
-					unit<uint32> strat_17 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
-					unit<uint32> strat_18 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
+					//unit<uint32> strat_16 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
+					//unit<uint32> strat_17 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
+					//unit<uint32> strat_18 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
 				}
 			}	
 		}
