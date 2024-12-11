@@ -2,7 +2,7 @@ container SourceData {
 	unit<uint32> variants : nrofrows=21 {
 		attribute<uint32> id := id(.);
 		//attribute<string> name : ["Ref2030", "s1a","s1b","s2a","s2b","s2d","s2e","s3a","s3b","s3d", "s3e", "s3f", "s3h", "s4a", "s4b", "s4c", "s4d", "s5a", "s5b", "s5c", "s5d"];
-		attribute<string> name : ["Ref2030", "s1a","s1b","s2a","s2b","s2d","s2e", "s2f","s3a","s3b","s3c","s3d", "s3e", "s3f", "s3h", "s4a", "s4b"];
+		attribute<string> name : ["Ref2030", "s1a","s1b","s2a","s2b","s2d","s2e", "s2f","s3a","s3b","s3c","s3d", "s3e", "s3f", "s3g", "s3h", "s4a", "s4b"];
 	}
 	
 	container CBS2020Gebiedsindelingen 
@@ -147,48 +147,43 @@ container SourceData {
 		unit<uint32> optionSet := range(uint32, 0, 2);				
 		attribute<string> GDAL_Options (optionSet) : ['QUOTED_FIELDS_AS_STRING=YES', 'EMPTY_STRING_AS_NULL=YES'];
 		
-		unit<uint32> ViewerIndicatoren_Strategie_1 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241119_Results_run4/Strategie_1_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> ViewerIndicatoren_Strategie_1 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/Strategie_1_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
-		unit<uint32> ViewerIndicatoren_Strategie_2 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241119_Results_run4/Strategie_2_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> ViewerIndicatoren_Strategie_2 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/Strategie_2_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
-		unit<uint32> ViewerIndicatoren_Strategie_3 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241119_Results_run4/Strategie_3_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> ViewerIndicatoren_Strategie_3 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/Strategie_3_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
-		unit<uint32> ViewerIndicatoren_Strategie_4 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241119_Results_run4/Strategie_4_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> ViewerIndicatoren_Strategie_4 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/Strategie_4_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
-		unit<uint32> ViewerIndicatoren_Strategie_5 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241119_Results_run4/Strategie_5_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> ViewerIndicatoren_Strategie_6 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/Ref_2023_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
-		unit<uint32> ViewerIndicatoren_Strategie_6 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241119_Results_run4/Ref_2023_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> ViewerIndicatoren_Strategie_7 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/Ref_2030_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
-		unit<uint32> ViewerIndicatoren_Strategie_7 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241119_Results_run4/Ref_2030_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
-		{
-			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
-		}
-		
-		unit<uint32> ViewerIndicatoren_Strategie_8 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241119_Results_run4/LNHoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> ViewerIndicatoren_Strategie_8 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/LNHoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
 		// statisch
-		unit<uint32> statisch : StorageName="%SourceDataDir%/StartAnalyse/V2/20241119_Results_run4/Statisch.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> statisch : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/Statisch.csv", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 			//attribute<bool> I13_Uitgesloten_ := _I13_Uitgesloten_ == "False" ? False : True;
@@ -196,34 +191,154 @@ container SourceData {
 	}
 	
 	container pand {
-		unit<uint32> pand_read : StorageName="%SourceDataDir%/StartAnalyse/V1/pand/pand.gpkg", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> pand_read : StorageName="%SourceDataDir%/StartAnalyse/V2/pand/pand.gpkg", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<geography/rdc_m> geometry (poly);
 		}
 		
 		unit<uint32> pand_fss_write := pand/pand_read
-			, StorageName="%SourceDataDir%/StartAnalyse/V1/pand/pand.fss"
+			, StorageName="%SourceDataDir%/StartAnalyse/V2/pand/pand.fss"
 			, StorageType="fss", StorageReadOnly="False" 
 		{
 			attribute<geography/wm_m> geometry (poly) := convert(pand_read/geometry, geography/wm_m);
 			attribute<uint16> bouwjaar := pand_read/bouwjaar;
 			attribute<uint16> SchilLabel_rel := uint16(pand_read/SchilLabel_rel);
+			attribute<string> schillabel := pand_read/schillabel;
+			attribute<int32> gebruiksdoelen := pand_read/gebruiksdoelen;
 		}
 			
 		unit<uint32> pand_fss_read 
-		    : StorageName="%SourceDataDir%/StartAnalyse/V1/pand/pand.fss"
+		    : StorageName="%SourceDataDir%/StartAnalyse/V2/pand/pand.fss"
 			, StorageType="fss", StorageReadOnly="True"
 		{
 			attribute<geography/wm_m> geometry (poly);
 			attribute<uint16> bouwjaar;
 			attribute<uint16> SchilLabel_rel;
-			
+			attribute<string> schillabel;
+			attribute<int32> gebruiksdoelen;
 			attribute<uint32> id := id(.);
 		}
 		
 	}
 	
 	container aanbod {
+		container MetaData 
+		{
+			
+			unit<uint32> Categorie: nrofrows = 15 // source is 5N82 Functioneel Ontwerp LT-warmtenetten_CPT_2018-10-3.docx Tabel 16
+			{
+				attribute<string> code : [
+					'Supermarkt'
+				,	'RWZI'
+				,	'KoelVries'
+				,	'Bakkerij'
+				,	'Wasserij'
+				,	'Dienstverlening_Informatie'
+				,	'Voedingsmiddelen_dranken_tabak'
+				,	'Slachthuis'
+				,	'Datacenter'
+				,	'IJsbaan'
+				,	'GemaalKoude'
+				,	'GemaalWarmte'
+				,	'Zwembad'
+				,	'Glastuinbouw'
+				,	'WKO'
+				];
+				
+				attribute<string> label : [
+					'Supermarkt'
+				,	'RWZI'
+				,	'KoelVries'
+				,	'Bakkerij'
+				,	'Wasserij'
+				,	'Dienstverlening_Informatie'
+				,	'Voedingsmiddelen_dranken_tabak'
+				,	'Slachthuis'
+				,	'Datacenter'
+				,	'IJsbaan'
+				,	'GemaalKoude'
+				,	'GemaalWarmte'
+				,	'Zwembad'
+				,	'Glastuinbouw'
+				,	'WKO'
+				];
+				attribute<bool> levert_koude := const(false, .);
+				attribute<bool> vraagt_koude_koude :
+				[
+					true, false, true, false, false, false, true, true, true, true, true, false, false, false, false
+				];
+				attribute<units/MW>      MWth_max  : [0, 11, 2, 0, 2, 5, 24, 3, 13, 0, 0, 0, 0, 0, 0]            , Descr = "Maximale capaciteit waarvoor de bron kan worden ingezet";
+				attribute<percent> bron_vol  := const(70[percent], .)                                      , Descr = "Aandeel op secundair netvolume dat de bron voor rekening kan nemen";
+				attribute<percent> bron_cap  := const(30[percent], .)                                      , Descr = "Aandeel op secundaire netcapaciteit dat de bron voor rekening kan nemen";
+				attribute<Celsius> T_Bron    : [30, 30, 30, 30, 30, 50, 30, 30, 30, 30, 30, 30, 30, 30, 15], Descr = "Temperatuur welke de bron maximaal kan leveren zonder hulpvoorziening";
+				attribute<Eur_kW>  Ki_KW_min := const(50	[Eur_kW], .)                                   , Descr = "";
+				attribute<Eur_kW>  Ki_KW_max := const(250[Eur_kW], .)                                      , Descr = "";
+				attribute<Eur_GJ>  K_GJ      := const(0[Eur_GJ], .)                                        , Descr = "";
+				attribute<Eur_GJ>  E_GJ      := const(0[Eur_GJ], .)                                        , Descr = "";
+
+				container V := for_each_nedv(code, string(id(.))+'[..]', void, .);
+			}
+			unit<uint32> TypeInfo
+			:	StorageName     = "%SourceDataDir%/StartAnalyse/V2/aanbod/TypeInfo.csv" 
+			,	StorageType     = "gdal.vect"
+			,	StorageReadOnly = "True"
+			,	SyncMode        = "None"
+			{
+				attribute<string>  Type;
+				attribute<string>  label := Type, DialogType = "labelText";
+				attribute<string>  K_kW_min;   // [Eur_kW]
+				attribute<string>  K_kW_max;   // [Eur_kW]
+				attribute<string>  MWth_min;   // [MWth]
+				attribute<units/MW>      MWth_default : [ 10, 20,   0.5,  6,  6,  3,  3,  6,  3,  3, 20,   0.5,  3,   0.5];
+				attribute<Celsius> Temp_default : [ 70, 70,  70  , 70, 70, 70, 70, 70, 70, 70, 70,  70  , 70,  70];
+				attribute<ratio>   Pcap_default := const(0.3[ratio] , TypeInfo);
+				attribute<ratio>   Pvol_default := const(0.8[ratio] , TypeInfo);
+				attribute<string>  JaarKosten; // [_yr]
+
+				attribute<TypeInfoList> TypeInfoList_rel := rlookup(Type, TypeInfoList/Naam);
+				attribute<RekenType>    RekenType_rel    := TypeInfoList/RekenType_rel[TypeInfoList_rel];
+				
+				attribute<Eur_kW> Ki_kW_min := K_kW_min[Eur_kW];
+				attribute<Eur_kW> Ki_kW_max := K_kW_max[Eur_kW];
+
+				container K_GJ := for_each_nedv(classifications/Rekenstap/name
+					, replace('union_data(RekenType, '+AsItemList('RekenTypes/'+RekenType/Naam+'/K_GJ [classifications/Rekenstap/V/@X]')+')[RekenType_rel]', '@X', classifications/Rekenstap/name)
+					, .
+					, Eur_GJ
+				);
+				container Km_GJ := for_each_nedv(classifications/Rekenstap/name
+					, replace('union_data(RekenType, '+AsItemList('RekenTypes/'+RekenType/Naam+'/Km_GJ [classifications/Rekenstap/V/@X]')+')[RekenType_rel]', '@X', classifications/Rekenstap/name)
+					, .
+					, Eur_GJ
+				);
+				attribute<string> CO2_2010;
+				attribute<string> CO2_2020;
+				attribute<string> CO2_2030;
+				attribute<string> CO2_2040;
+				attribute<string> CO2_2050;
+				attribute<string> NOx_2010;
+				attribute<string> NOx_2020;
+				attribute<string> NOx_2030;
+				attribute<string> NOx_2040;
+				attribute<string> NOx_2050;
+				attribute<string> SO2_2010;
+				attribute<string> SO2_2020;
+				attribute<string> SO2_2030;
+				attribute<string> SO2_2040;
+				attribute<string> SO2_2050;
+				attribute<string> VOS_2010;
+				attribute<string> VOS_2020;
+				attribute<string> VOS_2030;
+				attribute<string> VOS_2040;
+				attribute<string> VOS_2050;
+				attribute<string> TS_2010;
+				attribute<string> TS_2020;
+				attribute<string> TS_2030;
+				attribute<string> TS_2040;
+				attribute<string> TS_2050;
+			}	
+		}
+		
 	    unit<uint32> gas : StorageName="%SourceDataDir%/StartAnalyse/V1/aanbod/gas/ModelLeidingen20190517.shp", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<geography/rdc_m> geometry (arc);
@@ -236,24 +351,30 @@ container SourceData {
 		}
 		
 		container puntbronnen {
-			unit<uint32> LT : StorageName="%SourceDataDir%/StartAnalyse/V1/aanbod/puntbronnen/20200311_Puntbronnen_LT.csv", StorageType="gdal.vect", StorageReadOnly="True"
+			unit<uint32> LT : StorageName="%SourceDataDir%/StartAnalyse/V2/aanbod/puntbronnen/20241118_Puntbronnen_LT.csv", StorageType="gdal.vect", StorageReadOnly="True"
 			{
 				attribute<geography/rdc_m> geometry := point_xy(float64(x),float64(y), geography/rdc_m);
+				attribute<units/MW>        MWth_max    := MakeDefined(makedefined(MWcapaciteit[units/MW], MetaData/Categorie/MWth_max[Categorie_rel]), metadata/TypeInfo/MWth_default[Typeinfo_rel]);
+				attribute<metadata/Typeinfo> Typeinfo_rel := const( 6[metadata/Typeinfo], .);
+				attribute<metadata/Categorie> Categorie_rel := makedefined(rlookup(LowerCase(Type_bron), LowerCase(MetaData/Categorie/code)), MetaData/Categorie/V/Voedingsmiddelen_dranken_tabak);
 			}	
 			
-			unit<uint32> MT : StorageName="%SourceDataDir%/StartAnalyse/V1/aanbod/puntbronnen/20200311_Puntbronnen_MT.csv", StorageType="gdal.vect", StorageReadOnly="True"
+			unit<uint32> MT : StorageName="%SourceDataDir%/StartAnalyse/V2/aanbod/puntbronnen/20241118_Puntbronnen_MT.csv", StorageType="gdal.vect", StorageReadOnly="True"
 			{
-				attribute<geography/rdc_m> geometry := point_xy(float64(x),float64(y), geography/rdc_m);
+				attribute<geography/rdc_m>   geometry     := point_xy(float64(x),float64(y), geography/rdc_m);
+				attribute<MetaData/TypeInfo> TypeInfo_rel := makedefined(rlookup(Type_bron, MetaData/TypeInfo/Type), 5[metadata/Typeinfo]);
+				attribute<units/MW>      MWth_min  := value(MetaData/TypeInfo/MWth_min[TypeInfo_rel], units/MW);
+				attribute<units/MW>      MWth_max  := makedefined(MWcapaciteit[units/MW], MetaData/TypeInfo/MWth_default[TypeInfo_rel]);
 			}	
 		}
 		
-		unit<uint32> WKO : StorageName="%SourceDataDir%/StartAnalyse/V1/aanbod/WKO/20180802_WKO_potentiecontour.shp", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> WKO : StorageName="%SourceDataDir%/StartAnalyse/V2/aanbod/WKO/20240610_WKO_potentiecontour.shp", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<geography/rdc_m> geometry (poly);
 			attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := convert(geometry, geography/rdc_m_ipoint);
 		}	
 		
-		unit<uint32> TEO : StorageName="%SourceDataDir%/StartAnalyse/V1/aanbod/WKO/20200211_TEO_potentiecontour.shp", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> TEO : StorageName="%SourceDataDir%/StartAnalyse/V2/aanbod/WKO/20240528_TEO_potentiecontour.shp", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<geography/rdc_m> geometry (poly);
 			attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := convert(geometry, geography/rdc_m_ipoint);
@@ -481,7 +602,7 @@ container SourceData {
 									   "S3", "S3", "S3", "S3", "S3", "S3", "S3", "S3", "S3", "S3", "S3", "S3", "S3", "S3", "S3", "S3", "S3", "S3",
 									   "S4", "S4", "S4", "S4", "S4", "S4", "S4", "S4", "S4", "S4", "S4", "S4", "S4", "S4", "S4", "S4", "S4", "S4",
 									   "S5", "S5", "S5", "S5", "S5", "S5", "S5", "S5", "S5", "S5", "S5", "S5", "S5", "S5", "S5", "S5", "S5", "S5",
-									   "R19", "R19", "R19", "R19", "R19", "R19", "R19", "R19", "R19", "R19", "R19", "R19", "R19", "R19", "R19",
+									   "R23", "R23", "R23", "R23", "R23", "R23", "R23", "R23", "R23", "R23", "R23", "R23", "R23", "R23", "R23",
 									   "R30", "R30", "R30", "R30", "R30", "R30", "R30", "R30", "R30", "R30", "R30", "R30", "R30", "R30", "R30",
 									   "LN", "LN", "LN", "LN", "LN", "LN", "LN", "LN", "LN", "LN", "LN", "LN", "LN", "LN", "LN", "LN", "LN", "LN", "LN"];
 			

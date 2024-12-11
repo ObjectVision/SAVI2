@@ -726,7 +726,7 @@ container Templates {
 			attribute<string> Provincienaam := replace(rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I08_provincienaam_), "'", "");
 			attribute<string> AantalWoningen := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I09_aantal_woningen_Aansluiting_);
 			attribute<string> AantalUtiliteiten := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I10_aantal_utiliteit_Aansluiting_);
-			attribute<string> WoningEquivalenten := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I11_woningequivalenten_Woning_);
+			attribute<string> WoningEquivalenten := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I11_WEQ_utiliteit_Aansluiting_);
 
 			// strategie informatie
 			attribute<string> V01_Strategievariant                    					      := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_V01_Strategievariant_);
@@ -1005,7 +1005,7 @@ container Templates {
 			parameter<string> S4 :== 'replace(S4_t_2, "@@@TITLE@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/title))';
 			
 			parameter<string> R19_t := components/rel_items;
-			parameter<string> R19_t_1 := replace(R19_t, "@@@STRAT_ID@@@", "R19");
+			parameter<string> R19_t_1 := replace(R19_t, "@@@STRAT_ID@@@", "R23");
 			parameter<string> R19_t_2 :== 'replace(R19_t_1, "@@@LAYER_LINK@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/layer))';
 			parameter<string> R19 :== 'replace(R19_t_2, "@@@TITLE@@@", rjoin("LN_' + layer_id + '", SourceData/meta/Links/key, SourceData/meta/Links/title))';
 			
@@ -1054,7 +1054,10 @@ container Templates {
 		parameter<string> final_t_15 :== 'replace(final_t_14, "@@@STRAT_H14@@@", "<a href=" + rjoin("' + strat_id + '_H14", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H14</a>'')';
 		parameter<string> final_t_16 :== 'replace(final_t_15, "@@@STRAT_H15@@@", "<a href=" + rjoin("' + strat_id + '_H15", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H15</a>'')';
 		parameter<string> final_t_17 :== 'MakeDefined(replace(final_t_16, "@@@STRAT_H16@@@", "<a href=" + rjoin("' + strat_id + '_H16", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H16</a>''),final_t_16)';
-		parameter<string> final_t_18 :== 'MakeDefined(replace(final_t_17, "@@@STRAT_H17@@@", "<a href=" + rjoin("' + strat_id + '_H17", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H17</a>''),final_t_17)';
+		parameter<string> final_t_18_1 :== 'MakeDefined(replace(final_t_17, "@@@STRAT_H17@@@", "<a href=" + rjoin("' + strat_id + '_H17", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H17</a>''),final_t_17)';
+		parameter<string> final_t_18_2 :== 'MakeDefined(replace(final_t_18_1, "@@@R23_H17@@@", "<a href=" + rjoin("R23_H17", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H17</a>''),final_t_18_1)';
+		parameter<string> final_t_18_3 :== 'MakeDefined(replace(final_t_18_2, "@@@R30_H15@@@", "<a href=" + rjoin("R30_H15", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H17</a>''),final_t_18_2)';
+		parameter<string> final_t_18 :== 'MakeDefined(replace(final_t_18_3, "@@@R30_H16@@@", "<a href=" + rjoin("R30_H16", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   '' target="_blank">H17</a>''),final_t_18_3)';
 		
 		parameter<string> filename := "%LocalDataDir%/startanalyse_2_0/meta/" + strat_id + "_" + layer_id + ".html";
 		parameter<string> final_t_19 :== 'MakeDefined(replace(final_t_18, "@@@STRAT_H18@@@", "<a href=" + rjoin("' + strat_id + '_H18", SourceData/meta/Links/key, SourceData/meta/Links/layer) +   ''target="_blank">H18</a>''),final_t_18)', 

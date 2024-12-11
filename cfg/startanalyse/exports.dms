@@ -7,12 +7,12 @@ container Exports {
 		container export_strat2 := Templates/ExportStrategieToTilejson(false, 2b);
 		container export_strat3 := Templates/ExportStrategieToTilejson(false, 3b);
 		container export_strat4 := Templates/ExportStrategieToTilejson(false, 4b);
-		container export_strat5 := Templates/ExportStrategieToTilejson(false, 5b);
+		//container export_strat5 := Templates/ExportStrategieToTilejson(false, 5b);
 		container export_strat6 := Templates/ExportStrategieToTilejson(true, 6b);  // ref19
 		container export_strat7 := Templates/ExportStrategieToTilejson(true, 7b);  // ref30
 		container export_strat8 := Templates/ExportStrategieToTilejson(false, 8b); // stratNL
 		
-		parameter<string> export_all := "Done", ExplicitSuppliers="Exports/strats/export_strat1/MVT/all_zoom_levels/dataset;Exports/strats/export_strat2/MVT/all_zoom_levels/dataset;Exports/strats/export_strat3/MVT/all_zoom_levels/dataset;Exports/strats/export_strat4/MVT/all_zoom_levels/dataset;Exports/strats/export_strat5/MVT/all_zoom_levels/dataset;Exports/strats/export_strat6/MVT/all_zoom_levels/dataset;Exports/strats/export_strat7/MVT/all_zoom_levels/dataset;Exports/strats/export_strat8/MVT/all_zoom_levels/dataset";
+		parameter<string> export_all := "Done", ExplicitSuppliers="Exports/strats/export_strat1/MVT/all_zoom_levels/dataset;Exports/strats/export_strat2/MVT/all_zoom_levels/dataset;Exports/strats/export_strat3/MVT/all_zoom_levels/dataset;Exports/strats/export_strat4/MVT/all_zoom_levels/dataset;Exports/strats/export_strat6/MVT/all_zoom_levels/dataset;Exports/strats/export_strat7/MVT/all_zoom_levels/dataset;Exports/strats/export_strat8/MVT/all_zoom_levels/dataset";
 	}
 	
 	container top2
@@ -22,20 +22,22 @@ container Exports {
 			attribute<units/Euro_per_ton_CO2_per_yr> S1H17 := Exports/strats/export_strat1/Buurtindicatoren/H17_Nationale_meerkosten_CO2;
 			attribute<units/Euro_per_ton_CO2_per_yr> S2H17 := Exports/strats/export_strat2/Buurtindicatoren/H17_Nationale_meerkosten_CO2;
 			attribute<units/Euro_per_ton_CO2_per_yr> S3H17 := Exports/strats/export_strat3/Buurtindicatoren/H17_Nationale_meerkosten_CO2;
-			//attribute<units/Euro_per_ton_CO2_per_yr> S4H17 := Exports/strats/export_strat4/Buurtindicatoren/H17_Nationale_meerkosten_CO2;
-			attribute<units/Euro_per_ton_CO2_per_yr> S5H17 := Exports/strats/export_strat5/Buurtindicatoren/H17_Nationale_meerkosten_CO2;
+			attribute<units/Euro_per_ton_CO2_per_yr> S4H17 := Exports/strats/export_strat4/Buurtindicatoren/H17_Nationale_meerkosten_CO2;
 			
-			attribute<uint32> min_index := argmin(S1H17, S2H17, S3H17, S5H17);
-			attribute<float32> best_value := min_elem(S1H17, S2H17, S3H17, S5H17);
+			//attribute<units/Euro_per_ton_CO2_per_yr> S5H17 := Exports/strats/export_strat5/Buurtindicatoren/H17_Nationale_meerkosten_CO2;
+			
+			attribute<uint32> min_index := argmin(S1H17, S2H17, S3H17, S4H17);//S5H17);
+			attribute<float32> best_value := min_elem(S1H17, S2H17, S3H17, S4H17);
 			
 			
 			attribute<units/Euro_per_ton_CO2_per_yr> S1H17_or_not := min_index==0?(0/0)[units/Euro_per_ton_CO2_per_yr]:S1H17;
-			attribute<units/Euro_per_ton_CO2_per_yr> S2H17_or_not := min_index==1?(0/0)[units/Euro_per_ton_CO2_per_yr]:S1H17;
-			attribute<units/Euro_per_ton_CO2_per_yr> S3H17_or_not := min_index==2?(0/0)[units/Euro_per_ton_CO2_per_yr]:S1H17;
-			//attribute<units/Euro_per_ton_CO2_per_yr> S4H17 := Exports/strats/export_strat4/Buurtindicatoren/H17_Nationale_meerkosten_CO2;
-			attribute<units/Euro_per_ton_CO2_per_yr> S5H17_or_not := min_index==3?(0/0)[units/Euro_per_ton_CO2_per_yr]:S1H17;
+			attribute<units/Euro_per_ton_CO2_per_yr> S2H17_or_not := min_index==1?(0/0)[units/Euro_per_ton_CO2_per_yr]:S2H17;
+			attribute<units/Euro_per_ton_CO2_per_yr> S3H17_or_not := min_index==2?(0/0)[units/Euro_per_ton_CO2_per_yr]:S3H17;
+			attribute<units/Euro_per_ton_CO2_per_yr> S4H17_or_not := min_index==3?(0/0)[units/Euro_per_ton_CO2_per_yr]:S4H17;
 			
-			attribute<float32> second_best_value := min_elem(S1H17_or_not, S2H17_or_not, S3H17_or_not, S5H17_or_not);
+			//attribute<units/Euro_per_ton_CO2_per_yr> S5H17_or_not := min_index==3?(0/0)[units/Euro_per_ton_CO2_per_yr]:S1H17;
+			
+			attribute<float32> second_best_value := min_elem(S1H17_or_not, S2H17_or_not, S3H17_or_not, S4H17_or_not);
 			
 			attribute<float32> difference := second_best_value - best_value;
 		}
@@ -63,8 +65,6 @@ container Exports {
 	}
 
 	container aanbod {
-		parameter<string> export_all := "Done", ExplicitSuppliers="Exports/strats/export_strat1/MVT/all_zoom_levels/dataset;Exports/strats/export_strat2/MVT/all_zoom_levels/dataset;Exports/strats/export_strat3/MVT/all_zoom_levels/dataset;Exports/strats/export_strat4/MVT/all_zoom_levels/dataset;Exports/strats/export_strat5/MVT/all_zoom_levels/dataset;Exports/strats/export_strat6/MVT/all_zoom_levels/dataset;Exports/strats/export_strat7/MVT/all_zoom_levels/dataset;Exports/strats/export_strat8/MVT/all_zoom_levels/dataset";
-		
 		container gas := Templates/ExportGasTilejson();
 		container geothermie {
 
@@ -427,15 +427,15 @@ container Exports {
             nationale kosten als ontwikkelingen op het gebied van kostenreductie en energiekosten tot 2030
             afwijken van de centrale veronderstellingen. De totale extra nationale kosten zijn uit te splitsen in
             de kosten in de vorm van kapitaalslasten (K10) en in de vorm van variabele kosten (K18).';
+			
 			parameter<string> b_kaart_H17 := ' de jaarlijkse extra nationale kosten per ton CO2-reductie.
-            Deze zijn berekend door de extra nationale kosten (@@@STRAT_H16@@@, zie vorige paragrafen) te delen door de
-            berekende CO2-reductie ten opzichte van de 2030 referentie in de buurt, zie CO2-uitstoot @@@STRAT_H15@@@ in
-            kolom 2030 ref. van tabel 5.2. Merk op dat deze waarde afwijkt van de CO2-uitstoot in het
+            Deze zijn berekend door het verschil in nationale kosten tussen referentie 2030 en @@@STRAT_H16@@@ te delen door het verschil in
+            berekende CO2 uitstoot tussen referentie 2030 en @@@STRAT_H16@@@. Merk op dat het verschil in berekende CO2 uitstoot afwijkt van de CO2-uitstoot in het
             startjaar, die bovenaan de set buurtabellen is vermeld. Dat verschil ontstaat door vermindering
             van de warmtevraag als gevolg van de verwachte stijging van de buitentemperatuur vanaf het
             startjaar. Deze indicator @@@STRAT_H17@@@ helpt strategieën en buurten te selecteren waar de CO2-uitstoot het
-            meest kosten-efficiënt is te reduceren. De uitkomsten voor H17 staan eveneens weergegeven in
-            figuur 2.2 (paragraaf 4.2.4).';
+            meest kosten-efficiënt is te reduceren.';
+			
 			parameter<string> b_kaart_H18 := ' de jaarlijkse extra nationale kosten per woningequivalent
             in 2030. Let wel: dat zijn níet de kosten die een woningeigenaar moet betalen. Een (nu nog onbekend) deel van die kosten wordt door anderen betaald, zoals energiebedrijven en verhuurders
             (die investeringen doen) of overheden (die bijvoorbeeld subsidies verstrekken). Die kosten

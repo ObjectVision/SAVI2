@@ -3,7 +3,6 @@ container units {
 	unit<float32> Jaar;
 	unit<float32> woning;
 	unit<float32> CO2;
-	unit<float32>  J := baseunit('J', float32);
 	unit<float64> m  := baseunit('m', float64);
 	unit<float32> m_f32  := baseunit('m', float32);
 	unit<int32> mm := 0.001 * int32(m);
@@ -11,7 +10,24 @@ container units {
 	unit<float64> m2 := m*m;
 	unit<float64> m3 := m*m*m;
 	unit<float32> ha := 10e4*m_f32*m_f32;
-	unit<float32> giga_J := 10e9*J;
+	
+	// duration
+	unit<float64> s             := baseunit('s', float64),   label = "second", descr = "SI base unit for time";
+	unit<float64> hr            := 60 * 60 * s,              label = "hour";
+	unit<float64> yr            := BaseUnit('yr', float64) , label = "year", descr = "alternative unit for time duration";
+	unit<float64> _yr           := 1 / yr,                   label = "per year";
+	
+	// energy
+	unit<float64> J             := BaseUnit('J', float64), label = "Joule", descr = "SI unit for energy";
+	unit<float64> V             := BaseUnit('V', float64), label = "Volt";
+	unit<float64> A             := W / V;
+
+	// power
+	unit<float64> W             := J / s, label = "Watt", descr = "SI unit for power";
+	unit<float64> kW            := 1000 * W;
+	unit<float64> MW            := 1000 * kW;
+	
+	unit<float32> giga_J := 10e9*float32(J);
 	unit<float32> giga_J_per_ha := giga_J / ha;
 	unit<float32> giga_J_per_woning_per_yr := giga_J / woning / Jaar;
 	unit<float32> ton_CO2 := 10e9*CO2;
