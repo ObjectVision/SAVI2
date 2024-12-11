@@ -1,0 +1,52 @@
+container issue_156
+{
+	container geography
+	{
+		unit<dpoint> wm_base : DialogData = "wmts_wm_layer", SpatialReference = "EPSG:3857";
+		unit<dpoint> wm_m  := range(wm_base, point_yx(6555240.0, 335100.0), point_yx(7153283.0, 820628.0));
+	}
+
+	container gpkg
+	{
+		container LN : StorageName="%LocalDataDir%/StartAnalyse_2_0/Strategie8.gpkg"
+		,  StorageType     = "gdal.vect"
+		,  StorageReadOnly = "True"
+		,  SyncMode        = "allTables"
+		,  DialogData      = "geography/wm_m"
+		{
+			unit<uint32> strat_08
+			{
+				attribute<geography/wm_m> geometry (poly);
+			}
+			unit<uint32> strat_09
+			{
+				attribute<geography/wm_m> geometry (poly);
+			}
+			unit<uint32> strat_10
+			{
+				attribute<geography/wm_m> geometry (poly);
+			}
+		}
+	}
+	
+	container tiles
+	{
+		unit<uint32> tile_8_132_83 : StorageName="%ProjDir%/tst/data/83.pbf"
+		,  StorageType     = "gdal.vect"
+		,  StorageReadOnly = "True"
+		,  SyncMode        = "allTables"
+		,  DialogData      = "geography/wm_m";
+		
+		unit<uint32> tile_9_264_167 : StorageName="%ProjDir%/tst/data/167.pbf"
+		,  StorageType     = "gdal.vect"
+		,  StorageReadOnly = "True"
+		,  SyncMode        = "allTables"
+		,  DialogData      = "geography/wm_m";
+		
+		unit<uint32> tile_10_528_334 : StorageName="%ProjDir%/tst/data/334.pbf"
+		,  StorageType     = "gdal.vect"
+		,  StorageReadOnly = "True"
+		,  SyncMode        = "allTables"
+		,  DialogData      = "geography/wm_m";
+	}
+}
