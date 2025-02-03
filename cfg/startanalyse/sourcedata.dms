@@ -1,5 +1,5 @@
 container SourceData {
-	unit<uint32> variants : nrofrows=21 {
+	unit<uint32> variants : nrofrows=18 {
 		attribute<uint32> id := id(.);
 		//attribute<string> name : ["Ref2030", "s1a","s1b","s2a","s2b","s2d","s2e","s3a","s3b","s3d", "s3e", "s3f", "s3h", "s4a", "s4b", "s4c", "s4d", "s5a", "s5b", "s5c", "s5d"];
 		attribute<string> name : ["Ref2030", "s1a","s1b","s2a","s2b","s2d","s2e", "s2f","s3a","s3b","s3c","s3d", "s3e", "s3f", "s3g", "s3h", "s4a", "s4b"];
@@ -41,12 +41,27 @@ container SourceData {
 	: StorageName = "%SourceDataDir%/CBS/2023/cbsgebiedsindelingen2023.gpkg"
 	, StorageType="gdal.vect"
 	, StorageReadOnly="True"
+	, SyncMode = "AllTables"
 	{
+		unit<uint32> regionale_energiestrategie_gegeneraliseerd 
+		{
+			attribute<geography/rdc_m_ipoint> geometry (poly);
+			attribute<string> statnaam;
+			attribute<string> JRSTATCODE;
+		}
+	
 		unit<uint32> buurt_gegeneraliseerd
 		{			
 			attribute<geography/rdc_m_ipoint> geometry (poly);
 			attribute<geography/rdc_mm> geometry_mm (poly) := geometry[geography/rdc_mm];
-			attribute<string> BU_CODE := statcode;
+			attribute<string> BU_Code := statcode;
+			attribute<string> buurtnaam := statnaam;
+			attribute<string> WK_Code := rjoin(BU_Code, SourceData/CBSwijkenbuurten_2023_v2/buurten/BU_Code, SourceData/CBSwijkenbuurten_2023_v2/buurten/Wijkcode);
+			attribute<string> Wijknaam := rjoin(BU_Code, SourceData/CBSwijkenbuurten_2023_v2/buurten/BU_Code, SourceData/CBSwijkenbuurten_2023_v2/buurten/Wijknaam);
+			attribute<string> GM_Code := rjoin(BU_Code, SourceData/CBSwijkenbuurten_2023_v2/buurten/BU_Code, SourceData/CBSwijkenbuurten_2023_v2/buurten/Gemeentecode);
+			attribute<string> Gemeentenaam := rjoin(BU_Code, SourceData/CBSwijkenbuurten_2023_v2/buurten/BU_Code, SourceData/CBSwijkenbuurten_2023_v2/buurten/Gemeentenaam);
+			attribute<string> water := rjoin(BU_Code, SourceData/CBSwijkenbuurten_2023_v2/buurten/BU_Code, SourceData/CBSwijkenbuurten_2023_v2/buurten/Water);
+			attribute<int32> area := area(geometry, int32);
 		}
 		
 		unit<uint32> buurt_niet_gegeneraliseerd
@@ -71,6 +86,26 @@ container SourceData {
 		}
 	}
 	
+	container CBS_wijken_en_buurten_2023_tabel
+	{
+		unit<uint32> src
+		: StorageName = "%SourceDataDir%/CBS/2023/OBS_85618NED_202412200000.csv"
+		, StorageType="gdal.vect"
+		, StorageReadOnly="True"
+		, Source="https://www.cbs.nl/nl-nl/cijfers/detail/85618NED"
+		{
+			attribute<bool> is_buurt := substr(WijkenEnBuurten, 0, 2) == "BU";
+			attribute<bool> is_measure_perc_stadsverwarming := Measure == "M000369";
+		}
+		
+		unit<uint32> stadsverwarming := select_with_attr_by_cond(src, src/is_buurt && src/is_measure_perc_stadsverwarming)
+		{
+			attribute<Geography/rdc_m> geometry (poly) := rjoin(BU_Code, Buurt2023/BU_CODE, Buurt2023/geometry);
+			attribute<string> BU_Code := WijkenEnBuurten;
+			attribute<float32> perc := float32(VALUE);
+		}
+	}	
+	
 	unit<uint32> buurt2020_with_H2O : StorageName = "%SourceDataDir%/StartAnalyse/V1/cbs_buurt_2020/buurt_2020_v3.shp", StorageType="gdal.vect", StorageReadOnly="True"
 	{
 		attribute<geography/rdc_m> geometry (poly);
@@ -87,6 +122,12 @@ container SourceData {
 	}
 	
 	unit<uint32> buurt2023 := select_with_attr_by_org_rel(CBSwijkenbuurten_2023_v2/buurten, lowercase(CBSwijkenbuurten_2023_v2/buurten/water)=='nee') // &&  id(buurt2020_with_H2O)>13885);
+	{
+		attribute<geography/wm_m> geometry_wm (poly) := convert(geometry, geography/wm_m);
+		attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := rjoin(BU_CODE, CBS2023Gebiedsindelingen/buurt_gegeneraliseerd/BU_CODE, CBS2023Gebiedsindelingen/buurt_gegeneraliseerd/geometry);
+	}
+	
+	unit<uint32> buurt2023_gegeneraliseerd := select_with_attr_by_org_rel(CBSwijkenbuurten_2023_v2/buurten, lowercase(CBSwijkenbuurten_2023_v2/buurten/water)=='nee') // &&  id(buurt2020_with_H2O)>13885);
 	{
 		attribute<geography/wm_m> geometry_wm (poly) := convert(geometry, geography/wm_m);
 		attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := rjoin(BU_CODE, CBS2023Gebiedsindelingen/buurt_gegeneraliseerd/BU_CODE, CBS2023Gebiedsindelingen/buurt_gegeneraliseerd/geometry);
@@ -147,46 +188,209 @@ container SourceData {
 		unit<uint32> optionSet := range(uint32, 0, 2);				
 		attribute<string> GDAL_Options (optionSet) : ['QUOTED_FIELDS_AS_STRING=YES', 'EMPTY_STRING_AS_NULL=YES'];
 		
-		unit<uint32> ViewerIndicatoren_Strategie_1 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/Strategie_1_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		parameter<string> run_variant_part := "20250129_Results_run12";
+		unit<uint32> ViewerIndicatoren_Strategie_1 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA/results/Strategie_1_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
-		unit<uint32> ViewerIndicatoren_Strategie_2 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/Strategie_2_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> ViewerIndicatoren_Strategie_2 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA/results/Strategie_2_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
-		unit<uint32> ViewerIndicatoren_Strategie_3 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/Strategie_3_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> ViewerIndicatoren_Strategie_3 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA/results/Strategie_3_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
-		unit<uint32> ViewerIndicatoren_Strategie_4 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/Strategie_4_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> ViewerIndicatoren_Strategie_4 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA/results/Strategie_4_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
-		unit<uint32> ViewerIndicatoren_Strategie_6 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/Ref_2023_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> ViewerIndicatoren_Strategie_6 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA/results/Ref_2023_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
-		unit<uint32> ViewerIndicatoren_Strategie_7 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/Ref_2030_Hoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> ViewerIndicatoren_Strategie_7 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA/results/Ref_2030_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
-		unit<uint32> ViewerIndicatoren_Strategie_8 : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/LNHoofdindicatoren.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> ViewerIndicatoren_Strategie_8 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA/results/LNHoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// gevoeligheidsanalyses
+		// LN_GA_01
+		unit<uint32> ViewerIndicatoren_Strategie_9 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA/results/LN_GA_01Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// LN_GA_02
+		unit<uint32> ViewerIndicatoren_Strategie_10 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA/results/LN_GA_02Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S1_GA_03
+		unit<uint32> ViewerIndicatoren_Strategie_11 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_energiebesparing_opt/results/Strategie_1_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S2_GA_03
+		unit<uint32> ViewerIndicatoren_Strategie_12 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_energiebesparing_opt/results/Strategie_2_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S3_GA_03
+		unit<uint32> ViewerIndicatoren_Strategie_13 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_energiebesparing_opt/results/Strategie_3_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S4_GA_03
+		unit<uint32> ViewerIndicatoren_Strategie_14 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_energiebesparing_opt/results/Strategie_4_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// LN_GA_03
+		unit<uint32> ViewerIndicatoren_Strategie_15 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_energiebesparing_opt/results/LNHoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S1_GA_04
+		unit<uint32> ViewerIndicatoren_Strategie_16 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_hogere_energieprijzen/results/Strategie_1_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S2_GA_04
+		unit<uint32> ViewerIndicatoren_Strategie_17 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_hogere_energieprijzen/results/Strategie_2_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S3_GA_04
+		unit<uint32> ViewerIndicatoren_Strategie_18 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_hogere_energieprijzen/results/Strategie_3_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S4_GA_04
+		unit<uint32> ViewerIndicatoren_Strategie_19 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_hogere_energieprijzen/results/Strategie_4_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// LN_GA_04
+		unit<uint32> ViewerIndicatoren_Strategie_20 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_hogere_energieprijzen/results/LNHoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S1_GA_05
+		unit<uint32> ViewerIndicatoren_Strategie_21 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_lagere_energieprijzen/results/Strategie_1_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S2_GA_05
+		unit<uint32> ViewerIndicatoren_Strategie_22 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_lagere_energieprijzen/results/Strategie_2_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S3_GA_05
+		unit<uint32> ViewerIndicatoren_Strategie_23 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_lagere_energieprijzen/results/Strategie_3_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S4_GA_05
+		unit<uint32> ViewerIndicatoren_Strategie_24 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_lagere_energieprijzen/results/Strategie_4_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// LN_GA_05
+		unit<uint32> ViewerIndicatoren_Strategie_25 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_lagere_energieprijzen/results/LNHoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+
+		// S1_GA_06
+		unit<uint32> ViewerIndicatoren_Strategie_26 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_proceskosten_hoog/results/Strategie_1_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S2_GA_06
+		unit<uint32> ViewerIndicatoren_Strategie_27 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_proceskosten_hoog/results/Strategie_2_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S3_GA_06
+		unit<uint32> ViewerIndicatoren_Strategie_28 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_proceskosten_hoog/results/Strategie_3_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S4_GA_06
+		unit<uint32> ViewerIndicatoren_Strategie_29 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_proceskosten_hoog/results/Strategie_4_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// LN_GA_06
+		unit<uint32> ViewerIndicatoren_Strategie_30 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_proceskosten_hoog/results/LNHoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S1_GA_07
+		unit<uint32> ViewerIndicatoren_Strategie_31 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_proceskosten_laag/results/Strategie_1_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S2_GA_07
+		unit<uint32> ViewerIndicatoren_Strategie_32 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_proceskosten_laag/results/Strategie_2_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S3_GA_07
+		unit<uint32> ViewerIndicatoren_Strategie_33 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_proceskosten_laag/results/Strategie_3_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// S4_GA_07
+		unit<uint32> ViewerIndicatoren_Strategie_34 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_proceskosten_laag/results/Strategie_4_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
+		// LN_GA_07
+		unit<uint32> ViewerIndicatoren_Strategie_35 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA_proceskosten_laag/results/LNHoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
 		// statisch
-		unit<uint32> statisch : StorageName="%SourceDataDir%/StartAnalyse/V2/20241203_Results_run6/Statisch.csv", StorageType="gdal.vect", StorageReadOnly="True"
+		unit<uint32> statisch : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA/results/Statisch.csv'", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
-			//attribute<bool> I13_Uitgesloten_ := _I13_Uitgesloten_ == "False" ? False : True;
 		}
 	}
 	
@@ -378,6 +582,18 @@ container SourceData {
 		{
 			attribute<geography/rdc_m> geometry (poly);
 			attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := convert(geometry, geography/rdc_m_ipoint);
+		}
+		
+		container lijnbronnen
+		{
+			unit<uint32> warmtelinq
+			: StorageName="%SourceDataDir%/StartAnalyse/V2/aanbod/lijnbronnen/warmtelinq.shp"
+			, StorageType="gdal.vect"
+			, StorageReadOnly="True"
+			{
+				attribute<geography/rdc_m> geometry (arc);
+			}
+			
 		}
 	}
 	
