@@ -12,11 +12,10 @@ container issue_156
 		,  StorageType     = "gdal.vect"
 		,  StorageReadOnly = "True"
 		,  SyncMode        = "allTables"
-		,  DialogData      = "geography/wm_m"
 		{
 			unit<uint32> strat_08
 			{
-				attribute<geography/wm_m> geometry (poly);
+				//attribute<geography/wm_m> geometry (poly);
 			}
 			unit<uint32> strat_09
 			{
@@ -31,11 +30,15 @@ container issue_156
 	
 	container tiles
 	{
-		unit<uint32> tile_8_132_83 : StorageName="%ProjDir%/tst/data/83.pbf"
+		unit<uint32> tile_8_132_83 : StorageName="C:/Users/Cicada/prj/SAVI2/scripts/Strategie8/8/132/83.pbf"
 		,  StorageType     = "gdal.vect"
 		,  StorageReadOnly = "True"
-		,  SyncMode        = "allTables"
-		,  DialogData      = "geography/wm_m";
+		,  SyncMode        = "allTables";
+													
+		unit<uint32> tile_8_132_83_tippecanoe : StorageName="%ProjDir%/scripts/tiles/Strategie8/8/132/83.pbf"
+		,  StorageType     = "gdal.vect"
+		,  StorageReadOnly = "True"
+		,  SyncMode        = "allTables";
 		
 		unit<uint32> tile_9_264_167 : StorageName="%ProjDir%/tst/data/167.pbf"
 		,  StorageType     = "gdal.vect"
@@ -43,7 +46,7 @@ container issue_156
 		,  SyncMode        = "allTables"
 		,  DialogData      = "geography/wm_m";
 		
-		unit<uint32> tile_10_528_334 : StorageName="%ProjDir%/tst/data/334.pbf"
+		unit<uint32> tile_10_528_334 : StorageName="C:/Users/Cicada/prj/SAVI2/scripts/Strategie8/10/528/334.pbf"
 		,  StorageType     = "gdal.vect"
 		,  StorageReadOnly = "True"
 		,  SyncMode        = "allTables"
