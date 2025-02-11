@@ -777,8 +777,8 @@ container Templates {
 			attribute<Euro_per_ton_CO2_per_yr> S3H17_Nationale_meerkosten_CO2           := rjoin(BU_CODE, strat3_domain/BU_CODE, strat3_domain/_H17_Nat_meerkost_CO2_Euro_per_mega_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
 			attribute<Euro_per_ton_CO2_per_yr> S4H17_Nationale_meerkosten_CO2           := rjoin(BU_CODE, strat4_domain/BU_CODE, strat4_domain/_H17_Nat_meerkost_CO2_Euro_per_mega_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
 			
-			attribute<Euro_per_ton_CO2> H17_difference  								  := Exports/top2/kosten/difference;
-			attribute<Bool> H17_perc_difference := Exports/top2/kosten/is_percentueel_afwijkend;
+			attribute<Euro_per_ton_CO2> H17_difference  								:= rjoin(BU_CODE, SourceData/startanalyse_2_0/LNKostenVerschil/BU_code, SourceData/startanalyse_2_0/LNKostenVerschil/H17_Delta); //Exports/top2/kosten/difference;
+			attribute<Bool> H17_perc_difference 										:= rjoin(BU_CODE, SourceData/startanalyse_2_0/LNKostenVerschil/BU_code, SourceData/startanalyse_2_0/LNKostenVerschil/klein_verschil); //Exports/top2/kosten/is_percentueel_afwijkend;
 			attribute<Euro_per_woning_per_yr> H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
 			//attribute<units/Euro_per_m3> H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
 			//attribute<units/m3> H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3

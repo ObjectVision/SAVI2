@@ -38,6 +38,7 @@ container Exports {
 		container export_strat33 := Templates/ExportStrategieToTilejson(false, 33b); // S3_GA_07
 		container export_strat34 := Templates/ExportStrategieToTilejson(false, 34b); // S4_GA_07
 		container export_strat35 := Templates/ExportStrategieToTilejson(false, 35b); // LN_GA_07
+		container export_strat36 := Templates/ExportStrategieToTilejson(false, 36b); // LN_B
 		
 		parameter<string> export_all := "Done", ExplicitSuppliers="Exports/strats/export_strat1/MVT/all_zoom_levels/dataset;Exports/strats/export_strat2/MVT/all_zoom_levels/dataset;Exports/strats/export_strat3/MVT/all_zoom_levels/dataset;Exports/strats/export_strat4/MVT/all_zoom_levels/dataset;Exports/strats/export_strat6/MVT/all_zoom_levels/dataset;Exports/strats/export_strat7/MVT/all_zoom_levels/dataset;Exports/strats/export_strat8/MVT/all_zoom_levels/dataset";
 
@@ -371,7 +372,7 @@ container Exports {
 			
 			<div> 
 			<p>
-			<img id="@@@STRAT_ID@@@ Thumbnail" src="https://geo.asa2024.nl/symbolen/@@@STRAT_ID@@@.png" alt="Openen in Map Viewer">
+			<img id="@@@STRAT_ID@@@ Thumbnail" src="https://geo.startanalyse2025.nl/symbolen/@@@STRAT_ID@@@.png" alt="Openen in Map Viewer">
 			</p>';
 			
 
@@ -551,7 +552,7 @@ container Exports {
 			parameter<string> rel_items := '<li class="list-group-item d-flex justify-content-between align-items-start">
 												<div class="ms-2 me-auto">
 												  <div class="fw-bold">
-													  <img style="max-width:10%;" class="inline-block" src="https://geo.asa2024.nl/symbolen/@@@STRAT_ID@@@.png" alt="@@@STRAT_ID@@@ thumpnail">
+													  <img style="max-width:10%;" class="inline-block" src="https://geo.startanalyse2025.nl/symbolen/@@@STRAT_ID@@@.png" alt="@@@STRAT_ID@@@ thumpnail">
 													  @@@TITLE@@@
 												  </div>
 												</div>
@@ -727,10 +728,7 @@ container Exports {
 			
 			
 			parameter<string> footer := '<footer class="container-fluid footer">
-										   <p>Metadata op basis van <a href="https://kaartviewer.asa2024.nl/app/map/main/101?layerIds=275" target="_blank">Startanalyse aardgasvrije buurten</a> (gemeenterapport),
-											 <a href="https://www.pbl.nl/sites/default/files/downloads/pbl-2022-achtergrondrapport-startanalyse-aardgasvrije-buurten-2020-achtergrondrapport_4917.pdf" target="_blank">Startanalyse aardgasvrije buurten</a> (achtergrondrapport) en 
-											 <a href="https://expertisecentrumwarmte.nl/themas/de+leidraad/infographic+startanalyse/default.aspx" target="_blank">Expertise Centrum Warmte</a>
-										   </p>
+										   <p>Metainformatie is tot stand gekomen op basis van de <a href="https://startanalyse.pbl.nl/" target="_blank">Startanalyse 2025</a> begin pagina.</p>
 										 </footer>';
 										 
 			parameter<string> m_footer := '</div>';

@@ -188,7 +188,7 @@ container SourceData {
 		unit<uint32> optionSet := range(uint32, 0, 2);				
 		attribute<string> GDAL_Options (optionSet) : ['QUOTED_FIELDS_AS_STRING=YES', 'EMPTY_STRING_AS_NULL=YES'];
 		
-		parameter<string> run_variant_part := "20250129_Results_run12";
+		parameter<string> run_variant_part := "20250131_Results_run13";
 		unit<uint32> ViewerIndicatoren_Strategie_1 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA/results/Strategie_1_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
@@ -387,11 +387,26 @@ container SourceData {
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
 		
+		// LN_B
+		unit<uint32> ViewerIndicatoren_Strategie_36 : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA/results/LN_B_Hoofdindicatoren.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+		}
+		
 		// statisch
 		unit<uint32> statisch : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA/results/Statisch.csv'", StorageType="gdal.vect", StorageReadOnly="True"
 		{
 			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
 		}
+		
+		// LNKostenVerschilAnalyse
+		unit<uint32> LNKostenVerschil : StorageName="='%SourceDataDir%/StartAnalyse/V2/' + run_variant_part + '/PD_SA/results/LNKostenVerschilAnalyse.csv'", StorageType="gdal.vect", StorageReadOnly="True"
+		{
+			attribute<string> BU_CODE := replace(_BU_CODE_, '''', '');
+			attribute<bool> klein_verschil := _klein_verschil_ == "'False'" ? false : true;
+			attribute<units/Euro_per_ton_CO2> H17_Delta := _H17_Delta_tCO2_Euro_per_mega_g_[units/Euro_per_ton_CO2];
+		}
+		
 	}
 	
 	container pand {
