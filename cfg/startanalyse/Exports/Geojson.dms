@@ -1,5 +1,15 @@
 container geojson
 {
+	parameter<string> export_no_gevoeligheidsanalyses := "Done"
+	, ExplicitSuppliers = 
+	"strat1/Z05/strat1;strat1/Z06/strat1;strat1/Z07/strat1;strat1/Z08/strat1;strat1/Z09/strat1;strat1/Z10/strat1;strat1/Z11/strat1;strat1/Z12/strat1;strat1/Z13/strat1;strat1/Z14/strat1;strat1/Z15/strat1;"
+	"strat2/Z05/strat2;strat2/Z06/strat2;strat2/Z07/strat2;strat2/Z08/strat2;strat2/Z09/strat2;strat2/Z10/strat2;strat2/Z11/strat2;strat2/Z12/strat2;strat2/Z13/strat2;strat2/Z14/strat2;strat2/Z15/strat2;"
+	"strat3/Z05/strat3;strat3/Z06/strat3;strat3/Z07/strat3;strat3/Z08/strat3;strat3/Z09/strat3;strat3/Z10/strat3;strat3/Z11/strat3;strat3/Z12/strat3;strat3/Z13/strat3;strat3/Z14/strat3;strat3/Z15/strat3;"
+	"strat4/Z05/strat4;strat4/Z06/strat4;strat4/Z07/strat4;strat4/Z08/strat4;strat4/Z09/strat4;strat4/Z10/strat4;strat4/Z11/strat4;strat4/Z12/strat4;strat4/Z13/strat4;strat4/Z14/strat4;strat4/Z15/strat4;"
+	"ref19/Z05/ref19;ref19/Z06/ref19;ref19/Z07/ref19;ref19/Z08/ref19;ref19/Z09/ref19;ref19/Z10/ref19;ref19/Z11/ref19;ref19/Z12/ref19;ref19/Z13/ref19;ref19/Z14/ref19;ref19/Z15/ref19;"
+	"ref30/Z05/ref30;ref30/Z06/ref30;ref30/Z07/ref30;ref30/Z08/ref30;ref30/Z09/ref30;ref30/Z10/ref30;ref30/Z11/ref30;ref30/Z12/ref30;ref30/Z13/ref30;ref30/Z14/ref30;ref30/Z15/ref30;"
+	"stratLN/Z05/stratLN;stratLN/Z06/stratLN;stratLN/Z07/stratLN;stratLN/Z08/stratLN;stratLN/Z09/stratLN;stratLN/Z10/stratLN;stratLN/Z11/stratLN;stratLN/Z12/stratLN;stratLN/Z13/stratLN;stratLN/Z14/stratLN;stratLN/Z15/stratLN";
+
 	parameter<string> export_all := "Done"
 	, ExplicitSuppliers = 
 	"strat1/Z05/strat1;strat1/Z06/strat1;strat1/Z07/strat1;strat1/Z08/strat1;strat1/Z09/strat1;strat1/Z10/strat1;strat1/Z11/strat1;strat1/Z12/strat1;strat1/Z13/strat1;strat1/Z14/strat1;strat1/Z15/strat1;"
@@ -36,7 +46,18 @@ container geojson
 	"S3GA07/Z05/S3GA07;S3GA07/Z06/S3GA07;S3GA07/Z07/S3GA07;S3GA07/Z08/S3GA07;S3GA07/Z09/S3GA07;S3GA07/Z10/S3GA07;S3GA07/Z11/S3GA07;S3GA07/Z12/S3GA07;S3GA07/Z13/S3GA07;S3GA07/Z14/S3GA07;S3GA07/Z15/S3GA07;"
 	"S4GA07/Z05/S4GA07;S4GA07/Z06/S4GA07;S4GA07/Z07/S4GA07;S4GA07/Z08/S4GA07;S4GA07/Z09/S4GA07;S4GA07/Z10/S4GA07;S4GA07/Z11/S4GA07;S4GA07/Z12/S4GA07;S4GA07/Z13/S4GA07;S4GA07/Z14/S4GA07;S4GA07/Z15/S4GA07;"
 	"LNGA07/Z05/LNGA07;LNGA07/Z06/LNGA07;LNGA07/Z07/LNGA07;LNGA07/Z08/LNGA07;LNGA07/Z09/LNGA07;LNGA07/Z10/LNGA07;LNGA07/Z11/LNGA07;LNGA07/Z12/LNGA07;LNGA07/Z13/LNGA07;LNGA07/Z14/LNGA07;LNGA07/Z15/LNGA07;"
-	"LNB/Z05/LNB;LNB/Z06/LNB;LNB/Z07/LNB;LNB/Z08/LNB;LNB/Z09/LNB;LNB/Z10/LNB;LNB/Z11/LNB;LNB/Z12/LNB;LNB/Z13/LNB;LNB/Z14/LNB;LNB/Z15/LNB";
+	"LNGA08/Z05/LNGA08;LNGA08/Z06/LNGA08;LNGA08/Z07/LNGA08;LNGA08/Z08/LNGA08;LNGA08/Z09/LNGA08;LNGA08/Z10/LNGA08;LNGA08/Z11/LNGA08;LNGA08/Z12/LNGA08;LNGA08/Z13/LNGA08;LNGA08/Z14/LNGA08;LNGA08/Z15/LNGA08;"
+	"S1GA09/Z05/S1GA09;S1GA09/Z06/S1GA09;S1GA09/Z07/S1GA09;S1GA09/Z08/S1GA09;S1GA09/Z09/S1GA09;S1GA09/Z10/S1GA09;S1GA09/Z11/S1GA09;S1GA09/Z12/S1GA09;S1GA09/Z13/S1GA09;S1GA09/Z14/S1GA09;S1GA09/Z15/S1GA09;"
+	"S2GA09/Z05/S2GA09;S2GA09/Z06/S2GA09;S2GA09/Z07/S2GA09;S2GA09/Z08/S2GA09;S2GA09/Z09/S2GA09;S2GA09/Z10/S2GA09;S2GA09/Z11/S2GA09;S2GA09/Z12/S2GA09;S2GA09/Z13/S2GA09;S2GA09/Z14/S2GA09;S2GA09/Z15/S2GA09;"
+	"S3GA09/Z05/S3GA09;S3GA09/Z06/S3GA09;S3GA09/Z07/S3GA09;S3GA09/Z08/S3GA09;S3GA09/Z09/S3GA09;S3GA09/Z10/S3GA09;S3GA09/Z11/S3GA09;S3GA09/Z12/S3GA09;S3GA09/Z13/S3GA09;S3GA09/Z14/S3GA09;S3GA09/Z15/S3GA09;"
+	"S4GA09/Z05/S4GA09;S4GA09/Z06/S4GA09;S4GA09/Z07/S4GA09;S4GA09/Z08/S4GA09;S4GA09/Z09/S4GA09;S4GA09/Z10/S4GA09;S4GA09/Z11/S4GA09;S4GA09/Z12/S4GA09;S4GA09/Z13/S4GA09;S4GA09/Z14/S4GA09;S4GA09/Z15/S4GA09;"
+	"LNGA09/Z05/LNGA09;LNGA09/Z06/LNGA09;LNGA09/Z07/LNGA09;LNGA09/Z08/LNGA09;LNGA09/Z09/LNGA09;LNGA09/Z10/LNGA09;LNGA09/Z11/LNGA09;LNGA09/Z12/LNGA09;LNGA09/Z13/LNGA09;LNGA09/Z14/LNGA09;LNGA09/Z15/LNGA09;"
+	"S1GA10/Z05/S1GA10;S1GA10/Z06/S1GA10;S1GA10/Z07/S1GA10;S1GA10/Z08/S1GA10;S1GA10/Z09/S1GA10;S1GA10/Z10/S1GA10;S1GA10/Z11/S1GA10;S1GA10/Z12/S1GA10;S1GA10/Z13/S1GA10;S1GA10/Z14/S1GA10;S1GA10/Z15/S1GA10;"
+	"S2GA10/Z05/S2GA10;S2GA10/Z06/S2GA10;S2GA10/Z07/S2GA10;S2GA10/Z08/S2GA10;S2GA10/Z09/S2GA10;S2GA10/Z10/S2GA10;S2GA10/Z11/S2GA10;S2GA10/Z12/S2GA10;S2GA10/Z13/S2GA10;S2GA10/Z14/S2GA10;S2GA10/Z15/S2GA10;"
+	"S3GA10/Z05/S3GA10;S3GA10/Z06/S3GA10;S3GA10/Z07/S3GA10;S3GA10/Z08/S3GA10;S3GA10/Z09/S3GA10;S3GA10/Z10/S3GA10;S3GA10/Z11/S3GA10;S3GA10/Z12/S3GA10;S3GA10/Z13/S3GA10;S3GA10/Z14/S3GA10;S3GA10/Z15/S3GA10;"
+	"S4GA10/Z05/S4GA10;S4GA10/Z06/S4GA10;S4GA10/Z07/S4GA10;S4GA10/Z08/S4GA10;S4GA10/Z09/S4GA10;S4GA10/Z10/S4GA10;S4GA10/Z11/S4GA10;S4GA10/Z12/S4GA10;S4GA10/Z13/S4GA10;S4GA10/Z14/S4GA10;S4GA10/Z15/S4GA10;"
+	"LNGA10/Z05/LNGA10;LNGA10/Z06/LNGA10;LNGA10/Z07/LNGA10;LNGA10/Z08/LNGA10;LNGA10/Z09/LNGA10;LNGA10/Z10/LNGA10;LNGA10/Z11/LNGA10;LNGA10/Z12/LNGA10;LNGA10/Z13/LNGA10;LNGA10/Z14/LNGA10;LNGA10/Z15/LNGA10;"
+	"LNGA11/Z05/LNGA11;LNGA11/Z06/LNGA11;LNGA11/Z07/LNGA11;LNGA11/Z08/LNGA11;LNGA11/Z09/LNGA11;LNGA11/Z10/LNGA11;LNGA11/Z11/LNGA11;LNGA11/Z12/LNGA11;LNGA11/Z13/LNGA11;LNGA11/Z14/LNGA11;LNGA11/Z15/LNGA11";
 	
 	container strat1
 	{
@@ -3137,11 +3158,11 @@ container geojson
 		}
 	}
 	
-	container LNB
+	container LNGA08
 	{
 		container Z05
 		{
-			unit<uint32> LNB := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat))
+			unit<uint32> LNGA08 := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat))
 			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie36/strat_05.geojson"
 			, StorageType="gdalwrite.vect"
 			, StorageReadOnly = "False";
@@ -3149,7 +3170,7 @@ container geojson
 
 		container Z06
 		{
-			unit<uint32> LNB := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat))
+			unit<uint32> LNGA08 := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat))
 			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie36/strat_06.geojson"
 			, StorageType="gdalwrite.vect"
 			, StorageReadOnly = "False";
@@ -3157,7 +3178,7 @@ container geojson
 		
 		container Z07
 		{
-			unit<uint32> LNB := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat))
+			unit<uint32> LNGA08 := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat))
 			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie36/strat_07.geojson"
 			, StorageType="gdalwrite.vect"
 			, StorageReadOnly = "False";
@@ -3165,7 +3186,7 @@ container geojson
 		
 		container Z08
 		{
-			unit<uint32> LNB := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat))
+			unit<uint32> LNGA08 := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat))
 			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie36/strat_08.geojson"
 			, StorageType="gdalwrite.vect"
 			, StorageReadOnly = "False";
@@ -3173,7 +3194,7 @@ container geojson
 		
 		container Z09
 		{
-			unit<uint32> LNB := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat))
+			unit<uint32> LNGA08 := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat))
 			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie36/strat_09.geojson"
 			, StorageType="gdalwrite.vect"
 			, StorageReadOnly = "False";
@@ -3181,7 +3202,7 @@ container geojson
 		
 		container Z10
 		{
-			unit<uint32> LNB := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat))
+			unit<uint32> LNGA08 := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat))
 			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie36/strat_10.geojson"
 			, StorageType="gdalwrite.vect"
 			, StorageReadOnly = "False";
@@ -3189,7 +3210,7 @@ container geojson
 		
 		container Z11
 		{
-			unit<uint32> LNB := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat))
+			unit<uint32> LNGA08 := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat))
 			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie36/strat_11.geojson"
 			, StorageType="gdalwrite.vect"
 			, StorageReadOnly = "False";
@@ -3197,7 +3218,7 @@ container geojson
 		
 		container Z12
 		{
-			unit<uint32> LNB := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat))
+			unit<uint32> LNGA08 := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat))
 			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie36/strat_12.geojson"
 			, StorageType="gdalwrite.vect"
 			, StorageReadOnly = "False";
@@ -3205,7 +3226,7 @@ container geojson
 		
 		container Z13
 		{
-			unit<uint32> LNB := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat))
+			unit<uint32> LNGA08 := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat))
 			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie36/strat_13.geojson"
 			, StorageType="gdalwrite.vect"
 			, StorageReadOnly = "False";
@@ -3213,7 +3234,7 @@ container geojson
 		
 		container Z14
 		{
-			unit<uint32> LNB := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat))
+			unit<uint32> LNGA08 := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat))
 			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie36/strat_14.geojson"
 			, StorageType="gdalwrite.vect"
 			, StorageReadOnly = "False";
@@ -3221,11 +3242,1013 @@ container geojson
 		
 		container Z15
 		{
-			unit<uint32> LNB := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat))
+			unit<uint32> LNGA08 := select_with_attr_by_cond(Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat36/MVT/base_results/split_polygon_results/results/per_strat))
 			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie36/strat_15.geojson"
 			, StorageType="gdalwrite.vect"
 			, StorageReadOnly = "False";
 		}
 	}
 
+	// GA09
+	container S1GA09
+	{
+		container Z05
+		{
+			unit<uint32> S1GA09 := select_with_attr_by_cond(Exports/strats/export_strat37/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat37/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie37/strat_05.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+
+		container Z06
+		{
+			unit<uint32> S1GA09 := select_with_attr_by_cond(Exports/strats/export_strat37/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat37/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie37/strat_06.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z07
+		{
+			unit<uint32> S1GA09 := select_with_attr_by_cond(Exports/strats/export_strat37/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat37/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie37/strat_07.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z08
+		{
+			unit<uint32> S1GA09 := select_with_attr_by_cond(Exports/strats/export_strat37/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat37/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie37/strat_08.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z09
+		{
+			unit<uint32> S1GA09 := select_with_attr_by_cond(Exports/strats/export_strat37/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat37/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie37/strat_09.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z10
+		{
+			unit<uint32> S1GA09 := select_with_attr_by_cond(Exports/strats/export_strat37/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat37/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie37/strat_10.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z11
+		{
+			unit<uint32> S1GA09 := select_with_attr_by_cond(Exports/strats/export_strat37/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat37/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie37/strat_11.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z12
+		{
+			unit<uint32> S1GA09 := select_with_attr_by_cond(Exports/strats/export_strat37/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat37/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie37/strat_12.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z13
+		{
+			unit<uint32> S1GA09 := select_with_attr_by_cond(Exports/strats/export_strat37/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat37/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie37/strat_13.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z14
+		{
+			unit<uint32> S1GA09 := select_with_attr_by_cond(Exports/strats/export_strat37/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat37/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie37/strat_14.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z15
+		{
+			unit<uint32> S1GA09 := select_with_attr_by_cond(Exports/strats/export_strat37/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat37/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie37/strat_15.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+	}
+
+	container S2GA09
+	{
+		container Z05
+		{
+			unit<uint32> S2GA09 := select_with_attr_by_cond(Exports/strats/export_strat38/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat38/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie38/strat_05.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+
+		container Z06
+		{
+			unit<uint32> S2GA09 := select_with_attr_by_cond(Exports/strats/export_strat38/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat38/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie38/strat_06.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z07
+		{
+			unit<uint32> S2GA09 := select_with_attr_by_cond(Exports/strats/export_strat38/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat38/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie38/strat_07.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z08
+		{
+			unit<uint32> S2GA09 := select_with_attr_by_cond(Exports/strats/export_strat38/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat38/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie38/strat_08.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z09
+		{
+			unit<uint32> S2GA09 := select_with_attr_by_cond(Exports/strats/export_strat38/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat38/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie38/strat_09.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z10
+		{
+			unit<uint32> S2GA09 := select_with_attr_by_cond(Exports/strats/export_strat38/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat38/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie38/strat_10.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z11
+		{
+			unit<uint32> S2GA09 := select_with_attr_by_cond(Exports/strats/export_strat38/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat38/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie38/strat_11.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z12
+		{
+			unit<uint32> S2GA09 := select_with_attr_by_cond(Exports/strats/export_strat38/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat38/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie38/strat_12.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z13
+		{
+			unit<uint32> S2GA09 := select_with_attr_by_cond(Exports/strats/export_strat38/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat38/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie38/strat_13.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z14
+		{
+			unit<uint32> S2GA09 := select_with_attr_by_cond(Exports/strats/export_strat38/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat38/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie38/strat_14.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z15
+		{
+			unit<uint32> S2GA09 := select_with_attr_by_cond(Exports/strats/export_strat38/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat38/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie38/strat_15.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+	}
+	
+	container S3GA09
+	{
+		container Z05
+		{
+			unit<uint32> S3GA09 := select_with_attr_by_cond(Exports/strats/export_strat39/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat39/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie39/strat_05.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+
+		container Z06
+		{
+			unit<uint32> S3GA09 := select_with_attr_by_cond(Exports/strats/export_strat39/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat39/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie39/strat_06.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z07
+		{
+			unit<uint32> S3GA09 := select_with_attr_by_cond(Exports/strats/export_strat39/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat39/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie39/strat_07.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z08
+		{
+			unit<uint32> S3GA09 := select_with_attr_by_cond(Exports/strats/export_strat39/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat39/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie39/strat_08.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z09
+		{
+			unit<uint32> S3GA09 := select_with_attr_by_cond(Exports/strats/export_strat39/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat39/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie39/strat_09.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z10
+		{
+			unit<uint32> S3GA09 := select_with_attr_by_cond(Exports/strats/export_strat39/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat39/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie39/strat_10.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z11
+		{
+			unit<uint32> S3GA09 := select_with_attr_by_cond(Exports/strats/export_strat39/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat39/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie39/strat_11.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z12
+		{
+			unit<uint32> S3GA09 := select_with_attr_by_cond(Exports/strats/export_strat39/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat39/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie39/strat_12.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z13
+		{
+			unit<uint32> S3GA09 := select_with_attr_by_cond(Exports/strats/export_strat39/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat39/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie39/strat_13.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z14
+		{
+			unit<uint32> S3GA09 := select_with_attr_by_cond(Exports/strats/export_strat39/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat39/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie39/strat_14.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z15
+		{
+			unit<uint32> S3GA09 := select_with_attr_by_cond(Exports/strats/export_strat39/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat39/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie39/strat_15.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+	}
+	
+	container S4GA09
+	{
+		container Z05
+		{
+			unit<uint32> S4GA09 := select_with_attr_by_cond(Exports/strats/export_strat40/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat40/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie40/strat_05.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+
+		container Z06
+		{
+			unit<uint32> S4GA09 := select_with_attr_by_cond(Exports/strats/export_strat40/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat40/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie40/strat_06.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z07
+		{
+			unit<uint32> S4GA09 := select_with_attr_by_cond(Exports/strats/export_strat40/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat40/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie40/strat_07.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z08
+		{
+			unit<uint32> S4GA09 := select_with_attr_by_cond(Exports/strats/export_strat40/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat40/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie40/strat_08.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z09
+		{
+			unit<uint32> S4GA09 := select_with_attr_by_cond(Exports/strats/export_strat40/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat40/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie40/strat_09.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z10
+		{
+			unit<uint32> S4GA09 := select_with_attr_by_cond(Exports/strats/export_strat40/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat40/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie40/strat_10.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z11
+		{
+			unit<uint32> S4GA09 := select_with_attr_by_cond(Exports/strats/export_strat40/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat40/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie40/strat_11.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z12
+		{
+			unit<uint32> S4GA09 := select_with_attr_by_cond(Exports/strats/export_strat40/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat40/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie40/strat_12.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z13
+		{
+			unit<uint32> S4GA09 := select_with_attr_by_cond(Exports/strats/export_strat40/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat40/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie40/strat_13.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z14
+		{
+			unit<uint32> S4GA09 := select_with_attr_by_cond(Exports/strats/export_strat40/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat40/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie40/strat_14.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z15
+		{
+			unit<uint32> S4GA09 := select_with_attr_by_cond(Exports/strats/export_strat40/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat40/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie40/strat_15.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+	}
+	
+	container LNGA09
+	{
+		container Z05
+		{
+			unit<uint32> LNGA09 := select_with_attr_by_cond(Exports/strats/export_strat41/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat41/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie41/strat_05.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+
+		container Z06
+		{
+			unit<uint32> LNGA09 := select_with_attr_by_cond(Exports/strats/export_strat41/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat41/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie41/strat_06.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z07
+		{
+			unit<uint32> LNGA09 := select_with_attr_by_cond(Exports/strats/export_strat41/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat41/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie41/strat_07.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z08
+		{
+			unit<uint32> LNGA09 := select_with_attr_by_cond(Exports/strats/export_strat41/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat41/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie41/strat_08.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z09
+		{
+			unit<uint32> LNGA09 := select_with_attr_by_cond(Exports/strats/export_strat41/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat41/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie41/strat_09.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z10
+		{
+			unit<uint32> LNGA09 := select_with_attr_by_cond(Exports/strats/export_strat41/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat41/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie41/strat_10.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z11
+		{
+			unit<uint32> LNGA09 := select_with_attr_by_cond(Exports/strats/export_strat41/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat41/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie41/strat_11.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z12
+		{
+			unit<uint32> LNGA09 := select_with_attr_by_cond(Exports/strats/export_strat41/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat41/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie41/strat_12.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z13
+		{
+			unit<uint32> LNGA09 := select_with_attr_by_cond(Exports/strats/export_strat41/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat41/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie41/strat_13.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z14
+		{
+			unit<uint32> LNGA09 := select_with_attr_by_cond(Exports/strats/export_strat41/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat41/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie41/strat_14.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z15
+		{
+			unit<uint32> LNGA09 := select_with_attr_by_cond(Exports/strats/export_strat41/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat41/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie41/strat_15.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+	}
+
+	// GA10
+	container S1GA10
+	{
+		container Z05
+		{
+			unit<uint32> S1GA10 := select_with_attr_by_cond(Exports/strats/export_strat42/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat42/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie42/strat_05.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+
+		container Z06
+		{
+			unit<uint32> S1GA10 := select_with_attr_by_cond(Exports/strats/export_strat42/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat42/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie42/strat_06.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z07
+		{
+			unit<uint32> S1GA10 := select_with_attr_by_cond(Exports/strats/export_strat42/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat42/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie42/strat_07.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z08
+		{
+			unit<uint32> S1GA10 := select_with_attr_by_cond(Exports/strats/export_strat42/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat42/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie42/strat_08.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z09
+		{
+			unit<uint32> S1GA10 := select_with_attr_by_cond(Exports/strats/export_strat42/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat42/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie42/strat_09.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z10
+		{
+			unit<uint32> S1GA10 := select_with_attr_by_cond(Exports/strats/export_strat42/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat42/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie42/strat_10.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z11
+		{
+			unit<uint32> S1GA10 := select_with_attr_by_cond(Exports/strats/export_strat42/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat42/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie42/strat_11.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z12
+		{
+			unit<uint32> S1GA10 := select_with_attr_by_cond(Exports/strats/export_strat42/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat42/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie42/strat_12.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z13
+		{
+			unit<uint32> S1GA10 := select_with_attr_by_cond(Exports/strats/export_strat42/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat42/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie42/strat_13.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z14
+		{
+			unit<uint32> S1GA10 := select_with_attr_by_cond(Exports/strats/export_strat42/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat42/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie42/strat_14.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z15
+		{
+			unit<uint32> S1GA10 := select_with_attr_by_cond(Exports/strats/export_strat42/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat42/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie42/strat_15.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+	}
+
+	container S2GA10
+	{
+		container Z05
+		{
+			unit<uint32> S2GA10 := select_with_attr_by_cond(Exports/strats/export_strat43/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat43/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie43/strat_05.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+
+		container Z06
+		{
+			unit<uint32> S2GA10 := select_with_attr_by_cond(Exports/strats/export_strat43/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat43/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie43/strat_06.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z07
+		{
+			unit<uint32> S2GA10 := select_with_attr_by_cond(Exports/strats/export_strat43/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat43/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie43/strat_07.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z08
+		{
+			unit<uint32> S2GA10 := select_with_attr_by_cond(Exports/strats/export_strat43/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat43/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie43/strat_08.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z09
+		{
+			unit<uint32> S2GA10 := select_with_attr_by_cond(Exports/strats/export_strat43/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat43/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie43/strat_09.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z10
+		{
+			unit<uint32> S2GA10 := select_with_attr_by_cond(Exports/strats/export_strat43/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat43/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie43/strat_10.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z11
+		{
+			unit<uint32> S2GA10 := select_with_attr_by_cond(Exports/strats/export_strat43/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat43/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie43/strat_11.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z12
+		{
+			unit<uint32> S2GA10 := select_with_attr_by_cond(Exports/strats/export_strat43/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat43/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie43/strat_12.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z13
+		{
+			unit<uint32> S2GA10 := select_with_attr_by_cond(Exports/strats/export_strat43/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat43/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie43/strat_13.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z14
+		{
+			unit<uint32> S2GA10 := select_with_attr_by_cond(Exports/strats/export_strat43/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat43/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie43/strat_14.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z15
+		{
+			unit<uint32> S2GA10 := select_with_attr_by_cond(Exports/strats/export_strat43/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat43/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie43/strat_15.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+	}
+	
+	container S3GA10
+	{
+		container Z05
+		{
+			unit<uint32> S3GA10 := select_with_attr_by_cond(Exports/strats/export_strat44/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat44/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie44/strat_05.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+
+		container Z06
+		{
+			unit<uint32> S3GA10 := select_with_attr_by_cond(Exports/strats/export_strat44/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat44/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie44/strat_06.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z07
+		{
+			unit<uint32> S3GA10 := select_with_attr_by_cond(Exports/strats/export_strat44/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat44/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie44/strat_07.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z08
+		{
+			unit<uint32> S3GA10 := select_with_attr_by_cond(Exports/strats/export_strat44/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat44/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie44/strat_08.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z09
+		{
+			unit<uint32> S3GA10 := select_with_attr_by_cond(Exports/strats/export_strat44/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat44/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie44/strat_09.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z10
+		{
+			unit<uint32> S3GA10 := select_with_attr_by_cond(Exports/strats/export_strat44/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat44/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie44/strat_10.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z11
+		{
+			unit<uint32> S3GA10 := select_with_attr_by_cond(Exports/strats/export_strat44/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat44/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie44/strat_11.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z12
+		{
+			unit<uint32> S3GA10 := select_with_attr_by_cond(Exports/strats/export_strat44/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat44/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie44/strat_12.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z13
+		{
+			unit<uint32> S3GA10 := select_with_attr_by_cond(Exports/strats/export_strat44/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat44/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie44/strat_13.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z14
+		{
+			unit<uint32> S3GA10 := select_with_attr_by_cond(Exports/strats/export_strat44/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat44/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie44/strat_14.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z15
+		{
+			unit<uint32> S3GA10 := select_with_attr_by_cond(Exports/strats/export_strat44/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat44/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie44/strat_15.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+	}
+	
+	container S4GA10
+	{
+		container Z05
+		{
+			unit<uint32> S4GA10 := select_with_attr_by_cond(Exports/strats/export_strat45/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat45/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie45/strat_05.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+
+		container Z06
+		{
+			unit<uint32> S4GA10 := select_with_attr_by_cond(Exports/strats/export_strat45/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat45/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie45/strat_06.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z07
+		{
+			unit<uint32> S4GA10 := select_with_attr_by_cond(Exports/strats/export_strat45/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat45/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie45/strat_07.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z08
+		{
+			unit<uint32> S4GA10 := select_with_attr_by_cond(Exports/strats/export_strat45/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat45/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie45/strat_08.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z09
+		{
+			unit<uint32> S4GA10 := select_with_attr_by_cond(Exports/strats/export_strat45/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat45/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie45/strat_09.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z10
+		{
+			unit<uint32> S4GA10 := select_with_attr_by_cond(Exports/strats/export_strat45/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat45/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie45/strat_10.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z11
+		{
+			unit<uint32> S4GA10 := select_with_attr_by_cond(Exports/strats/export_strat45/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat45/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie45/strat_11.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z12
+		{
+			unit<uint32> S4GA10 := select_with_attr_by_cond(Exports/strats/export_strat45/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat45/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie45/strat_12.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z13
+		{
+			unit<uint32> S4GA10 := select_with_attr_by_cond(Exports/strats/export_strat45/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat45/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie45/strat_13.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z14
+		{
+			unit<uint32> S4GA10 := select_with_attr_by_cond(Exports/strats/export_strat45/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat45/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie45/strat_14.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z15
+		{
+			unit<uint32> S4GA10 := select_with_attr_by_cond(Exports/strats/export_strat45/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat45/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie45/strat_15.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+	}
+	
+	container LNGA10
+	{
+		container Z05
+		{
+			unit<uint32> LNGA10 := select_with_attr_by_cond(Exports/strats/export_strat46/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat46/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie46/strat_05.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+
+		container Z06
+		{
+			unit<uint32> LNGA10 := select_with_attr_by_cond(Exports/strats/export_strat46/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat46/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie46/strat_06.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z07
+		{
+			unit<uint32> LNGA10 := select_with_attr_by_cond(Exports/strats/export_strat46/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat46/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie46/strat_07.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z08
+		{
+			unit<uint32> LNGA10 := select_with_attr_by_cond(Exports/strats/export_strat46/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat46/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie46/strat_08.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z09
+		{
+			unit<uint32> LNGA10 := select_with_attr_by_cond(Exports/strats/export_strat46/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat46/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie46/strat_09.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z10
+		{
+			unit<uint32> LNGA10 := select_with_attr_by_cond(Exports/strats/export_strat46/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat46/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie46/strat_10.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z11
+		{
+			unit<uint32> LNGA10 := select_with_attr_by_cond(Exports/strats/export_strat46/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat46/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie46/strat_11.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z12
+		{
+			unit<uint32> LNGA10 := select_with_attr_by_cond(Exports/strats/export_strat46/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat46/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie46/strat_12.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z13
+		{
+			unit<uint32> LNGA10 := select_with_attr_by_cond(Exports/strats/export_strat46/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat46/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie46/strat_13.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z14
+		{
+			unit<uint32> LNGA10 := select_with_attr_by_cond(Exports/strats/export_strat46/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat46/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie46/strat_14.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z15
+		{
+			unit<uint32> LNGA10 := select_with_attr_by_cond(Exports/strats/export_strat46/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat46/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie46/strat_15.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+	}
+
+	container LNGA11
+	{
+		container Z05
+		{
+			unit<uint32> LNGA11 := select_with_attr_by_cond(Exports/strats/export_strat47/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat47/MVT/all_zoom_levels/z_5/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie47/strat_05.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+
+		container Z06
+		{
+			unit<uint32> LNGA11 := select_with_attr_by_cond(Exports/strats/export_strat47/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat47/MVT/all_zoom_levels/z_6/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie47/strat_06.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z07
+		{
+			unit<uint32> LNGA11 := select_with_attr_by_cond(Exports/strats/export_strat47/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat47/MVT/all_zoom_levels/z_7/split_polygon_results/results/per_strat))
+			, StorageName="%LocalDataDir%/startanalyse_2_0/Strategie47/strat_07.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z08
+		{
+			unit<uint32> LNGA11 := select_with_attr_by_cond(Exports/strats/export_strat47/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat47/MVT/all_zoom_levels/z_8/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie47/strat_08.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z09
+		{
+			unit<uint32> LNGA11 := select_with_attr_by_cond(Exports/strats/export_strat47/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat47/MVT/all_zoom_levels/z_9/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie47/strat_09.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z10
+		{
+			unit<uint32> LNGA11 := select_with_attr_by_cond(Exports/strats/export_strat47/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat47/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie47/strat_10.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z11
+		{
+			unit<uint32> LNGA11 := select_with_attr_by_cond(Exports/strats/export_strat47/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat47/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie47/strat_11.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z12
+		{
+			unit<uint32> LNGA11 := select_with_attr_by_cond(Exports/strats/export_strat47/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat47/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie47/strat_12.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z13
+		{
+			unit<uint32> LNGA11 := select_with_attr_by_cond(Exports/strats/export_strat47/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat47/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie47/strat_13.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z14
+		{
+			unit<uint32> LNGA11 := select_with_attr_by_cond(Exports/strats/export_strat47/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat47/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie47/strat_14.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+		
+		container Z15
+		{
+			unit<uint32> LNGA11 := select_with_attr_by_cond(Exports/strats/export_strat47/MVT/base_results/split_polygon_results/results/per_strat, const(true, Exports/strats/export_strat47/MVT/base_results/split_polygon_results/results/per_strat))
+			, StorageName= "%LocalDataDir%/startanalyse_2_0/Strategie47/strat_15.geojson"
+			, StorageType="gdalwrite.vect"
+			, StorageReadOnly = "False";
+		}
+	}
 }

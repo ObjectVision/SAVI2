@@ -38,8 +38,19 @@ container Exports {
 		container export_strat33 := Templates/ExportStrategieToTilejson(false, 33b); // S3_GA_07
 		container export_strat34 := Templates/ExportStrategieToTilejson(false, 34b); // S4_GA_07
 		container export_strat35 := Templates/ExportStrategieToTilejson(false, 35b); // LN_GA_07
-		container export_strat36 := Templates/ExportStrategieToTilejson(false, 36b); // LN_B
-		
+		container export_strat36 := Templates/ExportStrategieToTilejson(false, 36b); // LN_GA_08
+		container export_strat37 := Templates/ExportStrategieToTilejson(false, 37b); // S1_GA_09
+		container export_strat38 := Templates/ExportStrategieToTilejson(false, 38b); // S2_GA_09
+		container export_strat39 := Templates/ExportStrategieToTilejson(false, 39b); // S3_GA_09
+		container export_strat40 := Templates/ExportStrategieToTilejson(false, 40b); // S4_GA_09
+		container export_strat41 := Templates/ExportStrategieToTilejson(false, 41b); // LN_GA_09
+		container export_strat42 := Templates/ExportStrategieToTilejson(false, 42b); // S1_GA_10
+		container export_strat43 := Templates/ExportStrategieToTilejson(false, 43b); // S2_GA_10
+		container export_strat44 := Templates/ExportStrategieToTilejson(false, 44b); // S3_GA_10
+		container export_strat45 := Templates/ExportStrategieToTilejson(false, 45b); // S4_GA_10
+		container export_strat46 := Templates/ExportStrategieToTilejson(false, 46b); // LN_GA_10
+		container export_strat47 := Templates/ExportStrategieToTilejson(false, 47b); // LN_GA_11
+
 		parameter<string> export_all := "Done", ExplicitSuppliers="Exports/strats/export_strat1/MVT/all_zoom_levels/dataset;Exports/strats/export_strat2/MVT/all_zoom_levels/dataset;Exports/strats/export_strat3/MVT/all_zoom_levels/dataset;Exports/strats/export_strat4/MVT/all_zoom_levels/dataset;Exports/strats/export_strat6/MVT/all_zoom_levels/dataset;Exports/strats/export_strat7/MVT/all_zoom_levels/dataset;Exports/strats/export_strat8/MVT/all_zoom_levels/dataset";
 
 		#include <geojson.dms>
@@ -183,6 +194,29 @@ container Exports {
 		}*/
 		
 		container puntbronnen {
+
+			unit<uint32> S2A_bronnen_connecties := SourceData/aanbod/puntbronnen/S2A_bronnen_connecties
+			, storageName="%LocalDataDir%/startanalyse_2_0/aanbod/S2A_bronnen_connecties.geojson"
+			, storageType="gdalwrite.vect"
+			, StorageReadOnly = "False"
+			{
+				attribute<geography/wgs_base> geometry (arc):= SourceData/aanbod/puntbronnen/S2A_bronnen_connecties/geometry[geography/wgs_base];
+				attribute<string> bron_naam := SourceData/aanbod/puntbronnen/S2A_bronnen_connecties/bron_naam;
+				attribute<int32> bron_rel := SourceData/aanbod/puntbronnen/S2A_bronnen_connecties/bron_rel;
+				attribute<int32> bron_color := SourceData/aanbod/puntbronnen/S2A_bronnen_connecties/bron_color;
+			}
+
+			unit<uint32> S2D_bronnen_connecties := SourceData/aanbod/puntbronnen/S2D_bronnen_connecties
+			, storageName="%LocalDataDir%/startanalyse_2_0/aanbod/S2D_bronnen_connecties.geojson"
+			, storageType="gdalwrite.vect"
+			, StorageReadOnly = "False"
+			{
+				attribute<geography/wgs_base> geometry (arc) := SourceData/aanbod/puntbronnen/S2D_bronnen_connecties/geometry[geography/wgs_base];
+				attribute<string> bron_naam := SourceData/aanbod/puntbronnen/S2D_bronnen_connecties/bron_naam;
+				attribute<int32> bron_rel := SourceData/aanbod/puntbronnen/S2D_bronnen_connecties/bron_rel;
+				attribute<int32> bron_color := SourceData/aanbod/puntbronnen/S2D_bronnen_connecties/bron_color;
+			}
+
 			unit<uint32> lt := SourceData/aanbod/puntbronnen/lt
 			, storageName="%LocalDataDir%/startanalyse_2_0/aanbod/lt.geojson"
 			, storageType="gdalwrite.vect"
@@ -191,7 +225,7 @@ container Exports {
 				attribute<geography/wgs_base> geometry := SourceData/aanbod/puntbronnen/lt/geometry[geography/wgs_base];
 				attribute<string> bron_naam := SourceData/aanbod/puntbronnen/lt/bron_naam;
 				attribute<string> bron_type := SourceData/aanbod/puntbronnen/lt/type_bron;
-				attribute<string> MWcapaciteit := SourceData/aanbod/puntbronnen/lt/MWcapaciteit;
+				attribute<float32> MWcapaciteit := SourceData/aanbod/puntbronnen/lt/MWth_max[float32];
 				// ... //
 			}
 			
@@ -203,7 +237,7 @@ container Exports {
 				attribute<geography/wgs_base> geometry := convert(SourceData/aanbod/puntbronnen/mt/geometry, geography/wgs_base);
 				attribute<string> bron_naam := SourceData/aanbod/puntbronnen/mt/bron_naam;
 				attribute<string> bron_type := SourceData/aanbod/puntbronnen/mt/type_bron;
-				attribute<string> MWcapaciteit := SourceData/aanbod/puntbronnen/mt/MWcapaciteit;
+				attribute<float32> MWcapaciteit := SourceData/aanbod/puntbronnen/mt/MWth_max[float32];
 				// ... //
 			}
 		}
@@ -355,11 +389,39 @@ container Exports {
 			container S2 := Templates/export_strategy_downloads("2", "strat2");
 			container S3 := Templates/export_strategy_downloads("3", "strat3");
 			container S4 := Templates/export_strategy_downloads("4", "strat4");
-			//container S5 := Templates/export_strategy_downloads("5", "strat5");
 			container R19 := Templates/export_strategy_downloads("6", "ref19");
 			container R30 := Templates/export_strategy_downloads("7", "ref30");
 			container LN := Templates/export_strategy_downloads("8", "stratLN");
-			parameter<string> export_all := "ready", ExplicitSuppliers="S1/export_all; S2/export_all; S3/export_all; S4/export_all; R19/export_all; R30/export_all; LN/export_all;";
+			container LNGA01 := Templates/export_strategy_downloads("10", "LNGA01");
+			container LNGA02 := Templates/export_strategy_downloads("11", "LNGA02");
+			container LNGA03 := Templates/export_strategy_downloads("15", "LNGA03");
+			container LNGA04 := Templates/export_strategy_downloads("20", "LNGA04");
+			container LNGA05 := Templates/export_strategy_downloads("25", "LNGA05");
+			container LNGA06 := Templates/export_strategy_downloads("30", "LNGA06");
+			container LNGA07 := Templates/export_strategy_downloads("35", "LNGA07");
+			container LNGA08 := Templates/export_strategy_downloads("36", "LNGA08");
+			container LNGA09 := Templates/export_strategy_downloads("41", "LNGA09");
+			container LNGA10 := Templates/export_strategy_downloads("46", "LNGA10");
+			container LNGA11 := Templates/export_strategy_downloads("47", "LNGA11");
+
+			parameter<string> export_all := "ready", ExplicitSuppliers="S1/export_all; 
+																		S2/export_all;
+																		S3/export_all;
+																		S4/export_all;
+																		R19/export_all;
+																		R30/export_all;
+																		LN/export_all;
+																		LNGA01/export_all;
+																		LNGA02/export_all;
+																		LNGA03/export_all;
+																		LNGA04/export_all;
+																		LNGA05/export_all;
+																		LNGA06/export_all;
+																		LNGA07/export_all;
+																		LNGA08/export_all;
+																		LNGA09/export_all;
+																		LNGA10/export_all;
+																		LNGA11/export_all;";
 		}
 	}
 	

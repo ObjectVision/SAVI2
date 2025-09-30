@@ -196,9 +196,13 @@ container Templates {
 				attribute<units/Euro_per_ton_CO2_per_yr> S3H17_Nationale_meerkosten_CO2           := MakeDefined(domain/S3H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel], nodata_value);
 				attribute<units/Euro_per_ton_CO2_per_yr> S4H17_Nationale_meerkosten_CO2           := MakeDefined(domain/S4H17_Nationale_meerkosten_CO2[split_polygons/polygon_rel], nodata_value);
 			
-				
+				attribute<units/Euro_per_ton_CO2_per_yr> H17_difference10             	:= MakeDefined(domain/H17_difference10[split_polygons/polygon_rel], nodata_value);
+				attribute<bool> H17_perc_difference10             						:= domain/H17_perc_difference10[split_polygons/polygon_rel];
 				attribute<units/Euro_per_ton_CO2_per_yr> H17_difference             	:= MakeDefined(domain/H17_difference[split_polygons/polygon_rel], nodata_value);
 				attribute<bool> H17_perc_difference             						:= domain/H17_perc_difference[split_polygons/polygon_rel];
+				attribute<units/Euro_per_ton_CO2_per_yr> H17_difference30             	:= MakeDefined(domain/H17_difference30[split_polygons/polygon_rel], nodata_value);
+				attribute<bool> H17_perc_difference30             						:= domain/H17_perc_difference30[split_polygons/polygon_rel];
+				
 				attribute<units/Euro_per_woning_per_yr> H18_Nationale_meerkosten_extra  := MakeDefined(domain/H18_Nationale_meerkosten_extra[split_polygons/polygon_rel], nodata_value);
 
 				attribute<Euro_per_m3>              H19_waarde_klimaatneutraal_gas 		:= MakeDefined(domain/H19_waarde_klimaatneutraal_gas[split_polygons/polygon_rel], nodata_value);
@@ -777,8 +781,18 @@ container Templates {
 			attribute<Euro_per_ton_CO2_per_yr> S3H17_Nationale_meerkosten_CO2           := rjoin(BU_CODE, strat3_domain/BU_CODE, strat3_domain/_H17_Nat_meerkost_CO2_Euro_per_mega_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
 			attribute<Euro_per_ton_CO2_per_yr> S4H17_Nationale_meerkosten_CO2           := rjoin(BU_CODE, strat4_domain/BU_CODE, strat4_domain/_H17_Nat_meerkost_CO2_Euro_per_mega_g_[units/Euro_per_ton_CO2_per_yr]); // Euro/ton/jaar
 			
-			attribute<Euro_per_ton_CO2> H17_difference  								:= rjoin(BU_CODE, SourceData/startanalyse_2_0/LNKostenVerschil/BU_code, SourceData/startanalyse_2_0/LNKostenVerschil/H17_Delta); //Exports/top2/kosten/difference;
-			attribute<Bool> H17_perc_difference 										:= rjoin(BU_CODE, SourceData/startanalyse_2_0/LNKostenVerschil/BU_code, SourceData/startanalyse_2_0/LNKostenVerschil/klein_verschil); //Exports/top2/kosten/is_percentueel_afwijkend;
+			// difference 10%
+			attribute<Euro_per_ton_CO2> H17_difference10  								:= rjoin(BU_CODE, SourceData/startanalyse_2_0/LNKostenVerschil_10/BU_code, SourceData/startanalyse_2_0/LNKostenVerschil_10/H17_Delta); //Exports/top2/kosten/difference;
+			attribute<Bool> H17_perc_difference10 										:= rjoin(BU_CODE, SourceData/startanalyse_2_0/LNKostenVerschil_10/BU_code, SourceData/startanalyse_2_0/LNKostenVerschil_10/klein_verschil); //Exports/top2/kosten/is_percentueel_afwijkend;
+			
+			// difference 20%
+			attribute<Euro_per_ton_CO2> H17_difference  								:= rjoin(BU_CODE, SourceData/startanalyse_2_0/LNKostenVerschil_20/BU_code, SourceData/startanalyse_2_0/LNKostenVerschil_20/H17_Delta);
+			attribute<Bool> H17_perc_difference 										:= rjoin(BU_CODE, SourceData/startanalyse_2_0/LNKostenVerschil_20/BU_code, SourceData/startanalyse_2_0/LNKostenVerschil_20/klein_verschil);
+			
+			// difference 30%
+			attribute<Euro_per_ton_CO2> H17_difference30  								:= rjoin(BU_CODE, SourceData/startanalyse_2_0/LNKostenVerschil_30/BU_code, SourceData/startanalyse_2_0/LNKostenVerschil_30/H17_Delta);
+			attribute<Bool> H17_perc_difference30 										:= rjoin(BU_CODE, SourceData/startanalyse_2_0/LNKostenVerschil_30/BU_code, SourceData/startanalyse_2_0/LNKostenVerschil_30/klein_verschil);
+
 			attribute<Euro_per_woning_per_yr> H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
 			//attribute<units/Euro_per_m3> H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
 			//attribute<units/m3> H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
@@ -884,21 +898,15 @@ container Templates {
 					//parameter<string> GDAL_Driver : ['FlatGeobuf'];
 					container dataset
 					{
-						container strat05
-						{
-							unit<uint32> stratNL := select_with_attr_by_cond(z_5/split_polygon_results/results/per_strat, const(true, z_5/split_polygon_results/results/per_strat))
-							, StorageName='="%LocalDataDir%/startanalyse_2_0/Strategie"+string(strategie_id)+"/strat_05.geojson"'
-							, StorageType="gdalwrite.vect"
-							, StorageReadOnly = "False";
-						}
+						unit<uint32> strat_05 := select_with_attr_by_cond(z_5/split_polygon_results/results/per_strat, const(true, z_5/split_polygon_results/results/per_strat))
+						, StorageName='="%LocalDataDir%/startanalyse_2_0/Strategie"+string(strategie_id)+"/strat_05.geojson"'
+						, StorageType="gdalwrite.vect"
+						, StorageReadOnly = "False";
 
-						container strat06
-						{
-							unit<uint32> stratNL := select_with_attr_by_cond(z_6/split_polygon_results/results/per_strat, const(true, z_6/split_polygon_results/results/per_strat))
-							, StorageName='="%LocalDataDir%/startanalyse_2_0/Strategie"+string(strategie_id)+"/strat_06.geojson"'
-							, StorageType="gdalwrite.vect"
-							, StorageReadOnly = "False";
-						}
+						unit<uint32> strat_06 := select_with_attr_by_cond(z_6/split_polygon_results/results/per_strat, const(true, z_6/split_polygon_results/results/per_strat))
+						, StorageName='="%LocalDataDir%/startanalyse_2_0/Strategie"+string(strategie_id)+"/strat_06.geojson"'
+						, StorageType="gdalwrite.vect"
+						, StorageReadOnly = "False";
 						
 						unit<uint32> strat_07 := select_with_attr_by_cond(z_7/split_polygon_results/results/per_strat, const(true, z_7/split_polygon_results/results/per_strat))
 						, StorageName='="%LocalDataDir%/startanalyse_2_0/Strategie"+string(strategie_id)+"/strat_07.geojson"'
