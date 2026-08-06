@@ -685,6 +685,7 @@ container Templates {
 		// begin case parameters
 		parameter<bool> is_ref;
 		parameter<uint8> strategie_id;
+		parameter<string> strategy_name;
 		// end case parameters
  
 		//parameter<string> strategie_domain_str := "SourceData/StartAnalyse_1_0/ViewerIndicatoren_Strategie_" + string(strategie_id);
@@ -698,9 +699,8 @@ container Templates {
 		attribute<string> BU_CODE_strategie (strategie_domain) := strategie_domain/BU_CODE;
 		
 		
-		//attribute<string> BU_CODE_strategie1 (SourceData/StartAnalyse_2_0/ViewerIndicatoren_Strategie_1) := SourceData/StartAnalyse_2_0/ViewerIndicatoren_Strategie_1/BU_CODE;
-		
-		unit<uint32> Buurtindicatoren_2020 := SourceData/buurt2020, Using = "Units" {
+
+/*		unit<uint32> Buurtindicatoren_2020 := SourceData/buurt2020, Using = "Units" {
 			// algemene informatie
 			attribute<string> BU_CODE                                                         := SourceData/buurt2020/BU_CODE;
 			attribute<string> Buurtnaam := rjoin(BU_CODE, SourceData/StartAnalyse_1_0/statisch/BU_CODE, SourceData/StartAnalyse_1_0/statisch/_I02_buurtnaam_);
@@ -742,27 +742,27 @@ container Templates {
 			//attribute<units/Euro_per_m3> H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
 			//attribute<units/m3> H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
 			
-			/*attribute<units/Euro_per_ton_CO2> G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
-			attribute<units/Euro_per_ton_CO2> G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G02_Nat_meerkost_CO2_Kost_Reductie_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
-			attribute<units/Euro_per_ton_CO2> G03_Nat_meerkost_CO2_En_Prijzen_Laag            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G03_Nat_meerkost_CO2_En_Prijzen_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
-			attribute<units/Euro_per_ton_CO2> G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G04_Nat_meerkost_CO2_En_Prijzen_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2*/
-			
-			//attribute<>
-		}
+
+		}*/
 		
-		unit<uint32> Buurtindicatoren := SourceData/buurt2023, Using = "Units" {
+		unit<uint32> Buurtindicatoren := SourceData/buurt2024, Using = "Units" 
+		, StorageName='="%LocalDataDir%/startanalyse_2_0/2026/" + strategy_name + ".geojson"'
+		, StorageType="gdalwrite.vect"
+		, StorageReadOnly = "False"
+		{
 			// algemene informatie
-			attribute<string> BU_CODE                                                         := SourceData/buurt2023/BU_CODE;
-			attribute<string> Buurtnaam := SourceData/buurt2023/Buurtnaam;
-			attribute<string> Wijkcode := SourceData/buurt2023/Wijkcode;
-			attribute<string> Wijknaam := SourceData/buurt2023/Wijknaam;
-			attribute<string> Gemeentecode := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I05_gemeentecode_);
+			attribute<geography/rdc_m> geometry (poly) := SourceData/buurt2024/geometry;
+			attribute<string> BU_CODE := SourceData/buurt2024/BU_CODE;
+			attribute<string> Buurtnaam := SourceData/buurt2024/Buurtnaam;
+			attribute<string> WK_CODE := SourceData/buurt2024/WK_CODE;
+			attribute<string> Wijknaam := SourceData/buurt2024/Wijknaam;
+			attribute<string> GM_CODE := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I05_gemeentecode_);
 			attribute<string> Gemeentenaam := replace(rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I06_gemeentenaam_), "'", "");
 			attribute<string> Energieregionaam := replace(rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I07_energieregionaam_), "'", "");
 			attribute<string> Provincienaam := replace(rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I08_provincienaam_), "'", "");
-			attribute<string> AantalWoningen := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I09_aantal_woningen_Aansluiting_);
-			attribute<string> AantalUtiliteiten := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I10_aantal_utiliteit_Aansluiting_);
-			attribute<string> WoningEquivalenten := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I11_woningequivalenten_Woning_);
+			attribute<uint32> AantalWoningen := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I09_aantal_woningen_Aansluiting_)[uint32];
+			attribute<uint32> AantalUtiliteiten := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I10_aantal_utiliteit_Aansluiting_)[uint32];
+			attribute<uint32> WoningEquivalenten := rjoin(BU_CODE, SourceData/StartAnalyse_2_0/statisch/BU_CODE, SourceData/StartAnalyse_2_0/statisch/_I11_woningequivalenten_Woning_)[uint32];
 
 			// strategie informatie
 			attribute<string> V01_Strategievariant                    					      := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_V01_Strategievariant_);
@@ -804,13 +804,6 @@ container Templates {
 			attribute<Bool> H17_perc_difference30 										:= rjoin(BU_CODE, SourceData/startanalyse_2_0/LNKostenVerschil_30/BU_code, SourceData/startanalyse_2_0/LNKostenVerschil_30/klein_verschil);
 
 			attribute<Euro_per_woning_per_yr> H18_Nationale_meerkosten_extra            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H18_Nat_meerkost_WEQ_Euro_per_Woning_yr_[units/Euro_per_woning_per_yr]); // Euro/weq/jaar
-			//attribute<units/Euro_per_m3> H19_waarde_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H19_waarde_hernieuwbaar_gas_Euro_per_m_3_[units/Euro_per_m3]); // Euro/m3
-			//attribute<units/m3> H20_beschikbaarheid_hernieuwbaar_gas                          := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H20_beschikbaarheid_hernieuwbaar_gas_[units/m3]); // m3
-			/*attribute<units/Euro_per_ton_CO2> G01_Nat_meerkost_CO2_Kost_Reductie_Hoog         := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G01_Nat_meerkost_CO2_Kost_Reductie_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2
-			attribute<units/Euro_per_ton_CO2> G02_Nat_meerkost_CO2_Kost_Reductie_Laag         := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G02_Nat_meerkost_CO2_Kost_Reductie_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
-			attribute<units/Euro_per_ton_CO2> G03_Nat_meerkost_CO2_En_Prijzen_Laag            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G03_Nat_meerkost_CO2_En_Prijzen_Laag_micro_Euro_per_g_[units/Euro_per_ton_CO2]); // Euro/ton CO2
-			attribute<units/Euro_per_ton_CO2> G04_Nat_meerkost_CO2_En_Prijzen_Hoog            := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_G04_Nat_meerkost_CO2_En_Prijzen_Hoog_micro_Euro_per_g_[units/Euro_per_ton_CO2]);    // Euro/ton CO2*/
-			 
 			attribute<Euro_per_m3>              H19_waarde_klimaatneutraal_gas := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H19_waarde_klimaatneutraal_gas_Euro_per_m_3_[units/Euro_per_m3]);
 			attribute<Bool>                     H20_toekenning_klimaatneutraal_gas := replace(rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H20_Toekenning_klimaatneutraal_gas_), "'", "")=='Ja';
 			attribute<giga_J_per_woning_per_yr> H21_input_elektriciteit_WD_OW := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H21_Input_elektriciteit_WD_OW_giga_J_per_Woning_yr_)[giga_J_per_woning_per_yr];
@@ -836,7 +829,7 @@ container Templates {
 			attribute<giga_J_per_woning_per_yr> H41_input_elektriciteit_u := rjoin(BU_CODE, BU_CODE_strategie, strategie_domain/_H41_Input_elektriciteit_u_giga_J_per_Woning_yr_)[giga_J_per_woning_per_yr];
 		}
 		
-		container MVT {
+		/*container MVT {
 			container base_results {
 				unit<uint32> multi_polygon_results := select_with_attr_by_cond(Buurtindicatoren, const(true,Buurtindicatoren)) {
 					//attribute<geography/wm_m> geometry_wm (poly) := rjoin(BU_CODE, SourceData/buurt2020/BU_CODE, convert(SourceData/buurt2020/geometry, geography/wm_m));
@@ -963,22 +956,6 @@ container Templates {
 						, StorageType="gdalwrite.vect"
 						, StorageReadOnly = "False";
 						
-						/*unit<uint32> strat_08_geometry_only := z_8/split_polygon_results/results/per_strat
-						, StorageName='="%LocalDataDir%/startanalyse_2_0/Strategie"+string(strategie_id)+"/strat_08.geojson"'
-						, StorageType="gdalwrite.vect"
-						, StorageReadOnly = "False"
-						{
-							attribute<geography/wm_m> geometry (poly) := z_8/split_polygon_results/results/per_strat/geometry;
-						}
-						
-						unit<uint32> strat_15_geometry_only := base_results/split_polygon_results/results/per_strat
-						, StorageName='="%LocalDataDir%/startanalyse_2_0/Strategie"+string(strategie_id)+"/strat_15.geojson"'
-						, StorageType="gdalwrite.vect"
-						, StorageReadOnly = "False"
-						{
-							attribute<geography/wm_m> geometry (poly) := base_results/split_polygon_results/results/per_strat/geometry;
-						}*/
-						
 						
 						//unit<uint32> strat_16 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
 						//unit<uint32> strat_17 := select_with_attr_by_cond(base_results/split_polygon_results/results/per_strat, const(true, base_results/split_polygon_results/results/per_strat));
@@ -990,7 +967,7 @@ container Templates {
 					//, StorageReadOnly = "False";
 				}
 			}	
-		}
+		}*/
 	}
 	
 	Template SimplifyAndExportGeometry {

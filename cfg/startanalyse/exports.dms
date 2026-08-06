@@ -3,57 +3,55 @@ container Exports {
 	//container buurt_indicators := Templates/ExportStrategiesToTilejson();
 	
 	container strats { 
-		container export_strat1 := Templates/ExportStrategieToTilejson(false, 1b);
-		container export_strat2 := Templates/ExportStrategieToTilejson(false, 2b);
-		container export_strat3 := Templates/ExportStrategieToTilejson(false, 3b);
-		container export_strat4 := Templates/ExportStrategieToTilejson(false, 4b);
+		container export_strat1 := Templates/ExportStrategieToTilejson(false, 1b, "strat1");
+		container export_strat2 := Templates/ExportStrategieToTilejson(false, 2b, "strat2");
+		container export_strat3 := Templates/ExportStrategieToTilejson(false, 3b, "strat3");
+		container export_strat4 := Templates/ExportStrategieToTilejson(false, 4b, "strat4");
 		//container export_strat5 := Templates/ExportStrategieToTilejson(false, 5b);
-		container export_strat6 := Templates/ExportStrategieToTilejson(true, 6b);  // ref19
-		container export_strat7 := Templates/ExportStrategieToTilejson(true, 7b);  // ref30
-		container export_strat8 := Templates/ExportStrategieToTilejson(false, 8b); // stratNL
-		container export_strat9 := Templates/ExportStrategieToTilejson(false, 9b); // LN_GA_01
-		container export_strat10 := Templates/ExportStrategieToTilejson(false, 10b); // LN_GA_02
-		container export_strat11 := Templates/ExportStrategieToTilejson(false, 11b); // S1_GA_03
-		container export_strat12 := Templates/ExportStrategieToTilejson(false, 12b); // S2_GA_03
-		container export_strat13 := Templates/ExportStrategieToTilejson(false, 13b); // S3_GA_03
-		container export_strat14 := Templates/ExportStrategieToTilejson(false, 14b); // S4_GA_03
-		container export_strat15 := Templates/ExportStrategieToTilejson(false, 15b); // LN_GA_03
-		container export_strat16 := Templates/ExportStrategieToTilejson(false, 16b); // S1_GA_04
-		container export_strat17 := Templates/ExportStrategieToTilejson(false, 17b); // S2_GA_04
-		container export_strat18 := Templates/ExportStrategieToTilejson(false, 18b); // S3_GA_04
-		container export_strat19 := Templates/ExportStrategieToTilejson(false, 19b); // S4_GA_04
-		container export_strat20 := Templates/ExportStrategieToTilejson(false, 20b); // LN_GA_04
-		container export_strat21 := Templates/ExportStrategieToTilejson(false, 21b); // S1_GA_05
-		container export_strat22 := Templates/ExportStrategieToTilejson(false, 22b); // S2_GA_05
-		container export_strat23 := Templates/ExportStrategieToTilejson(false, 23b); // S3_GA_05
-		container export_strat24 := Templates/ExportStrategieToTilejson(false, 24b); // S4_GA_05
-		container export_strat25 := Templates/ExportStrategieToTilejson(false, 25b); // LN_GA_05
-		container export_strat26 := Templates/ExportStrategieToTilejson(false, 26b); // S1_GA_06
-		container export_strat27 := Templates/ExportStrategieToTilejson(false, 27b); // S2_GA_06
-		container export_strat28 := Templates/ExportStrategieToTilejson(false, 28b); // S3_GA_06
-		container export_strat29 := Templates/ExportStrategieToTilejson(false, 29b); // S4_GA_06
-		container export_strat30 := Templates/ExportStrategieToTilejson(false, 30b); // LN_GA_06
-		container export_strat31 := Templates/ExportStrategieToTilejson(false, 31b); // S1_GA_07
-		container export_strat32 := Templates/ExportStrategieToTilejson(false, 32b); // S2_GA_07
-		container export_strat33 := Templates/ExportStrategieToTilejson(false, 33b); // S3_GA_07
-		container export_strat34 := Templates/ExportStrategieToTilejson(false, 34b); // S4_GA_07
-		container export_strat35 := Templates/ExportStrategieToTilejson(false, 35b); // LN_GA_07
-		container export_strat36 := Templates/ExportStrategieToTilejson(false, 36b); // LN_GA_08
-		container export_strat37 := Templates/ExportStrategieToTilejson(false, 37b); // S1_GA_09
-		container export_strat38 := Templates/ExportStrategieToTilejson(false, 38b); // S2_GA_09
-		container export_strat39 := Templates/ExportStrategieToTilejson(false, 39b); // S3_GA_09
-		container export_strat40 := Templates/ExportStrategieToTilejson(false, 40b); // S4_GA_09
-		container export_strat41 := Templates/ExportStrategieToTilejson(false, 41b); // LN_GA_09
-		container export_strat42 := Templates/ExportStrategieToTilejson(false, 42b); // S1_GA_10
-		container export_strat43 := Templates/ExportStrategieToTilejson(false, 43b); // S2_GA_10
-		container export_strat44 := Templates/ExportStrategieToTilejson(false, 44b); // S3_GA_10
-		container export_strat45 := Templates/ExportStrategieToTilejson(false, 45b); // S4_GA_10
-		container export_strat46 := Templates/ExportStrategieToTilejson(false, 46b); // LN_GA_10
-		container export_strat47 := Templates/ExportStrategieToTilejson(false, 47b); // LN_GA_11
+		container export_strat6 := Templates/ExportStrategieToTilejson(true, 6b, "ref19");  // ref19
+		container export_strat7 := Templates/ExportStrategieToTilejson(true, 7b, "ref30");  // ref30
+		container export_strat8 := Templates/ExportStrategieToTilejson(false, 8b, "stratNL"); // stratNL
+		container export_strat9 := Templates/ExportStrategieToTilejson(false, 9b, "LN_GA_01"); // LN_GA_01
+		container export_strat10 := Templates/ExportStrategieToTilejson(false, 10b, "LN_GA_02"); // LN_GA_02
+		container export_strat11 := Templates/ExportStrategieToTilejson(false, 11b, "S1_GA_03"); // S1_GA_03
+		container export_strat12 := Templates/ExportStrategieToTilejson(false, 12b, "S2_GA_03"); // S2_GA_03
+		container export_strat13 := Templates/ExportStrategieToTilejson(false, 13b, "S3_GA_03"); // S3_GA_03
+		container export_strat14 := Templates/ExportStrategieToTilejson(false, 14b, "S4_GA_03"); // S4_GA_03
+		container export_strat15 := Templates/ExportStrategieToTilejson(false, 15b, "LN_GA_03"); // LN_GA_03
+		container export_strat16 := Templates/ExportStrategieToTilejson(false, 16b, "S1_GA_04"); // S1_GA_04
+		container export_strat17 := Templates/ExportStrategieToTilejson(false, 17b, "S2_GA_04"); // S2_GA_04
+		container export_strat18 := Templates/ExportStrategieToTilejson(false, 18b, "S3_GA_04"); // S3_GA_04
+		container export_strat19 := Templates/ExportStrategieToTilejson(false, 19b, "S4_GA_04"); // S4_GA_04
+		container export_strat20 := Templates/ExportStrategieToTilejson(false, 20b, "LN_GA_04"); // LN_GA_04
+		container export_strat21 := Templates/ExportStrategieToTilejson(false, 21b, "S1_GA_05"); // S1_GA_05
+		container export_strat22 := Templates/ExportStrategieToTilejson(false, 22b, "S2_GA_05"); // S2_GA_05
+		container export_strat23 := Templates/ExportStrategieToTilejson(false, 23b, "S3_GA_05"); // S3_GA_05
+		container export_strat24 := Templates/ExportStrategieToTilejson(false, 24b, "S4_GA_05"); // S4_GA_05
+		container export_strat25 := Templates/ExportStrategieToTilejson(false, 25b, "LN_GA_05"); // LN_GA_05
+		container export_strat26 := Templates/ExportStrategieToTilejson(false, 26b, "S1_GA_06"); // S1_GA_06
+		container export_strat27 := Templates/ExportStrategieToTilejson(false, 27b, "S2_GA_06"); // S2_GA_06
+		container export_strat28 := Templates/ExportStrategieToTilejson(false, 28b, "S3_GA_06"); // S3_GA_06
+		container export_strat29 := Templates/ExportStrategieToTilejson(false, 29b, "S4_GA_06"); // S4_GA_06
+		container export_strat30 := Templates/ExportStrategieToTilejson(false, 30b, "LN_GA_06"); // LN_GA_06
+		container export_strat31 := Templates/ExportStrategieToTilejson(false, 31b, "S1_GA_07"); // S1_GA_07
+		container export_strat32 := Templates/ExportStrategieToTilejson(false, 32b, "S2_GA_07"); // S2_GA_07
+		container export_strat33 := Templates/ExportStrategieToTilejson(false, 33b, "S3_GA_07"); // S3_GA_07
+		container export_strat34 := Templates/ExportStrategieToTilejson(false, 34b, "S4_GA_07"); // S4_GA_07
+		container export_strat35 := Templates/ExportStrategieToTilejson(false, 35b, "LN_GA_07"); // LN_GA_07
+		container export_strat36 := Templates/ExportStrategieToTilejson(false, 36b, "LN_GA_08"); // LN_GA_08
+		container export_strat37 := Templates/ExportStrategieToTilejson(false, 37b, "S1_GA_09"); // S1_GA_09
+		container export_strat38 := Templates/ExportStrategieToTilejson(false, 38b, "S2_GA_09"); // S2_GA_09
+		container export_strat39 := Templates/ExportStrategieToTilejson(false, 39b, "S3_GA_09"); // S3_GA_09
+		container export_strat40 := Templates/ExportStrategieToTilejson(false, 40b, "S4_GA_09"); // S4_GA_09
+		container export_strat41 := Templates/ExportStrategieToTilejson(false, 41b, "LN_GA_09"); // LN_GA_09
+		container export_strat42 := Templates/ExportStrategieToTilejson(false, 42b, "S1_GA_10"); // S1_GA_10
+		container export_strat43 := Templates/ExportStrategieToTilejson(false, 43b, "S2_GA_10"); // S2_GA_10
+		container export_strat44 := Templates/ExportStrategieToTilejson(false, 44b, "S3_GA_10"); // S3_GA_10
+		container export_strat45 := Templates/ExportStrategieToTilejson(false, 45b, "S4_GA_10"); // S4_GA_10
+		container export_strat46 := Templates/ExportStrategieToTilejson(false, 46b, "LN_GA_10"); // LN_GA_10
+		container export_strat47 := Templates/ExportStrategieToTilejson(false, 47b, "LN_GA_11"); // LN_GA_11
 
-		parameter<string> export_all := "Done", ExplicitSuppliers="Exports/strats/export_strat1/MVT/all_zoom_levels/dataset;Exports/strats/export_strat2/MVT/all_zoom_levels/dataset;Exports/strats/export_strat3/MVT/all_zoom_levels/dataset;Exports/strats/export_strat4/MVT/all_zoom_levels/dataset;Exports/strats/export_strat6/MVT/all_zoom_levels/dataset;Exports/strats/export_strat7/MVT/all_zoom_levels/dataset;Exports/strats/export_strat8/MVT/all_zoom_levels/dataset";
-
-		#include <geojson.dms>
+		//#include <geojson.dms>
 
 	}
 	

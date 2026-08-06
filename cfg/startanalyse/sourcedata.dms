@@ -35,6 +35,33 @@ container SourceData {
 	,  SyncMode        = "AllTables"
 	,  DialogData      = "geography/rdc_m" 
 	{
+		unit<uint32> buurt_gegeneraliseerd
+		{
+			attribute<geography/rdc_m> geometry (poly);
+			attribute<string> BU_CODE := statcode;
+			attribute<string> WK_CODE := makedefined(WK_CODE_GEO, WK_CODE_ALT);
+
+			attribute<string> buurtnaam := statnaam;
+			attribute<string> wijknaam := rjoin(WK_CODE, wijk_gegeneraliseerd/WK_CODE, wijk_gegeneraliseerd/statnaam);
+			attribute<bool> is_water := rjoin(BU_CODE, SourceData/CBSwijkenbuurten_2024_v1/buurten/BU_CODE, SourceData/CBSwijkenbuurten_2024_v1/buurten/is_water);
+			attribute<uint32> WK_REL := point_in_polygon(centroid(geometry), wijk_gegeneraliseerd/geometry);
+			attribute<string> WK_CODE_GEO := rjoin(BU_CODE, overlay_wk/BU_CODE, overlay_wk/WK_CODE);
+			attribute<string> WK_CODE_ALT := wijk_gegeneraliseerd/WK_CODE[WK_REL];
+
+			unit<uint32> overlay_wk := overlay_polygon(geometry, wijk_gegeneraliseerd/geometry)
+			{
+				attribute<string> BU_CODE := buurt_gegeneraliseerd/BU_CODE[first_rel];
+				attribute<string> WK_CODE := wijk_gegeneraliseerd/WK_CODE[second_rel];
+			}
+
+		}
+
+		unit<uint32> wijk_gegeneraliseerd
+		{
+			attribute<geography/rdc_m> geometry (poly);
+			attribute<string> WK_CODE := statcode;
+		}
+		
 	}
 	
 	container CBS2023Gebiedsindelingen 
@@ -85,7 +112,24 @@ container SourceData {
 			attribute<string> Wijknaam := rjoin(Wijkcode, wijken/Wijkcode, wijken/wijknaam);
 		}
 	}
-	
+
+	container CBSwijkenbuurten_2024_v1
+	: StorageName = "%SourceDataDir%/CBS/2024/wijkenbuurten_2024_v1.gpkg"
+	, StorageType = "gdal.vect"
+	, StorageReadOnly = "True"
+	, SyncMode = "AllTables"
+	{
+		unit<uint32> buurten
+		{			
+			attribute<geography/rdc_m> geometry (poly);
+			attribute<geography/rdc_mm> geometry_mm (poly) := geometry[geography/rdc_mm];
+			attribute<string> BU_CODE := buurtcode;
+			attribute<string> Wijknaam := rjoin(Wijkcode, wijken/Wijkcode, wijken/wijknaam);
+
+			attribute<bool> is_water := water == "JA";
+		}
+	}
+
 	container CBS_wijken_en_buurten_2023_tabel
 	{
 		unit<uint32> src
@@ -121,10 +165,15 @@ container SourceData {
 		attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := rjoin(BU_CODE, CBS2020Gebiedsindelingen/buurt_gegeneraliseerd/BU_CODE, CBS2020Gebiedsindelingen/buurt_gegeneraliseerd/geometry);
 	}
 	
-	unit<uint32> buurt2023 := select_with_attr_by_org_rel(CBSwijkenbuurten_2023_v2/buurten, lowercase(CBSwijkenbuurten_2023_v2/buurten/water)=='nee') // &&  id(buurt2020_with_H2O)>13885);
+	/*unit<uint32> buurt2023 := select_with_attr_by_org_rel(CBSwijkenbuurten_2023_v2/buurten, lowercase(CBSwijkenbuurten_2023_v2/buurten/water)=='nee') // &&  id(buurt2020_with_H2O)>13885);
 	{
 		attribute<geography/wm_m> geometry_wm (poly) := convert(geometry, geography/wm_m);
 		attribute<geography/rdc_m_ipoint> geometry_rdc_m_ipoint (poly) := rjoin(BU_CODE, CBS2023Gebiedsindelingen/buurt_gegeneraliseerd/BU_CODE, CBS2023Gebiedsindelingen/buurt_gegeneraliseerd/geometry);
+	}*/
+
+	unit<uint32> buurt2024 := select_with_attr_by_org_rel(/SourceData/CBS2024Gebiedsindelingen/buurt_gegeneraliseerd, !SourceData/CBS2024Gebiedsindelingen/buurt_gegeneraliseerd/is_water)
+	{
+
 	}
 	
 	unit<uint32> buurt2023_gegeneraliseerd := select_with_attr_by_org_rel(CBSwijkenbuurten_2023_v2/buurten, lowercase(CBSwijkenbuurten_2023_v2/buurten/water)=='nee') // &&  id(buurt2020_with_H2O)>13885);
