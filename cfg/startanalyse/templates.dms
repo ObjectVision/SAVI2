@@ -229,6 +229,16 @@ container Templates {
 				attribute<giga_J_per_woning_per_yr> H40_input_klimaatneutraalgas_u 		:= MakeDefined(domain/H40_input_klimaatneutraalgas_u[split_polygons/polygon_rel], nodata_value);
 				attribute<giga_J_per_woning_per_yr> H41_input_elektriciteit_u  			:= MakeDefined(domain/H41_input_elektriciteit_u[split_polygons/polygon_rel], nodata_value);
 			}
+
+			unit<uint32> export := per_strat
+			, StorageName = "%LocalDataDir%/woonzorgnl/2025/startanalyse2/startanalyse2_buurt.shp"
+			, StorageType = "gdalwrite.vect"
+			, StorageReadOnly = "False"
+			{
+				attribute<geography/rdc_m> geometry (poly)       := per_strat/geometry[geography/rdc_m];
+				attribute<string>  variant := per_strat/V01_Strategievariant;
+				attribute<float32> code := per_strat/Strategiecode;
+			}
 		}
 	}
 	
